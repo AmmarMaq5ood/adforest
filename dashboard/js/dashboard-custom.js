@@ -395,7 +395,7 @@
         var ad_packages = await fetchAdPackages(adforest_ajax_url, adID, formId);
         $('#sb_loading').hide();
         $.dialog({
-            title: confirm_text,
+            title: 'Select a Package.',
             content: ad_packages,
             theme: 'Material',
             closeIcon: true,
