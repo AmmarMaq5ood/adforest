@@ -2111,18 +2111,11 @@ if (!function_exists('adforest_ad_posting')) {
                 $simple_ads = get_user_meta(get_current_user_id(), '_sb_simple_ads', true);
                 if ($simple_ads <= 0 || $simple_ads == "") {
                     $simple_ads = isset($package_single['free_ads']) ? $package_single['free_ads'] : '';
-                    if (!isset($params['sb_make_it_feature'])) {
-                        if ($simple_ads > 0 && !is_super_admin(get_current_user_id())) {
-                            $simple_ads = $simple_ads - 1;
-                            $package_single['free_ads'] = $simple_ads;
-                            $packageDetails[$params_ads_package] = $package_single;
-                            update_user_meta(get_current_user_id(), 'adforest_ads_package_details', $packageDetails);
-                        }
-                    }
-                } else {
                     if ($simple_ads > 0 && !is_super_admin(get_current_user_id())) {
                         $simple_ads = $simple_ads - 1;
-                        update_user_meta(get_current_user_id(), '_sb_simple_ads', $simple_ads);
+                        $package_single['free_ads'] = $simple_ads;
+                        $packageDetails[$params_ads_package] = $package_single;
+                        update_user_meta(get_current_user_id(), 'adforest_ads_package_details', $packageDetails);
                     }
                 }
 
@@ -2983,7 +2976,9 @@ if (!function_exists('adforest_get_sub_cats')) {
                     $Ads_pachages .= '</ul>';
                 }
                 $sb_simple_ads = get_user_meta(get_current_user_id(), '_sb_simple_ads', true);
-                if (isset($sb_simple_ads) && $sb_simple_ads > 0) {
+                $package_ad_expiry_days = get_user_meta(get_current_user_id(), 'package_ad_expiry_days', true);
+                $sb_expire_ads = get_user_meta(get_current_user_id(), '_sb_expire_ads', true);
+                if ($sb_simple_ads > 0 && ($package_ad_expiry_days == '-1' || $package_ad_expiry_days > 0) && ($sb_expire_ads == '-1' || $sb_expire_ads > date('Y-m-d'))) {
                     $Ads_pachages = '';
                 }
             }

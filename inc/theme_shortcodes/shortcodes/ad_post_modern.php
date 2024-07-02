@@ -1015,7 +1015,7 @@ if (!function_exists('ad_post_short_base_func')) {
 
             if (isset($adforest_theme['allow_featured_on_ad']) && $adforest_theme['allow_featured_on_ad']) {
 
-                if ($is_feature_ad == 0 && (get_user_meta(get_current_user_id(), '_sb_expire_ads', true) == '-1' || get_user_meta(get_current_user_id(), '_sb_expire_ads', true) >= date('Y-m-d'))) {
+                if ($is_feature_ad == 0 && (get_user_meta(get_current_user_id(), '_sb_expire_ads', true) == '-1' || get_user_meta(get_current_user_id(), '_sb_expire_ads', true) >= date('Y-m-d')) && (get_user_meta(get_current_user_id(), '_sb_simple_ads', true) > 0 && (get_user_meta(get_current_user_id(), 'package_ad_expiry_days', true) == '-1' || get_user_meta(get_current_user_id(), 'package_ad_expiry_days', true) > 0)) ) {
                     if (get_user_meta(get_current_user_id(), '_sb_featured_ads', true) == '-1' || get_user_meta(get_current_user_id(), '_sb_featured_ads', true) > 0) {
                         $count_featured_ads = __('Featured ads remaining: Unlimited', 'adforest');
 
@@ -1350,7 +1350,10 @@ if (!function_exists('ad_post_short_base_func')) {
                     $Ads_pachages .= '</ul></div>';
                 }
                 $sb_simple_ads = get_user_meta(get_current_user_id(), '_sb_simple_ads', true);
-                if (isset($sb_simple_ads) && $sb_simple_ads > 0) {
+                $package_ad_expiry_days = get_user_meta(get_current_user_id(), 'package_ad_expiry_days', true);
+                $sb_expire_ads = get_user_meta(get_current_user_id(), '_sb_expire_ads', true);
+                // echo "ITHY";
+                if ($sb_simple_ads > 0 && ($package_ad_expiry_days == '-1' || $package_ad_expiry_days > 0) && ($sb_expire_ads == '-1' || $sb_expire_ads > date('Y-m-d'))) {
                     $Ads_pachages = '';
                 }
             ?>
