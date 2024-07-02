@@ -262,6 +262,7 @@
         var url = $(this).attr('data-url');
         let formId = "make_listing_feartured_dashboard";
         let ad_packages = await fetchAdPackages(adforest_ajax_url, adID, formId);
+
         $('#sb_loading').hide();
 
         $.dialog({
@@ -949,23 +950,23 @@
     });
     /* Profile Badge Ends */
 
+    async function fetchAdPackages(adforest_ajax_url, adID, formId) {
+        let result;
+        try {
+            result = await $.ajax({
+                url: adforest_ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'load_feature_ad_modal',
+                    adID,
+                    formId
+                }
+            });
+            return result;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     /*end of directory listing code*/
 })(jQuery);
-
-async function fetchAdPackages(adforest_ajax_url, adID, formId) {
-    let result;
-    try {
-        result = await $.ajax({
-            url: adforest_ajax_url,
-            type: 'POST',
-            data: {
-                action: 'load_feature_ad_modal',
-                adID,
-                formId
-            }
-        });
-        return result;
-    } catch (error) {
-        console.error(error);
-    }
-}

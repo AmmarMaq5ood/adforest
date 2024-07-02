@@ -215,9 +215,9 @@
       });
   }
 
-  if (jQuery("[data-fancybox]").length > 0) {
-    jQuery("[data-fancybox]").fancybox();
-  }
+  // if (jQuery("[data-fancybox]").length > 0) {
+  //   jQuery("[data-fancybox]").fancybox();
+  // }
 
   if ($("#hero_product_slider").length > 0) {
     $("#hero_product_slider").owlCarousel({
@@ -3961,16 +3961,18 @@
             ads_package: ads_package,
         },
         success: function(response) {
-            $('#sb_loading').hide();
-            console.log("Form successfully submitted", response);
-            var get_r = response.split('|');
-            if ($.trim(get_r[0]) == '1') {
-                toastr.success(get_r[1], '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
-                window.location.reload();
-            } else {
-                toastr.error(get_r[1], '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
-            }
-        },
+          $('#sb_loading').hide();
+          if (response.success) {
+              toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+              if (response.data.url) {
+                  location.replace(response.data.url);
+              }else {
+                  window.location.reload();
+              }
+          } else {
+              toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+          }
+      },
         error: function(error) {
             $('#sb_loading').hide();
             console.log("Error submitting form", error);
@@ -4444,23 +4446,23 @@
   if ($("#play-video").length > 0) {
     $("#play-video").YouTubePopUp();
   }
-})(jQuery);
 
-
-async function fetchAdPackages(adforest_ajax_url, adID, formId) {
-  let result;
-  try {
-      result = await $.ajax({
-          url: adforest_ajax_url,
-          type: 'POST',
-          data: {
-              action: 'load_feature_ad_modal',
-              adID,
-              formId
-          }
-      });
-      return result;
-  } catch (error) {
-      console.error(error);
+  async function fetchAdPackages(adforest_ajax_url, adID, formId) {
+    let result;
+    try {
+        result = await $.ajax({
+            url: adforest_ajax_url,
+            type: 'POST',
+            data: {
+                action: 'load_feature_ad_modal',
+                adID,
+                formId
+            }
+        });
+        return result;
+    } catch (error) {
+        console.error(error);
+    }
   }
-}
+
+})(jQuery);
