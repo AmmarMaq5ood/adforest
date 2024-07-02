@@ -3902,22 +3902,18 @@
               action: "sb_make_featured",
               ad_id: adID,
             }).done(function (response) {
-              $("#sb_loading").hide();
-              var get_r = response.split("|");
-              if ($.trim(get_r[0]) == "1") {
-                toastr.success(get_r[1], "", {
-                  timeOut: 4000,
-                  closeButton: true,
-                  positionClass: "toast-top-right",
-                });
+              $('#sb_loading').hide();
+              if (response.success) {
+                  toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                  if (response.data.url) {
+                      location.replace(response.data.url);
+                  }else {
+                      window.location.reload();
+                  }
               } else {
-                toastr.success(get_r[1], "", {
-                  timeOut: 4000,
-                  closeButton: true,
-                  positionClass: "toast-top-right",
-                });
+                  toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
               }
-            });
+          });
           },
         },
         cancel: {
