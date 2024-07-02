@@ -198,6 +198,17 @@ function sb_themes_register_required_plugins()
             'external_url' => esc_url('https://downloads.wordpress.org/plugin/wp-twilio-core.1.5.7.zip'),
             'is_callable' => '',
         ),
+        array(
+            'name' => esc_html__('Advanced Custom Fields (ACF)', 'adforest'),
+            'slug' => 'advanced-custom-fields',
+            'source' => '',
+            'required' => true,
+            'version' => '',
+            'force_activation' => false,
+            'force_deactivation' => false,
+            'external_url' => esc_url('https://downloads.wordpress.org/plugin/advanced-custom-fields.6.3.3.zip'),
+            'is_callable' => '',
+        ),
     );
     /*
      * Array of configuration settings. Amend each line as needed.
