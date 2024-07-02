@@ -291,7 +291,6 @@
             },
             success: function(response) {
                 $('#sb_loading').hide();
-                console.log("Form successfully submitted", response);
                 if (response.success) {
                     toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
                     if (response.data.url) {
@@ -305,7 +304,7 @@
             },
             error: function(error) {
                 $('#sb_loading').hide();
-                console.log("Error submitting form", error);
+                console.error("Error submitting form", error);
             }
         });
     });
@@ -369,6 +368,8 @@
                                 toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
                                 if (response.data.url) {
                                     location.replace(response.data.url);
+                                } else {
+                                    window.location.reload();
                                 }
 
                             } else {
@@ -420,7 +421,6 @@
             },
             success: function(response) {
                 $('#sb_loading').hide();
-                console.log("Form successfully submitted", response);
                 if (response.success) {
                     toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
                     if (response.data.url) {
@@ -434,7 +434,7 @@
             },
             error: function(error) {
                 $('#sb_loading').hide();
-                console.log("Error submitting form", error);
+                console.error("Error submitting form", error);
             }
         });
     });
