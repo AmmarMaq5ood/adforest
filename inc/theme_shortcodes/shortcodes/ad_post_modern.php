@@ -1351,7 +1351,6 @@ if (!function_exists('ad_post_short_base_func')) {
                 }
                 $sb_simple_ads = get_user_meta(get_current_user_id(), '_sb_simple_ads', true);
                 if (isset($sb_simple_ads) && $sb_simple_ads > 0) {
-                    echo "HERE";
                     $Ads_pachages = '';
                 }
             ?>
