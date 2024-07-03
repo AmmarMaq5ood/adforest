@@ -2491,6 +2491,7 @@
         } else {
           var selected_packages = response.data.selected_packages;
           var cats_html = response.data.cats_html;
+          console.log(response);
 
           //if (selected_packages && selected_packages !== "") {
           $("#purchase-package").html(selected_packages);

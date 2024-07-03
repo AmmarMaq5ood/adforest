@@ -566,7 +566,7 @@ if (!function_exists('adforest_make_featured')) {
 
                     if ($ad_meta['_adforest_is_feature'][0] != 0) {
                         // echo '1|' . __("This ad has been featured successfullly", 'adforest');
-                        wp_send_json_success(array("message" => __("This ad has been featured successfullly.", 'adforest')));
+                        wp_send_json_success(array("message" => __("This ad has been featured successfully.", 'adforest')));
                     } else  {
                         wp_send_json_error(array("message" => __("Something Went Wrong", 'adforest')));
                     }
