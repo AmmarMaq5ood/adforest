@@ -75,7 +75,7 @@ if (!function_exists('adforest_after_payment')) {
 
                 $package_data = get_user_meta($uid, 'adforest_ads_package_details', true);
                
-                if (isset($package_data) && !empty($package_data)) {
+                if (isset($package_data) && !empty($package_data) && is_array($package_data)) {
                     foreach ($package_data as $key => $val) {
                         if (isset($naw_pkg_details) && count($naw_pkg_details) > 0) {
                             foreach ($naw_pkg_details as $new_key => $new_pkgs) {
@@ -151,7 +151,6 @@ if (!function_exists('adforest_after_payment')) {
                         }
                     }
                 } else {
-
                     update_user_meta($uid, 'adforest_ads_package_details', $naw_pkg_details);
                 }
             }

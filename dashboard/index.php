@@ -865,7 +865,6 @@ $sb_post_ad_page = apply_filters('adforest_ad_post_verified_id', $sb_post_ad_pag
             <?php }
 
             $selected_categories = get_user_meta(get_current_user_id(), 'adforest_ads_package_details', true);
-            $user_merta = get_user_meta(get_current_user_id());
             ?>
 
             <div class="package-container">
@@ -887,7 +886,7 @@ $sb_post_ad_page = apply_filters('adforest_ad_post_verified_id', $sb_post_ad_pag
                                     <li><span>Free Ads:</span> <span> <?php echo $details['free_ads']; ?></span></li>
                                     <li><span>Featured Ads:</span> <span><?php echo $details['featured_ads']; ?> </span></li>
                                     <li><span>Bump Ads:</span> <span><?php echo $details['bump_ads']; ?></span></li>
-                                    <li><span>Package Expiry Days:</span> <span><?php echo $details['pkg_expiry_days']; ?></span></li>
+                                    <li><span>Package Expiry Date:</span> <span><?php echo $details['pkg_expiry_days']; ?></span></li>
                                     <li><span>Ad Expiry Days:</span> <span><?php echo isset($details['ad_expiry_days']) ? $details['ad_expiry_days'] : ''; ?></span></li>
                                     <li><span>Featured Expiry Days:</span> <span><?php echo $details['featured_expiry_days']; ?></span></li>
                                     <li><span>Video Links:</span> <span><?php echo $details['video_links']; ?></span></li>
@@ -896,7 +895,7 @@ $sb_post_ad_page = apply_filters('adforest_ad_post_verified_id', $sb_post_ad_pag
                                     <li><span>Allow Bidding:</span> <span><?php echo isset($details['allow_bidding']) ? $details['allow_bidding'] : ''; ?></span></li>
                                     <li><span>Number of Events:</span> <span><?php echo isset($details['number_of_events']) ? $details['number_of_events'] : ''; ?></span></li>
                                     <li><span>Paid Biddings:</span> <span><?php echo isset($details['paid_biddings']) ? $details['paid_biddings'] : ''; ?></span></li>
-                                    <li><span>Allow Cate:</span>
+                                    <li><span>Allowed Categories:</span>
                                         <span>
                                             <?php
                                             $category_ids = isset($details['allow_cate']) ? explode(',', $details['allow_cate']) : array();
