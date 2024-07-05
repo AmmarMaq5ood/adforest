@@ -2349,6 +2349,7 @@ Redux::setSection($opt_name, array(
             'options' => array(
                 'pagination' => 'Pagination',
                 'show_more' => 'Show More',
+                'infinity_scroll' => 'Infinity Scroll',
             ),
             'default' => 'pagination',
         ),

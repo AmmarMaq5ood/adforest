@@ -4444,10 +4444,49 @@
     $("#play-video").YouTubePopUp();
   }
 
+  // jQuery(document).ready(function ($) {
+  //   var paged = 2;
+  //   $('#load-more-ads-btn').on('click', function () {
+  //     $("#sb_loading").show();
+  //     $.ajax({
+  //       type: 'POST',
+  //       url: ajax_url,
+  //       data: {
+  //         action: 'load_more_ads',
+  //         paged: paged
+  //       },
+  //       beforeSend: function () {
+  //         $('#load-more-ads-btn').text('Loading...');
+  //       },
+  //       success: function (response) {
+  //         $("#sb_loading").hide();
+  //         if (response == '0') {
+  //             $('#load-more-ads-btn').text('No More Ads').prop('disabled', true);
+  //         } else {
+  //             $('#ad-list').append(response);
+  //             var div = document.getElementById('ads-search-container');
+  //             div.scrollBy({
+  //                 top: 300,
+  //                 behavior: 'smooth'
+  //             });
+  //             $('#load-more-ads-btn').text('Show More');
+  //             paged++;
+  //         }
+  //       }
+  //     });
+  //   });
+  // });
+
   jQuery(document).ready(function ($) {
     var paged = 2;
-    $('#load-more-ads-btn').on('click', function () {
+    var loading = false;
+    var loadingMode = $('#ads-search-container').data('loading-mode');
+
+    function loadMoreAds() {
+      if (loading) return;
+      loading = true;
       $("#sb_loading").show();
+
       $.ajax({
         type: 'POST',
         url: ajax_url,
@@ -4456,26 +4495,52 @@
           paged: paged
         },
         beforeSend: function () {
-          $('#load-more-ads-btn').text('Loading...');
+          if (loadingMode === 'show_more') {
+            $('#load-more-ads-btn').text('Loading...');
+          }
         },
         success: function (response) {
           $("#sb_loading").hide();
           if (response == '0') {
-              $('#load-more-ads-btn').text('No More Ads').prop('disabled', true);
+            $('#no_more_ads_p').html('<h4 style="text-align: center; color: #FFC720;">No more ads...</h4>');
+            if (loadingMode === 'show_more') {
+              $('#load-more-ads-btn').text('No More Ads').prop('disabled', true).hide();
+            }
           } else {
-              $('#ad-list').append(response);
-              var div = document.getElementById('ads-search-container');
-              div.scrollBy({
-                  top: 300,
-                  behavior: 'smooth'
-              });
-              $('#load-more-ads-btn').text('Show More');
-              paged++;
+            $('#ad-list').append(response);
+            if (loadingMode === 'show_more') {
+              $('#load-more-ads-btn').text('Show More').show();
+            }
+            var div = document.getElementById('ads-search-container');
+            div.scrollBy({
+                top: 300,
+                behavior: 'smooth'
+            });
+            paged++;
+            loading = false;
           }
         }
       });
-    });
+    }
+
+    if (loadingMode === 'show_more') {
+      $('#load-more-ads-btn').on('click', function () {
+        loadMoreAds();
+      });
+    } else if (loadingMode === 'infinity_scroll') {
+      $('#load-more-ads-btn').on('click', function () {
+        loadMoreAds();
+        $(this).hide();
+      });
+      $('#ads-search-container').on('scroll', function () {
+        if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight - 100) {
+          loadMoreAds();
+        }
+      });
+    }
   });
+
+
 
   async function fetchAdPackages(adforest_ajax_url, adID, formId) {
     let result;

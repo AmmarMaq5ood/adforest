@@ -5,7 +5,7 @@ $section_class = '';
 if (wp_is_mobile()) {
     $section_class = 'section-no-pad ';
 }
-$loading_ads_mode = isset($adforest_theme['loading_ads_mode']) ? $adforest_theme['loading_ads_mode'] : 'km';
+$loading_ads_mode = isset($adforest_theme['loading_ads_mode']) ? $adforest_theme['loading_ads_mode'] : 'pagination';
 ?>
 <section class="match-adforest sidebar-match-adforest">
     <div class="container-fluid">
@@ -247,7 +247,7 @@ $loading_ads_mode = isset($adforest_theme['loading_ads_mode']) ? $adforest_theme
                 ?>
 
                 <div class="search-found-list">
-                    <div class="row posts-masonry" id="ads-search-container">
+                    <div class="row posts-masonry" id="ads-search-container" data-loading-mode="<?php echo esc_attr($loading_ads_mode); ?>">
                         <?php
                         $layouts = array('list_1', 'list_2', 'list');
                         if ($results->have_posts()) {
@@ -255,7 +255,7 @@ $loading_ads_mode = isset($adforest_theme['loading_ads_mode']) ? $adforest_theme
                             $col_lg = 4;
 
                             $layout_type = isset($adforest_theme['search_ad_layout_for_sidebar']) ?
-                            $adforest_theme['search_ad_layout_for_sidebar'] : "";
+                                $adforest_theme['search_ad_layout_for_sidebar'] : "";
                             $get_grid_layout = adforest_get_grid_layout();
                             $search_ad_layout_for_sidebar = ($get_grid_layout != "") ? $get_grid_layout : $layout_type;
 
@@ -288,14 +288,17 @@ $loading_ads_mode = isset($adforest_theme['loading_ads_mode']) ? $adforest_theme
                             </div>
                         <?php } ?>
                     </div>
-                    <?php 
-                    if ($results->have_posts()){
-                        if($loading_ads_mode == 'show_more') {
-                    ?>
+                    <?php
+                    if ($results->have_posts()) {
+                        if ($loading_ads_mode == 'show_more' || $loading_ads_mode == 'infinity_scroll') {
+                            ?>
                             <button class="btn btn-theme mt-4" id="load-more-ads-btn">Show More</button>
                     <?php }
                     } ?>
                 </div>
+                <div id="no_more_ads_p"></div>
+                <div id="sb_loading" style="display:none;">Loading...</div>
+
 
 
                 <?php if (isset($adforest_theme['search_ad_720_2']) && $adforest_theme['search_ad_720_2'] != "" && $results->have_posts()) {
@@ -308,10 +311,10 @@ $loading_ads_mode = isset($adforest_theme['loading_ads_mode']) ? $adforest_theme
                     <?php
                 }
                 ?>
-                <?php if($loading_ads_mode == 'pagination') { ?>
-                <div class="pagination-item">
-                    <?php adforest_pagination_search($results); ?>
-                </div>
+                <?php if ($loading_ads_mode == 'pagination') { ?>
+                    <div class="pagination-item">
+                        <?php adforest_pagination_search($results); ?>
+                    </div>
                 <?php } ?>
 
             </div>
