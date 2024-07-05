@@ -296,7 +296,7 @@ $loading_ads_mode = isset($adforest_theme['loading_ads_mode']) ? $adforest_theme
                     <?php }
                     } ?>
                 </div>
-                <div id="no_more_ads_p"></div>
+                <div class="m-2" id="no_more_ads_p"></div>
                 <div id="sb_loading" style="display:none;">Loading...</div>
 
 

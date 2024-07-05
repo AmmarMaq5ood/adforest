@@ -4502,7 +4502,8 @@
         success: function (response) {
           $("#sb_loading").hide();
           if (response == '0') {
-            $('#no_more_ads_p').html('<h4 style="text-align: center; color: #FFC720;">No more ads...</h4>');
+            // $('#no_more_ads_p').html('<h4 style="text-align: center; color: #FFC720;">No more ads...</h4>');
+            $('#no_more_ads_p').html('<div role="alert" class="alert alert-info alert-dismissible"><i class="fa fa-info-circle"></i><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>No More Ads</div>');
             if (loadingMode === 'show_more') {
               $('#load-more-ads-btn').text('No More Ads').prop('disabled', true).hide();
             }
@@ -4511,11 +4512,11 @@
             if (loadingMode === 'show_more') {
               $('#load-more-ads-btn').text('Show More').show();
             }
-            var div = document.getElementById('ads-search-container');
-            div.scrollBy({
-                top: 300,
-                behavior: 'smooth'
-            });
+            // var div = document.getElementById('ads-search-container');
+            // div.scrollBy({
+            //     top: 300,
+            //     behavior: 'smooth'
+            // });
             paged++;
             loading = false;
           }
