@@ -4444,33 +4444,38 @@
     $("#play-video").YouTubePopUp();
   }
 
-  jQuery(document).ready(function($) {
+  jQuery(document).ready(function ($) {
     var paged = 2;
-    $('#load-more-ads-btn').on('click', function() {
-        $("#sb_loading").show();
-        $.ajax({
-            type: 'POST',
-            url: ajax_url,
-            data: {
-                action: 'load_more_ads',
-                paged: paged
-            },
-            beforeSend: function() {
-                $('#load-more-ads-btn').text('Loading...');
-            },
-            success: function(response) {
-                $("#sb_loading").hide();
-                if (response == '0') {
-                    $('#load-more-ads-btn').text('No More Ads').prop('disabled', true);
-                } else {
-                    $('#ad-list').append(response);
-                    $('#load-more-ads-btn').text('Show More');
-                    paged++;
-                }
-            }
-        });
+    $('#load-more-ads-btn').on('click', function () {
+      $("#sb_loading").show();
+      $.ajax({
+        type: 'POST',
+        url: ajax_url,
+        data: {
+          action: 'load_more_ads',
+          paged: paged
+        },
+        beforeSend: function () {
+          $('#load-more-ads-btn').text('Loading...');
+        },
+        success: function (response) {
+          $("#sb_loading").hide();
+          if (response == '0') {
+              $('#load-more-ads-btn').text('No More Ads').prop('disabled', true);
+          } else {
+              $('#ad-list').append(response);
+              var div = document.getElementById('ads-search-container');
+              div.scrollBy({
+                  top: 300,
+                  behavior: 'smooth'
+              });
+              $('#load-more-ads-btn').text('Show More');
+              paged++;
+          }
+        }
+      });
     });
-});
+  });
 
   async function fetchAdPackages(adforest_ajax_url, adID, formId) {
     let result;
