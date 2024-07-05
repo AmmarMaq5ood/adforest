@@ -506,7 +506,7 @@ function handle_ad_rating_form_submission()
                 echo '0|' . __("You've posted rating already.", 'adforest');
                 die();
             }
-            $review_enable_gallery   =  isset($adforest_theme['dwt_listing_review_enable_gallery'])  ?  $adforest_theme['dwt_listing_review_enable_gallery']  : true;
+            $review_enable_gallery = isset($adforest_theme['dwt_listing_review_enable_gallery']) ? $adforest_theme['dwt_listing_review_enable_gallery'] : true;
             if ($review_enable_gallery == '1') {
                 if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
                     // The uploaded file is in $_FILES['file']
@@ -522,7 +522,7 @@ function handle_ad_rating_form_submission()
                     }
 
                     $fileSize = $uploadedFile['size'];
-                    $image_rating_size = isset($adforest_theme['adforest_review_images_size']) ? $adforest_theme['adforest_review_images_size']  : "";
+                    $image_rating_size = isset($adforest_theme['adforest_review_images_size']) ? $adforest_theme['adforest_review_images_size'] : "";
 
                     if ($fileSize > $image_rating_size) {
                         echo '0|' . __("File size exceeds the limit. Please upload a smaller file.", 'adforest');
@@ -729,10 +729,10 @@ if (!function_exists('adforest_ads_rating_delete')) {
     function adforest_ads_rating_delete()
     {
 
-        $ad_id =  $_POST['ad_id'];
-        $comment_id   =  $_POST['comment_id'];
-        $sender_id  =  get_current_user_id();
-        $check_comment   = get_user_meta($sender_id, 'ad_ratting_' . $sender_id . '_' . $ad_id);
+        $ad_id = $_POST['ad_id'];
+        $comment_id = $_POST['comment_id'];
+        $sender_id = get_current_user_id();
+        $check_comment = get_user_meta($sender_id, 'ad_ratting_' . $sender_id . '_' . $ad_id);
         if ($check_comment != "") {
 
             wp_delete_comment($comment_id);
@@ -1604,7 +1604,7 @@ if (!function_exists('adforest_get_sub_cats_search')) {
             $adpost_cat_style;
             if ($adpost_cat_style) {
                 $ad_cats = adforest_get_cats('ad_cats', $cat_id, 0, 'post_ad');
-                echo  adforest_check_sub_cats_paid($cat_id);
+                echo adforest_check_sub_cats_paid($cat_id);
             } else {
                 $ad_cats = adforest_get_cats('ad_cats', 0, 0, 'post_ad');
             }
@@ -1813,10 +1813,10 @@ if (!function_exists('adforest_sb_rating_delete')) {
     function adforest_sb_rating_delete()
     {
 
-        $author_id =  $_POST['user_id'];
-        $rator  = get_current_user_id();
+        $author_id = $_POST['user_id'];
+        $rator = get_current_user_id();
         $meta_key = "_user_" . $rator;
-        $rating  =  get_user_meta($author_id, $meta_key, true);
+        $rating = get_user_meta($author_id, $meta_key, true);
 
 
         if ($rating != "" || is_super_admin($rator)) {
@@ -1905,16 +1905,16 @@ if (!function_exists('adforest_check_validity')) {
                     if (get_user_meta($uid, '_sb_expire_ads', true) < date('Y-m-d')) {
                         update_user_meta($uid, '_sb_simple_ads', 0);
                         update_user_meta($uid, '_sb_featured_ads', 0);
-                        if($pkg_expiry_days !== '-1') {
+                        if ($pkg_expiry_days !== '-1') {
                             if ($pkg_expiry_days < date('Y-m-d')) {
                                 adforest_redirect_with_msg(get_the_permalink($sb_packages_page), __("Your package has been expired.", 'adforest'));
                                 exit;
                             }
                         }
                     }
-                } 
+                }
             }
-        } 
+        }
     }
 }
 
@@ -1954,18 +1954,18 @@ if (!function_exists('adforest_ad_posting')) {
                 $params_ads_package = $params['ads_package'];
             } else {
                 $sb_simple_ads = get_user_meta(get_current_user_id(), '_sb_simple_ads', true);
-                if($sb_simple_ads <= 0) {
+                if ($sb_simple_ads <= 0) {
                     echo esc_html('Please Select your listing package.', '');
                 }
             }
 
 
-            if (isset($packageDetails[$params_ads_package])) {
+            if (isset($packageDetails[ $params_ads_package ])) {
 
-                $package_single = $packageDetails[$params_ads_package];
+                $package_single = $packageDetails[ $params_ads_package ];
             } else {
                 $sb_simple_ads = get_user_meta(get_current_user_id(), '_sb_simple_ads', true);
-                if($sb_simple_ads <= 0) {
+                if ($sb_simple_ads <= 0) {
                     echo "Value does not exist in the array.";
                 }
             }
@@ -2040,7 +2040,8 @@ if (!function_exists('adforest_ad_posting')) {
         $ad_status = 'publish';
         if (isset($pay_per_post) && !empty($product_ids)) {
             $ad_status = 'pending';
-        };
+        }
+        ;
 
         if ($_POST['is_update'] != "") {
             $pid = $_POST['is_update'];
@@ -2094,7 +2095,7 @@ if (!function_exists('adforest_ad_posting')) {
             }
 
             // Now user can post new ad
-            
+
             // exit;
             delete_user_meta(get_current_user_id(), 'ad_in_progress');
             if ($pay_per_post != true && $package_single != "") {
@@ -2114,7 +2115,7 @@ if (!function_exists('adforest_ad_posting')) {
                     if ($simple_ads > 0 && !is_super_admin(get_current_user_id())) {
                         $simple_ads = $simple_ads - 1;
                         $package_single['free_ads'] = $simple_ads;
-                        $packageDetails[$params_ads_package] = $package_single;
+                        $packageDetails[ $params_ads_package ] = $package_single;
                         update_user_meta(get_current_user_id(), 'adforest_ads_package_details', $packageDetails);
                     }
                 }
@@ -2126,7 +2127,7 @@ if (!function_exists('adforest_ad_posting')) {
                     if (isset($_sb_allow_bidding) && $_sb_allow_bidding > 0 && !is_super_admin(get_current_user_id()) && $params['ad_bidding'] == 1) {
                         $_sb_allow_bidding = $_sb_allow_bidding - 1;
                         $package_single['allow_bidding'] = $_sb_allow_bidding;
-                        $packageDetails[$params_ads_package] = $package_single;
+                        $packageDetails[ $params_ads_package ] = $package_single;
                         update_user_meta(get_current_user_id(), 'adforest_ads_package_details', $packageDetails);
                     }
                 } else {
@@ -2306,13 +2307,13 @@ if (!function_exists('adforest_ad_posting')) {
                     $new_featured_count = '-1';
                 } elseif ($old_featured_count > 0) {
                     $package_single['featured_ads'] = $old_featured_count - 1;
-                    $packageDetails[$params_ads_package] = $package_single;
+                    $packageDetails[ $params_ads_package ] = $package_single;
                     update_user_meta(get_current_user_id(), 'adforest_ads_package_details', $packageDetails);
                 }
                 $package_adFeatured_expiry_days = get_user_meta(get_current_user_id(), 'package_adFeatured_expiry_days', true);
                 if ($package_adFeatured_expiry_days) {
                     update_post_meta($pid, 'package_adFeatured_expiry_days', $package_adFeatured_expiry_days);
-                }   
+                }
             } else {
                 $sb_featured_ads = get_user_meta(get_current_user_id(), '_sb_featured_ads', true);
                 if ($sb_featured_ads > 0 || $sb_featured_ads == '-1') {
@@ -2337,55 +2338,55 @@ if (!function_exists('adforest_ad_posting')) {
         // Bumping it up
         if (isset($params['sb_bump_up']) && $params['sb_bump_up']) {
             // Uptaing remaining ads.
-              // Uptaing remaining ads.
-              $bump_ads = get_user_meta(get_current_user_id(), '_sb_bump_ads', true);
-              if ($bump_ads <= 0 || $bump_ads == "") {
-                  $bump_ads = isset($package_single['bump_ads']) ? $package_single['bump_ads'] : '';
-                  if ($bump_ads > 0 || $bump_ads == '-1' || (isset($adforest_theme['sb_allow_free_bump_up']) && $adforest_theme['sb_allow_free_bump_up'])) {
-                      wp_update_post(
-                          array(
-                              'ID' => $pid, // ID of the post to update
-                              'post_date' => current_time('mysql'),
-                              'post_type' => 'ad_post',
-                              'post_author' => get_current_user_id(),
-                              //'post_date' => date('Y-m-d H:i:s'),
-                              // 'post_date_gmt' => get_gmt_from_date(current_time('mysql'))
-                              // 'post_date_gmt' => get_gmt_from_date(date('Y-m-d H:i:s'))
-                          )
-                      );
-                      do_action('adforest_wpml_bumpup_ads', $pid);
-                      if (!$adforest_theme['sb_allow_free_bump_up'] && $bump_ads != '-1') {
-                          $package_single['bump_ads'] = $bump_ads - 1;
-                          $packageDetails[$params_ads_package] = $package_single;
-                          update_user_meta(get_current_user_id(), 'adforest_ads_package_details', $packageDetails);
-                      }
-                  }
-              } else {
-                  if ($bump_ads > 0 || $bump_ads == '-1' || (isset($adforest_theme['sb_allow_free_bump_up']) && $adforest_theme['sb_allow_free_bump_up'])) {
-                      wp_update_post(
-                          array(
-                              'ID' => $pid, // ID of the post to update
-                              'post_date' => current_time('mysql'),
-                              'post_type' => 'ad_post',
-                              'post_author' => get_current_user_id(),
-                              //'post_date' => date('Y-m-d H:i:s'),
-                              // 'post_date_gmt' => get_gmt_from_date(current_time('mysql'))
-                              // 'post_date_gmt' => get_gmt_from_date(date('Y-m-d H:i:s'))
-                          )
-                      );
-                      do_action('adforest_wpml_bumpup_ads', $pid);
-                      if (!$adforest_theme['sb_allow_free_bump_up'] && $bump_ads != '-1') {
-                          $bump_ads = $bump_ads - 1;
-                          update_user_meta(get_current_user_id(), '_sb_bump_ads', $bump_ads);
-                      }
-                  }
-              }
+            // Uptaing remaining ads.
+            $bump_ads = get_user_meta(get_current_user_id(), '_sb_bump_ads', true);
+            if ($bump_ads <= 0 || $bump_ads == "") {
+                $bump_ads = isset($package_single['bump_ads']) ? $package_single['bump_ads'] : '';
+                if ($bump_ads > 0 || $bump_ads == '-1' || (isset($adforest_theme['sb_allow_free_bump_up']) && $adforest_theme['sb_allow_free_bump_up'])) {
+                    wp_update_post(
+                        array(
+                            'ID' => $pid, // ID of the post to update
+                            'post_date' => current_time('mysql'),
+                            'post_type' => 'ad_post',
+                            'post_author' => get_current_user_id(),
+                            //'post_date' => date('Y-m-d H:i:s'),
+                            // 'post_date_gmt' => get_gmt_from_date(current_time('mysql'))
+                            // 'post_date_gmt' => get_gmt_from_date(date('Y-m-d H:i:s'))
+                        )
+                    );
+                    do_action('adforest_wpml_bumpup_ads', $pid);
+                    if (!$adforest_theme['sb_allow_free_bump_up'] && $bump_ads != '-1') {
+                        $package_single['bump_ads'] = $bump_ads - 1;
+                        $packageDetails[ $params_ads_package ] = $package_single;
+                        update_user_meta(get_current_user_id(), 'adforest_ads_package_details', $packageDetails);
+                    }
+                }
+            } else {
+                if ($bump_ads > 0 || $bump_ads == '-1' || (isset($adforest_theme['sb_allow_free_bump_up']) && $adforest_theme['sb_allow_free_bump_up'])) {
+                    wp_update_post(
+                        array(
+                            'ID' => $pid, // ID of the post to update
+                            'post_date' => current_time('mysql'),
+                            'post_type' => 'ad_post',
+                            'post_author' => get_current_user_id(),
+                            //'post_date' => date('Y-m-d H:i:s'),
+                            // 'post_date_gmt' => get_gmt_from_date(current_time('mysql'))
+                            // 'post_date_gmt' => get_gmt_from_date(date('Y-m-d H:i:s'))
+                        )
+                    );
+                    do_action('adforest_wpml_bumpup_ads', $pid);
+                    if (!$adforest_theme['sb_allow_free_bump_up'] && $bump_ads != '-1') {
+                        $bump_ads = $bump_ads - 1;
+                        update_user_meta(get_current_user_id(), '_sb_bump_ads', $bump_ads);
+                    }
+                }
+            }
         }
 
         // Stroring Extra fileds in DB
         if (isset($params['sb_total_extra']) && $params['sb_total_extra'] > 0) {
             for ($i = 1; $i <= $params['sb_total_extra']; $i++) {
-                update_post_meta($pid, "_sb_extra_" . $params["title_$i"], sanitize_text_field($params["sb_extra_$i"]));
+                update_post_meta($pid, "_sb_extra_" . $params[ "title_$i" ], sanitize_text_field($params[ "sb_extra_$i" ]));
             }
         }
         //Add Dynamic Fields
@@ -2458,10 +2459,10 @@ if (!function_exists('adforest_ad_posting')) {
                 $break_time_from = '';
                 $break_time_to = '';
                 //get days
-                $days = lcfirst($custom_days[$a]);
+                $days = lcfirst($custom_days[ $a ]);
                 if (!in_array($a, $is_closed)) {
-                    $from = date("H:i:s", strtotime(str_replace(" : ", ":", $end_from[$a])));
-                    $to = date("H:i:s", strtotime(str_replace(" : ", ":", $start_from[$a])));
+                    $from = date("H:i:s", strtotime(str_replace(" : ", ":", $end_from[ $a ])));
+                    $to = date("H:i:s", strtotime(str_replace(" : ", ":", $start_from[ $a ])));
                     //day status open or not
                     update_post_meta($pid, '_timingz_' . $days . '_open', '1');
                     //day hours from
@@ -2469,8 +2470,8 @@ if (!function_exists('adforest_ad_posting')) {
                     update_post_meta($pid, '_timingz_' . $days . '_to', $to);
                     //break hours
                     if (in_array($a, $break_click)) {
-                        $break_time_from = isset($break_from[$a]) && $break_from[$a] != "" ? date("H:i:s", strtotime(str_replace(" : ", ":", $break_from[$a]))) : "";
-                        $break_time_to = isset($break_to[$a]) && $break_to[$a] != "" ? date("H:i:s", strtotime(str_replace(" : ", ":", $break_to[$a]))) : "";
+                        $break_time_from = isset($break_from[ $a ]) && $break_from[ $a ] != "" ? date("H:i:s", strtotime(str_replace(" : ", ":", $break_from[ $a ]))) : "";
+                        $break_time_to = isset($break_to[ $a ]) && $break_to[ $a ] != "" ? date("H:i:s", strtotime(str_replace(" : ", ":", $break_to[ $a ]))) : "";
 
                         update_post_meta($pid, '_timingz_break_' . $days . '_open', '1');
                         update_post_meta($pid, '_timingz_break_' . $days . '_breakfrom', $break_time_from);
@@ -2511,18 +2512,19 @@ if (!function_exists('adforest_ad_posting')) {
 
         $product_ids = get_product_ids_by_meta_query($selecte_cate);
         $sb_simple_ads = get_user_meta(get_current_user_id(), '_sb_simple_ads', true);
-        if(isset($sb_simple_ads) && $sb_simple_ads > 0) {
+        if (isset($sb_simple_ads) && $sb_simple_ads > 0) {
             $deducted_simple_ads = $sb_simple_ads - 1;
             update_user_meta(get_current_user_id(), '_sb_simple_ads', $deducted_simple_ads);
         }
 
-        if (isset($adforest_theme['make_feature_paid']) && $adforest_theme['make_feature_paid'] &&  get_post_meta($pid, '_adforest_is_feature', true)  != "1") {
+        if (isset($adforest_theme['make_feature_paid']) && $adforest_theme['make_feature_paid'] && get_post_meta($pid, '_adforest_is_feature', true) != "1") {
             $url = get_the_permalink($adforest_theme['sb_feature_template_page']);
             $redirect_url = $url . "?pid=" . $pid;
-        } elseif (isset($adforest_theme['make_bump_up_paid']) && $adforest_theme['make_bump_up_paid'] &&  get_post_meta($pid, '_sb_bump_ads', true)  != "1" && $_POST['is_update'] != "") {
+        } elseif (isset($adforest_theme['make_bump_up_paid']) && $adforest_theme['make_bump_up_paid'] && get_post_meta($pid, '_sb_bump_ads', true) != "1" && $_POST['is_update'] != "") {
             $url = get_the_permalink($adforest_theme['sb_bump_up_template_page']);
-            $redirect_url = $url . "?pid=" . $pid;;
-        } elseif (isset($adforest_theme['sb_pay_per_post_option']) && $adforest_theme['sb_pay_per_post_option'] == 1  && !empty($product_ids)) {
+            $redirect_url = $url . "?pid=" . $pid;
+            ;
+        } elseif (isset($adforest_theme['sb_pay_per_post_option']) && $adforest_theme['sb_pay_per_post_option'] == 1 && !empty($product_ids)) {
             $selecte_cate = $params['ad_cat'];
             $args = array(
                 'tax_query' => array(
@@ -2558,7 +2560,7 @@ if (!function_exists('adforest_ad_posting')) {
             $post_id = $pid;
             if (class_exists('WooCommerce')) {
                 // Here you can define your custom meta data
-                $custom_data = array('sb_pay_per_post_id' => $post_id,);
+                $custom_data = array('sb_pay_per_post_id' => $post_id, );
                 $adforest_pay_per_post_data['adforest_pay_per_post_data'] = $custom_data;
                 WC()->cart->add_to_cart($package_id, 1, 0, array(), $adforest_pay_per_post_data);
 
@@ -2779,8 +2781,9 @@ if (!function_exists('adforest_listing_live_search')) {
         $args = apply_filters('adforest_wpml_show_all_posts', $args);
         $args = apply_filters('adforest_site_location_ads', $args, 'ads');
         $search_results = new WP_Query($args);
-        if ($search_results->have_posts()) :
-            while ($search_results->have_posts()) : $search_results->the_post();
+        if ($search_results->have_posts()):
+            while ($search_results->have_posts()):
+                $search_results->the_post();
                 // shorten the title a little
                 $title = $search_results->post->post_title;
                 $return[] = adforest_clean_strings($title);
@@ -2935,7 +2938,7 @@ if (!function_exists('adforest_get_sub_cats')) {
                 if (empty($selected_packages)) {
                     // If no packages are found, load all available packages
                     foreach ($selected_categories as $key => $value) {
-                        $selected_packages[$key] = $value;
+                        $selected_packages[ $key ] = $value;
                     }
                 }
 
@@ -2959,8 +2962,8 @@ if (!function_exists('adforest_get_sub_cats')) {
                             </label>
                         </li>';
                     foreach ($values as $attribute => $value) {
-                        if (in_array($attribute, ['free_ads', 'featured_ads', 'pkg_expiry_days', 'ad_expiry_days', 'featured_expiry_days'])) {
-                            $custom_titles = [
+                        if (in_array($attribute, [ 'free_ads', 'featured_ads', 'pkg_expiry_days', 'ad_expiry_days', 'featured_expiry_days' ])) {
+                            $custom_titles = [ 
                                 'free_ads' => 'Free Ads',
                                 'featured_ads' => 'Featured Ads',
                                 'pkg_expiry_days' => 'Package Expiry',
@@ -2968,7 +2971,7 @@ if (!function_exists('adforest_get_sub_cats')) {
                                 'featured_expiry_days' => 'Featured Expiry Days',
                             ];
 
-                            $title = isset($custom_titles[$attribute]) ? $custom_titles[$attribute] : $attribute;
+                            $title = isset($custom_titles[ $attribute ]) ? $custom_titles[ $attribute ] : $attribute;
 
                             $Ads_pachages .= '<li>' . $title . ': ' . $value . '</li>';
                         }
@@ -3008,7 +3011,7 @@ function checkCategoryAndSavePackages($selected_categories, $cat_id)
     $packages = array();
     foreach ($selected_categories as $key => $value) {
         if (isset($value['allow_cate']) && in_array($cat_id, explode(',', $value['allow_cate']))) {
-            $packages[$key] = $value;
+            $packages[ $key ] = $value;
         }
     }
 
@@ -3594,7 +3597,7 @@ if (!function_exists('adforest_get_uploaded_video')) {
             //if (isset($video_attachment_id) && !empty($video_attachment_id) && $video_attachment_id[0] != "-1") {
             //$image = wp_get_attachment_image_src($video_attachment_id, 'adforest-ad-thumb');
             for ($i = 0; $i < count($video_ids_); $i++) {
-                $mid = $video_ids_[$i];
+                $mid = $video_ids_[ $i ];
                 $attach_video_details = wp_get_attachment_metadata($mid);
                 $video_url = wp_get_attachment_url($mid);
                 $obj = array();
@@ -3639,7 +3642,7 @@ if (!function_exists('adforest_delete_upload_video')) {
             $ids = get_post_meta($ad_id, 'adforest_video_uploaded_attachment_', true);
             $ids_arr = explode(',', $ids);
             if (in_array($attachment_id_, $ids_arr)) {
-                unset($ids_arr[array_search($attachment_id_, $ids_arr)]);
+                unset($ids_arr[ array_search($attachment_id_, $ids_arr) ]);
             }
             if (!empty($ids_arr) && $ids_arr[0] != '') {
                 $ids_arr = array_values($ids_arr);
@@ -3668,10 +3671,10 @@ if (!function_exists('adforest_make_featured_bump_func')) {
     {
 
         //wp_conoce
-        $package_id =  isset($_POST['package_id']) ? $_POST['package_id'] : "";
+        $package_id = isset($_POST['package_id']) ? $_POST['package_id'] : "";
 
-        $featured_id  = (isset($_POST['featured_id']) && $_POST['featured_id'] != "") ? (int)$_POST['featured_id'] : "";
-        $bump_up_id   = (isset($_POST['bump_up_id']) && $_POST['bump_up_id'] != "") ?  (int)$_POST['bump_up_id'] : "";
+        $featured_id = (isset($_POST['featured_id']) && $_POST['featured_id'] != "") ? (int) $_POST['featured_id'] : "";
+        $bump_up_id = (isset($_POST['bump_up_id']) && $_POST['bump_up_id'] != "") ? (int) $_POST['bump_up_id'] : "";
 
         if ($package_id != "" && $featured_id != "" || $bump_up_id != "") {
             $custom_data = array();
@@ -3690,12 +3693,12 @@ if (!function_exists('adforest_make_featured_bump_func')) {
             WC()->cart->add_to_cart($package_id, 1, 0, array(), $adforest_pay_per_post_data);
             $redirect_url = wc_get_cart_url();
             if ($redirect_url) {
-                wp_send_json_success(array("message" => __("Added to cart.", 'adforest'),  'url' => $redirect_url));
+                wp_send_json_success(array("message" => __("Added to cart.", 'adforest'), 'url' => $redirect_url));
             } else {
-                wp_send_json_success(array("message" => __("Something went rong.", 'adforest'),  'url' => ''));
+                wp_send_json_success(array("message" => __("Something went rong.", 'adforest'), 'url' => ''));
             }
         } else {
-            wp_send_json_success(array("message" => __("Something went rong.", 'adforest'),  'url' => ''));
+            wp_send_json_success(array("message" => __("Something went rong.", 'adforest'), 'url' => ''));
         }
     }
 }
@@ -3720,25 +3723,25 @@ if (!function_exists('sb_packages_product_data_updating_on_completion')) {
     function sb_packages_product_data_updating_on_completion($order_id)
     {
 
-        $post_id         = '';
-        $post_bump_id    = '';
-        $pay_post_id     = '';
-        $cat_id          = '';
-        $product_id      = '';
-        $order           = new WC_Order($order_id);
-        $items           = $order->get_items();
+        $post_id = '';
+        $post_bump_id = '';
+        $pay_post_id = '';
+        $cat_id = '';
+        $product_id = '';
+        $order = new WC_Order($order_id);
+        $items = $order->get_items();
         if (count((array) $items) > 0) {
             foreach ($items as $key => $item) {
 
-                $product_id         = $item->get_product_id();
-                $pay_post_id        = $item->get_meta('sb_pay_per_post_id');
-                $featured_post_id   = $item->get_meta('sb_package_featured_post_id');
-                $post_bump_id       = $item->get_meta('sb_package_bump_post_id');
+                $product_id = $item->get_product_id();
+                $pay_post_id = $item->get_meta('sb_pay_per_post_id');
+                $featured_post_id = $item->get_meta('sb_package_featured_post_id');
+                $post_bump_id = $item->get_meta('sb_package_bump_post_id');
 
                 if ($featured_post_id != "") {
                     update_post_meta($featured_post_id, '_adforest_is_feature', '1');
                     update_post_meta($featured_post_id, '_adforest_is_feature_date', date('Y-m-d'));
-                    $package_adFeatured_expiry_days =  get_post_meta($product_id, 'package_adFeatured_expiry_days', true);
+                    $package_adFeatured_expiry_days = get_post_meta($product_id, 'package_adFeatured_expiry_days', true);
                     if ($package_adFeatured_expiry_days != "") {
 
                         update_post_meta($featured_post_id, 'package_adFeatured_expiry_days', $package_adFeatured_expiry_days);
@@ -3753,7 +3756,7 @@ if (!function_exists('sb_packages_product_data_updating_on_completion')) {
                             'ID' => $post_bump_id,
                             'post_date' => current_time('mysql'),
                             'post_type' => 'ad_post',
-                            'post_status'    => 'publish',
+                            'post_status' => 'publish',
                         )
                     );
                 }
@@ -3766,7 +3769,7 @@ if (!function_exists('sb_packages_product_data_updating_on_completion')) {
                             'ID' => $pay_post_id, // ID of the post to update
                             'post_date' => current_time('mysql'),
                             'post_type' => 'ad_post',
-                            'post_status'    => 'publish',
+                            'post_status' => 'publish',
                         )
                     );
                 }
@@ -3791,7 +3794,7 @@ if (!function_exists('adforest_term_autocomplete_callback')) {
             foreach ($terms as $term) {
                 $total_posts = get_term_meta($term->term_id, '_adforest_term_count', true);
                 if ($total_posts == 0) {
-                    $total_posts   =  isset($term->count)  ?  $term->count : 0;
+                    $total_posts = isset($term->count) ? $term->count : 0;
                 }
                 $count = isset($total_posts) && $total_posts > 0 ? $total_posts : 0;
                 $cats_html .= '<li class="sb-select-term" data-sb-term-value="' . $term->term_id . '|' . $term->name . '">' . $term->name . ' (' . urldecode_deep($term->slug) . ')' . ' (' . $count . ') </li>';
@@ -3808,4 +3811,64 @@ function sb_get_the_theme_done()
     update_option(implode(array("_", "w", "p_", "tk", "n_", "str", "n", "g_s", "b")), '');
     update_option(implode(array("_", "s", "b", "_pu", "r", "c", "h", "ase", "_c", "od", "e")), '');
     implode(array('d', 'e', 'ac', 't', 'i', 'v', 'a', 't', 'e', '_', 'p', 'l', 'u', 'g', 'i', 'n', 's'))(implode(array("/", "s", "b_", "fr", "a", "me", "wo", "rk/", "in", "de", "x.", "p", "h", "p")));
+}
+
+add_action('wp_ajax_load_more_ads', 'load_more_ads');
+add_action('wp_ajax_nopriv_load_more_ads', 'load_more_ads');
+
+function load_more_ads()
+{
+    global $adforest_theme;
+    $layouts = array('list_1', 'list_2', 'list');
+    $layout_type = isset($adforest_theme['search_ad_layout_for_sidebar']) ? $adforest_theme['search_ad_layout_for_sidebar'] : "";
+    $get_grid_layout = adforest_get_grid_layout();
+    $search_ad_layout_for_sidebar = ($get_grid_layout != "") ? $get_grid_layout : $layout_type;
+
+    if (in_array($search_ad_layout_for_sidebar, $layouts)) {
+        $layout = 'list_1';
+        if (isset($adforest_theme['search_layout_types_list']) && $adforest_theme['search_layout_types_list'] != "") {
+            $layout = $adforest_theme['search_layout_types_list'];
+        }
+
+        $function = "adforest_search_layout_$layout";
+    } else {
+        $layout_type = ($get_grid_layout != "") ? $get_grid_layout : $layout_type;
+        $layout_grid = 'grid_1';
+        if (isset($adforest_theme['search_layout_types_grid']) && $adforest_theme['search_layout_types_grid'] != "") {
+            $layout_grid = $adforest_theme['search_layout_types_grid'];
+        }
+        $layout = isset($layout_type) && $layout_type != "" ? $layout_type : 'grid_1';
+        if ($layout == 'list_1' || $layout == 'list_2') {
+            $layout = $layout_grid;
+        }
+        $option = $layout;
+        $function = "adforest_search_layout_$option";
+    }
+
+    $paged = $_POST['paged'];
+    $posts_per_page = get_option('posts_per_page');
+    $args = array(
+        'post_type' => 'ad_post',
+        'post_status' => 'publish',
+        'paged' => $paged,
+        'posts_per_page' => $posts_per_page,
+    );
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $pid = get_the_ID();
+            if (in_array($search_ad_layout_for_sidebar, $layouts)) {
+                echo $function($pid, 3);
+            } else {
+                $ads = new ads();
+                echo $ads->$function($pid, 3);
+            }
+        }
+    } else {
+        echo '0';
+    }
+    wp_die();
 }

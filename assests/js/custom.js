@@ -295,7 +295,7 @@
       rtl: is_rtl,
       loop:
         $(".active .products_tabs_slider_full .wrapper-latest-product").length >
-        1
+          1
           ? true
           : false,
       nav: true,
@@ -777,7 +777,7 @@
   if ($("#rating_reply_form").length > 0) {
     $("#rating_reply_form")
       .parsley()
-      .on("field:validated", function () {})
+      .on("field:validated", function () { })
       .on("form:submit", function () {
         $("#sb_loading").show();
         $.post(ajax_url, {
@@ -867,7 +867,7 @@
   if ($("#send_message_pop").length > 0) {
     $("#send_message_pop")
       .parsley()
-      .on("field:validated", function () {})
+      .on("field:validated", function () { })
       .on("form:submit", function () {
         $("#sb_loading").show();
         var fd = new FormData();
@@ -1104,8 +1104,8 @@
                 .then(function (token) {
                   jQuery("#sb-sign-form").prepend(
                     '<input type="hidden" name="g-recaptcha-response" value="' +
-                      token +
-                      '">'
+                    token +
+                    '">'
                   );
                   jQuery.post(
                     adforest_ajax_url,
@@ -1693,8 +1693,8 @@
                 .then(function (token) {
                   jQuery("#user_contact_form").prepend(
                     '<input type="hidden" name="g-recaptcha-response" value="' +
-                      token +
-                      '">'
+                    token +
+                    '">'
                   );
 
                   jQuery.post(
@@ -1965,7 +1965,7 @@
 
     $("#ad_post_form")
       .parsley()
-      .on("field:validated", function () {})
+      .on("field:validated", function () { })
       .on("form:error", function () {
         $(".ad_errors").show();
         $(".parsley-errors-list").show();
@@ -2080,7 +2080,7 @@
         action: "post_ad",
         title: $("#ad_title").val(),
         is_update: $("#is_update").val(),
-      }).done(function (response) {});
+      }).done(function (response) { });
     }
   });
 
@@ -2145,7 +2145,7 @@
       var i = 0;
       var sb_max_files =
         typeof $("#sb_upload_video_limit").val() !== "undefined" &&
-        $("#sb_upload_video_limit").val() == "null"
+          $("#sb_upload_video_limit").val() == "null"
           ? null
           : $("#sb_upload_video_limit").val();
       $("#dropzone_video").dropzone({
@@ -2267,7 +2267,7 @@
       var i = 0;
       var sb_max_files =
         typeof $("#sb_upload_limit").val() !== "undefined" &&
-        $("#sb_upload_limit").val() == "null"
+          $("#sb_upload_limit").val() == "null"
           ? null
           : $("#sb_upload_limit").val();
       $("#dropzone").dropzone({
@@ -3270,8 +3270,8 @@
     $(this).scrollTop() > offset
       ? ad_post_btn.addClass("sticky-post-button-visible")
       : ad_post_btn
-          .removeClass("sticky-post-button-visible")
-          .removeClass("sticky-post-button-fadeout");
+        .removeClass("sticky-post-button-visible")
+        .removeClass("sticky-post-button-fadeout");
     $(this).scrollTop() > offset
       ? $back_to_top.addClass("cd-is-visible")
       : $back_to_top.removeClass("cd-is-visible cd-fade-out");
@@ -3600,8 +3600,8 @@
                 .then(function (token) {
                   jQuery("#user_contact_form").prepend(
                     '<input type="hidden" name="g-recaptcha-response" value="' +
-                      token +
-                      '">'
+                    token +
+                    '">'
                   );
                   jQuery.post(
                     adforest_ajax_url,
@@ -3905,21 +3905,21 @@
             }).done(function (response) {
               $('#sb_loading').hide();
               if (response.success) {
-                  toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
-                  if (response.data.url) {
-                      location.replace(response.data.url);
-                  }else {
-                      window.location.reload();
-                  }
+                toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                if (response.data.url) {
+                  location.replace(response.data.url);
+                } else {
+                  window.location.reload();
+                }
               } else {
-                  toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
               }
-          });
+            });
           },
         },
         cancel: {
           text: cancel_btn,
-          function() {},
+          function() { },
         },
       },
     });
@@ -3933,16 +3933,16 @@
     $('#sb_loading').hide();
 
     $.dialog({
-        title: "Please Select a Package",
-        content: ad_packages,
-        theme: 'Material',
-        closeIcon: true,
-        animation: 'scale',
-        type: 'blue',
+      title: "Please Select a Package",
+      content: ad_packages,
+      theme: 'Material',
+      closeIcon: true,
+      animation: 'scale',
+      type: 'blue',
     });
   });
-  
-  $(document).on('submit', '#make_listing_feartured_dashboard', function(e) {
+
+  $(document).on('submit', '#make_listing_feartured_dashboard', function (e) {
     e.preventDefault();
     $('#sb_loading').show();
 
@@ -3950,30 +3950,30 @@
     var ads_package = $(this).find('input[name="ads_package"]:checked').val();
 
     $.ajax({
-        url: adforest_ajax_url,
-        method: 'POST',
-        data: {
-            action: 'sb_make_featured',
-            ad_id: ad_id,
-            ads_package: ads_package,
-        },
-        success: function(response) {
-          $('#sb_loading').hide();
-          if (response.success) {
-              toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
-              if (response.data.url) {
-                  location.replace(response.data.url);
-              }else {
-                  window.location.reload();
-              }
-          } else {
-              toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
-          }
+      url: adforest_ajax_url,
+      method: 'POST',
+      data: {
+        action: 'sb_make_featured',
+        ad_id: ad_id,
+        ads_package: ads_package,
       },
-        error: function(error) {
-            $('#sb_loading').hide();
-            console.log("Error submitting form", error);
+      success: function (response) {
+        $('#sb_loading').hide();
+        if (response.success) {
+          toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+          if (response.data.url) {
+            location.replace(response.data.url);
+          } else {
+            window.location.reload();
+          }
+        } else {
+          toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
         }
+      },
+      error: function (error) {
+        $('#sb_loading').hide();
+        console.log("Error submitting form", error);
+      }
     });
   });
 
@@ -4444,21 +4444,49 @@
     $("#play-video").YouTubePopUp();
   }
 
+  jQuery(document).ready(function($) {
+    var paged = 2;
+    $('#load-more-ads-btn').on('click', function() {
+        $("#sb_loading").show();
+        $.ajax({
+            type: 'POST',
+            url: ajax_url,
+            data: {
+                action: 'load_more_ads',
+                paged: paged
+            },
+            beforeSend: function() {
+                $('#load-more-ads-btn').text('Loading...');
+            },
+            success: function(response) {
+                $("#sb_loading").hide();
+                if (response == '0') {
+                    $('#load-more-ads-btn').text('No More Ads').prop('disabled', true);
+                } else {
+                    $('#ad-list').append(response);
+                    $('#load-more-ads-btn').text('Show More');
+                    paged++;
+                }
+            }
+        });
+    });
+});
+
   async function fetchAdPackages(adforest_ajax_url, adID, formId) {
     let result;
     try {
-        result = await $.ajax({
-            url: adforest_ajax_url,
-            type: 'POST',
-            data: {
-                action: 'load_feature_ad_modal',
-                adID,
-                formId
-            }
-        });
-        return result;
+      result = await $.ajax({
+        url: adforest_ajax_url,
+        type: 'POST',
+        data: {
+          action: 'load_feature_ad_modal',
+          adID,
+          formId
+        }
+      });
+      return result;
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
   }
 

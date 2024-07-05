@@ -19,6 +19,13 @@ $ad_status = get_post_meta($pid, '_adforest_ad_status_', true);
                 <?php get_template_part('template-parts/layouts/ad-style/ad', 'status'); ?>
                 <?php get_template_part('template-parts/layouts/ad-style/rearrange', 'notification'); ?>
                 <?php get_template_part('template-parts/layouts/ad-style/feature', 'notification'); ?>
+                <?php
+                    if(isset($adforest_theme['sb_show_recently_viewed_on_ad_detail']) && $adforest_theme['sb_show_recently_viewed_on_ad_detail'] != "") {
+                        if (is_recently_viewed_ad_post($pid)) { 
+                            echo adforest_recently_viewed_ad($pid);
+                        }
+                        echo add_recently_viewed_ad_post($pid);
+                    }?>
                 <div class="best-car-sale">
                     <div class="sale-head">
 

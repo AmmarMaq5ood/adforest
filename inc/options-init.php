@@ -1901,6 +1901,12 @@ Redux::setSection($opt_name, array(
             'title' => __('Show Ad ID on ad detail page', 'adforest'),
             'default' => false,
         ),
+         array(
+            'id' => 'sb_show_recently_viewed_on_ad_detail',
+            'type' => 'switch',
+            'title' => __('Show Recently Viewed on Ad Detail Page', 'adforest'),
+            'default' => false,
+        ),
         array(
             'id' => 'ad_slider_type',
             'type' => 'button_set',
@@ -2337,6 +2343,16 @@ Redux::setSection($opt_name, array(
             'subtitle' => __('Choose radius search type', 'adforest'),
         ),
         array(
+            'id' => 'loading_ads_mode',
+            'type' => 'button_set',
+            'title' => __('Choose Ads Loading Mode', 'adforest'),
+            'options' => array(
+                'pagination' => 'Pagination',
+                'show_more' => 'Show More',
+            ),
+            'default' => 'pagination',
+        ),
+        array(
             'id' => 'search_widget_limit',
             'type' => 'button_set',
             'title' => __('Default widgets show', 'adforest'),
@@ -2355,6 +2371,13 @@ Redux::setSection($opt_name, array(
             'title' => __('Featured Ads', 'adforest'),
             'subtitle' => __('on search, location and category', 'adforest'),
             'default' => true,
+        ),
+        array(
+            'id' => 'recently_viewed_on_search',
+            'type' => 'switch',
+            'title' => __('Recently Viewed', 'adforest'),
+            'subtitle' => __('on search, location and category', 'adforest'),
+            'default' => false,
         ),
         array(
             'id' => 'max_ads_feature',

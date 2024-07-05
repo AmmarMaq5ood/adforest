@@ -4726,6 +4726,20 @@ section.search-bar-content {
   flex: 0 0 40.1%;
   position: relative;
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+#ads-search-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+#ads-search-container {
+  overflow-y: scroll; 
+  overflow-x:hidden;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 .search-vendor-page
   .col-xxl-10.col-xl-10.col-lg-10
   .search-found-list

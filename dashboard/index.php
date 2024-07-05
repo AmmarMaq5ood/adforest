@@ -859,6 +859,20 @@ $sb_post_ad_page = apply_filters('adforest_ad_post_verified_id', $sb_post_ad_pag
                                 </div>
 
                             </div>
+                            <!-- Recently Viewed Table -->
+                            <div class="col-12">
+                                <div class="card card-default">
+                                    <div class="card-header justify-content-between mb-1">
+                                        <h2><?php echo esc_html__('Recently Viewed Ads', 'adforest') ?></h2>
+
+                                    </div>
+                                    <div class="row">
+                                        <?php echo display_recently_viewed_ad_posts(); ?>
+                                    </div>
+                                    <div class="mt-3"></div>
+                                </div>
+                            </div>
+                            <!-- Recently Viewed Table -->
                         </div>
                     </div>
                 </div>
