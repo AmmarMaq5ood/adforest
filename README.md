@@ -3,6 +3,4 @@ This is a repo for adforest theme to activate this theme use this id='adforest-2
 
 testing new branch --updated
 
-AIzaSyB_La6qmewwbVnTZu5mn3tVrtu6oMaSXaI
-
 Google Maps API Key Working Right now = AIzaSyC67_gvQebjFfDcP_UlgGFujAlJRMhIb1o
