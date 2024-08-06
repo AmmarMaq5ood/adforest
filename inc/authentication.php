@@ -2072,7 +2072,6 @@ if (!function_exists('adforest_ad_posting')) {
             }
 
             if ($ad_status == 'pending') {
-
                 adforest_get_notify_on_ad_post($pid, true);
             }
         } else {
@@ -2585,7 +2584,6 @@ if (!function_exists('adforestCustomFieldsVals')) {
         /* $terms = wp_get_post_terms($post_id, 'ad_cats'); */
         $is_show = '';
         if (count($terms) > 0) {
-
             foreach ($terms as $term) {
                 $term_id = $term;
                 $t = adforest_dynamic_templateID($term_id);
@@ -3042,16 +3040,34 @@ if (!function_exists('sb_display_bidding_section_callback')) {
 
         $ad_id = isset($_POST['bid_ad_id']) && $_POST['bid_ad_id'] != '' ? $_POST['bid_ad_id'] : $ad_id;
         if ($sb_make_bid_categorised && $bid_categorised_type == 'selective') {
-            $cat_id = isset($_POST['cat_id']) && !empty($_POST['cat_id']) ? $_POST['cat_id'] : 0;
-            $bid_cat_base = get_term_meta($cat_id, 'adforest_make_bid_cat_base', true);
-            if (isset($bid_cat_base) && $bid_cat_base == 'yes' && $biding_value != "" && $biding_value != 0) {
-                echo '1';
+            if ($adforest_theme['sb_make_bidding_paid']) {
+                $cat_id = isset($_POST['cat_id']) && !empty($_POST['cat_id']) ? $_POST['cat_id'] : 0;
+                $bid_cat_base = get_term_meta($cat_id, 'adforest_make_bid_cat_base', true);
+                if (isset($bid_cat_base) && $bid_cat_base == 'yes' && $biding_value != "" && $biding_value != 0) {
+                    echo '1';
+                } else {
+                    echo '0';
+                }
+                update_post_meta($ad_id, 'adforest_latest_bid_cat_id', $cat_id);
             } else {
-                echo '0';
+                $cat_id = isset($_POST['cat_id']) && !empty($_POST['cat_id']) ? $_POST['cat_id'] : 0;
+                $bid_cat_base = get_term_meta($cat_id, 'adforest_make_bid_cat_base', true);
+                if (isset($bid_cat_base) && $bid_cat_base == 'yes') {
+                    echo '1';
+                } else {
+                    echo '0';
+                }
             }
-            update_post_meta($ad_id, 'adforest_latest_bid_cat_id', $cat_id);
         } else {
-            echo '1';
+            if ($adforest_theme['sb_make_bidding_paid']) {
+                if ($biding_value != "" && $biding_value != 0) {
+                    echo '1';
+                } else {
+                    echo '0';
+                }
+            } else {
+                echo '1';
+            }
         }
         wp_die();
     }
