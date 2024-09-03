@@ -512,6 +512,51 @@ function adforest_get_recent_products_list($product) {
 }
 }
 
+function adforest_custom_product_type_options( $options ) {
+    // Add the virtual and downloadable options for both simple and custom product types
+    $options['virtual'] = array(
+        'id'            => '_virtual',
+        'wrapper_class' => 'show_if_simple show_if_adforest_classified_pkgs show_if_adforest_feature_pkgs show_if_adforest_bump_up_pkgs show_if_adforest_pay_per_post_pkgs',
+        'label'         => __( 'Virtual', 'woocommerce' ),
+        'description'   => __( 'Virtual products are intangible and are not shipped.', 'woocommerce' ),
+        'default'       => 'no',
+    );
+
+    $options['downloadable'] = array(
+        'id'            => '_downloadable',
+        'wrapper_class' => 'show_if_simple show_if_adforest_classified_pkgs show_if_adforest_feature_pkgs show_if_adforest_bump_up_pkgs show_if_adforest_pay_per_post_pkgs',
+        'label'         => __( 'Downloadable', 'woocommerce' ),
+        'description'   => __( 'Downloadable products give access to a file upon purchase.', 'woocommerce' ),
+        'default'       => 'no',
+    );
+
+    return $options;
+}
+add_filter( 'product_type_options', 'adforest_custom_product_type_options' );
+
+
+function adforest_custom_product_js() {
+    ?>
+    <script type='text/javascript'>
+        jQuery( document ).ready( function() {
+            // Ensure options are shown for both simple and custom product types
+            jQuery( '.options_group.show_if_simple, .options_group.show_if_adforest_classified_pkgs, .options_group.show_if_adforest_feature_pkgs, .options_group.show_if_adforest_bump_up_pkgs, .options_group.show_if_adforest_pay_per_post_pkgs' ).addClass( 'show_if_simple' );
+        });
+    </script>
+    <?php
+}
+add_action( 'admin_footer', 'adforest_custom_product_js' );
+
+function adforest_save_custom_product_options( $post_id ) {
+    // Save Virtual option
+    $is_virtual = isset( $_POST['_virtual'] ) ? 'yes' : 'no';
+    update_post_meta( $post_id, '_virtual', $is_virtual );
+
+    // Save Downloadable option
+    $is_downloadable = isset( $_POST['_downloadable'] ) ? 'yes' : 'no';
+    update_post_meta( $post_id, '_downloadable', $is_downloadable );
+}
+add_action( 'woocommerce_process_product_meta', 'adforest_save_custom_product_options' );
 
 //=======fa=======
 /* Remove Categories, sku from Single Products */

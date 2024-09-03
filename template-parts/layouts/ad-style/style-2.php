@@ -318,9 +318,9 @@ $address = get_post_meta($pid, '_adforest_ad_location', true);
                         }
                         $is_fav = '';
                                 $pid =  get_the_ID();
-            if (get_user_meta(get_current_user_id(), '_sb_fav_id_' . $pid, true) == $pid) {
-                    $is_fav = 'ad-favourited';
-            }
+                        if (get_user_meta(get_current_user_id(), '_sb_fav_id_' . $pid, true) == $pid) {
+                                $is_fav = 'ad-favourited';
+                        }
                         ?><li class="<?php echo $is_fav; ?>"><a href="javascript:void(0);" class="ad_to_fav" data-adid="<?php echo get_the_ID(); ?>"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16" class="iconify icon-start" data-icon="bi:heart" data-inline="false" style="transform: rotate(360deg);"><g fill="currentColor"><path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385c.92 1.815 2.834 3.989 6.286 6.357c3.452-2.368 5.365-4.542 6.286-6.357c.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"></path></g></svg></i> </a></li>
                         <li><a data-bs-target=".report-quote" data-bs-toggle="modal"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16" class="iconify icon-start" data-icon="bi:exclamation-triangle" data-inline="false" style="transform: rotate(360deg);"><g fill="currentColor"><path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016a.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06a.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017a.163.163 0 0 1-.054-.06a.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"></path><path d="M7.002 12a1 1 0 1 1 2 0a1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"></path></g></svg></i></a></li>
                     </ul>

@@ -320,6 +320,7 @@ if (!function_exists('ad_post_short_base_func')) {
                 }
 
                 if ($levelz >= 3) {
+//                    Monkey va plant bug myth
                     $ad_country_cities = adforest_get_cats('ad_country', $countries[1]['id'], 0, 'post_ad');
                     $country_cities = '';
                     foreach ($ad_country_cities as $ad_city) {

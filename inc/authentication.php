@@ -134,11 +134,11 @@ if (!class_exists('authentication')) {
                    <input type="hidden"  id="reg_form_type" name = "reg_form_type" value="1">
 		  
 					</p>
-		   <input type="hidden" id="get_action" value="register" />
-		   <input type="hidden" id="nonce_register" value="' . $key_code . '" />
-		   <input type="hidden" id="verify_account_msg" value="' . __('Verificaton email has been sent to your email.', 'adforest') . '" />
-	          <input type="hidden" id="verify_recaptcha" value="' . __('Verify Recaptcha to procees', 'adforest') . '" />	
-                       <input type="hidden" id="admin_verify_account" value="' . __('Admin will verify your accouunt and let you know shortly.', 'adforest') . '" />
+		    <input type="hidden" id="get_action" value="register" />
+		    <input type="hidden" id="nonce_register" value="' . $key_code . '" />
+		    <input type="hidden" id="verify_account_msg" value="' . __('Verificaton email has been sent to your email.', 'adforest') . '" />
+            <input type="hidden" id="verify_recaptcha" value="' . __('Verify Recaptcha to procees', 'adforest') . '" />	
+            <input type="hidden" id="admin_verify_account" value="' . __('Admin will verify your accouunt and let you know shortly.', 'adforest') . '" />
           </form>
                   ' . $modal_html . '                           
         ';
@@ -2920,10 +2920,10 @@ if (!function_exists('adforest_get_sub_cats')) {
                 }
             }
 
-            if ($category_package_flag && !$has_parent_cat) {
-                echo "cat_error";
-                die();
-            }
+            // if ($category_package_flag && !$has_parent_cat) {
+            //     echo "cat_error";
+            //     die();
+            // }
         }
 
         if ($parent_child_pkg_flag) {

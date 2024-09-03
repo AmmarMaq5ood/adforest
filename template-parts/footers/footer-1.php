@@ -6,6 +6,7 @@ if (isset($adforest_theme['footer_options']) && $adforest_theme['footer_options'
     $is_bg = '';
     $style = ' style="color:#FFF"';
 }
+echo $is_bg;
 
 
 $section1_title = isset($adforest_theme['section_1_title']) ? $adforest_theme['section_1_title'] : esc_html__('Quick Links', 'Adforest');

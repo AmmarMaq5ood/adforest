@@ -185,7 +185,29 @@ if (get_query_var('paged')) {
 } else {
     $paged = 1;
 }
-$args = array('s' => $title, 'post_type' => 'ad_post', 'post_status' => 'publish', 'posts_per_page' => get_option('posts_per_page'), 'tax_query' => array($category, $countries_location, $ad_currency), 'meta_key' => $ordering_price, 'meta_query' => array($is_active, $condition, $ad_type, $warranty, $feature_or_simple, $price, $currency, $location, $custom_search, $lat_lng_meta_query,), 'order' => $order, 'orderby' => $orderBy, 'paged' => $paged,);
+$args = array(
+    's' => $title, 
+    'post_type' => 'ad_post', 
+    'post_status' => 'publish', 
+    'posts_per_page' => get_option('posts_per_page'), 
+    'tax_query' => array($category, $countries_location, $ad_currency), 
+    'meta_key' => $ordering_price, 
+    'meta_query' => array(
+        $is_active, 
+        $condition, 
+        $ad_type, 
+        $warranty, 
+        $feature_or_simple, 
+        $price, 
+        $currency, 
+        $location, 
+        $custom_search, 
+        $lat_lng_meta_query,
+    ),
+    'order' => $order, 
+    'orderby' => $orderBy, 
+    'paged' => $paged,
+);
 $args = apply_filters('adforest_wpml_show_all_posts', $args);
 $featured_first = isset($adforest_theme['featured_first']) && $adforest_theme['featured_first'] != '' ? $adforest_theme['featured_first'] : FALSE;
 $sort_data = isset($_GET['sort']) && $_GET['sort'] != '' ? $_GET['sort'] : '';

@@ -13,7 +13,7 @@ $contact_num = get_user_meta($author->ID, '_sb_contact', true);
             </div>
             <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">  
                 <?php
-                    if (have_posts() > 0 && in_array('sb_framework/index.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+                    if (have_posts() > 0 ) {
                         while (have_posts()) {
                             the_post();
                             $pid = get_the_ID();
