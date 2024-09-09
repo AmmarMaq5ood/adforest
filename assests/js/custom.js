@@ -2585,6 +2585,8 @@
         action: "sb_get_sub_cat",
         cat_id: $("#ad_cat_sub").val(),
       }).done(function (response) {
+        var cats_html = response?.data?.cats_html || "";
+        console.log("CATS HTML: ", cats_html);
         $("#sb_loading").hide();
         if ($.trim(response) == "cat_error") {
           $("#ad_cat_sub").val("");
@@ -2600,7 +2602,7 @@
           var cats_html = response?.data?.cats_html;
           $("#ad_cat_sub_sub").val("");
           $("#ad_cat_sub_sub_sub").val("");
-          if ($.trim(response) != "") {
+          if (cats_html !== "") {
             $("#ad_cat_id").val($("#ad_cat_sub").val());
             $("#ad_cat_sub_sub_div").show();
             $("#ad_cat_sub_sub").html(cats_html);
@@ -2669,6 +2671,9 @@
         action: "sb_get_sub_cat",
         cat_id: $("#ad_cat_sub_sub").val(),
       }).done(function (response) {
+        console.log('Respone3', response);
+        var cats_html = response?.data?.cats_html;
+        console.log("CATS HTML: ", cats_html);
         $("#sb_loading").hide();
         if ($.trim(response) == "cat_error") {
           $("#ad_cat_sub_sub").val("");
@@ -2681,9 +2686,8 @@
             positionClass: "toast-top-right",
           });
         } else {
-          var cats_html = response?.data?.cats_html;
           $("#ad_cat_sub_sub_sub").val("");
-          if ($.trim(response) != "") {
+          if (cats_html !== "" && cats_html !== undefined) {
             $("#ad_cat_id").val($("#ad_cat_sub_sub").val());
             $("#ad_cat_sub_sub_sub_div").show();
             $("#ad_cat_sub_sub_sub").html(cats_html);
@@ -2725,7 +2729,9 @@
         action: "sb_get_sub_cat",
         cat_id: $("#ad_cat_sub_sub_sub").val(),
       }).done(function (response) {
+        console.log("RESPONSE3: ", response)
         var cats_html = response?.data?.cats_html;
+        console.log("CATS HTML: ", cats_html);
         $("#sb_loading").hide();
         if ($.trim(response) == "cat_error") {
           $("#ad_cat_sub_sub_sub").val("");
@@ -2739,7 +2745,7 @@
           });
         } else {
           $("#ad_cat_sub_sub_sub_sub").val("");
-          if ($.trim(response) != "") {
+          if (cats_html != "") {
             $("#ad_cat_id").val($("#ad_cat_sub_sub_sub").val());
             $("#ad_cat_sub_sub_sub_sub_div").show();
             $("#ad_cat_sub_sub_sub_sub").html(cats_html);

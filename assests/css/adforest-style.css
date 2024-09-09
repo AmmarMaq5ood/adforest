@@ -2507,6 +2507,11 @@ h3.accordion-title.faq-titlle a,
   background: #fff;
   padding-left: 30px;
 }
+
+.desc-points ul{
+  list-style: disc;
+}
+
 .detail-list .adforest-owner-text {
   width: 100%;
   background: #fff;

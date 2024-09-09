@@ -28,19 +28,19 @@ if (!function_exists('ad_post_short')) {
                         "description" => __("Select the ad post form type default or with dynamic categories based. Extra fields will only works with default form.", 'adforest'),
                     ),
                     adforest_generate_type(__('Terms & Condition Field', 'adforest'), 'dropdown', 'terms_switch', '', '', array(
-                        __('Hide', 'adforest') => 'hide',
-                        __('Show', 'adforest') => 'show',
-                    )
+                            __('Hide', 'adforest') => 'hide',
+                            __('Show', 'adforest') => 'show',
+                        )
                     ),
                     adforest_generate_type(__('Terms & Condition Title', 'adforest'), 'textfield', 'terms_title', '', '', '', '', 'vc_col-sm-12 vc_column', array(
-                        'element' => 'terms_switch',
-                        'value' => 'show',
-                    )
+                            'element' => 'terms_switch',
+                            'value' => 'show',
+                        )
                     ),
                     adforest_generate_type(__('Terms & Conditions', 'adforest'), 'vc_link', 'terms_link', '', '', '', '', 'vc_col-sm-12 vc_column', array(
-                        'element' => 'terms_switch',
-                        'value' => 'show',
-                    )
+                            'element' => 'terms_switch',
+                            'value' => 'show',
+                        )
                     ),
                     adforest_generate_type(__('Extra Fields Section Title', 'adforest'), 'textfield', 'extra_section_title'),
                     // Making add more loop for fields
@@ -166,7 +166,7 @@ if (!function_exists('ad_post_short_base_func')) {
             foreach ($packageDetails as $package) {
                 if (isset($package['featured_ads']) && $package['featured_ads'] > 0) {
                     $has_featured_ads = true;
-                    $total_featured_ads += (int) $package['featured_ads'];
+                    $total_featured_ads += (int)$package['featured_ads'];
                 }
             }
         }
@@ -286,7 +286,6 @@ if (!function_exists('ad_post_short_base_func')) {
                 }
 
 
-
                 if (isset($cats_html) && $cats_html != '') {
                     $cat_style = '';
                 }
@@ -349,21 +348,22 @@ if (!function_exists('ad_post_short_base_func')) {
             $pay_per_post_check = isset($adforest_theme['sb_pay_per_post_option']) ? $adforest_theme['sb_pay_per_post_option'] : "";
             if ($pay_per_post_check == false) {
                 $packageDetails = get_user_meta(get_current_user_id(), 'adforest_ads_package_details', true);
-                $packages = count($packageDetails);
-                // print_r($packageDetails);
+                $packages = is_array($packageDetails) ? count($packageDetails) : 0;
                 $free_ads = "";
                 $pkg_expiry_days = "";
-                foreach ($packageDetails as $key => $subArray) {
-                    if (isset($subArray['free_ads'])) {
-                        $free_ads = $subArray['free_ads'];
-                        $pkg_expiry_days = $subArray['pkg_expiry_days'];
+                if ($packages != 0) {
+                    foreach ($packageDetails as $key => $subArray) {
+                        if (isset($subArray['free_ads'])) {
+                            $free_ads = $subArray['free_ads'];
+                            $pkg_expiry_days = $subArray['pkg_expiry_days'];
+                        }
                     }
                 }
                 if (!$adforest_theme['admin_allow_unlimited_ads']) {
-                    adforest_check_validity($packages, $pkg_expiry_days);
+                    adforest_check_validity($free_ads, $pkg_expiry_days);
                 }
                 if (!is_super_admin(get_current_user_id())) {
-                    adforest_check_validity($packages, $pkg_expiry_days);
+                    adforest_check_validity($free_ads, $pkg_expiry_days);
                 }
             }
 
@@ -409,7 +409,6 @@ if (!function_exists('ad_post_short_base_func')) {
 
         // Making fields
         if (isset($atts['fields']) && $atts['fields'] != '') {
-
 
 
             if (isset($adforest_elementor) && $adforest_elementor) {
@@ -574,7 +573,7 @@ if (!function_exists('ad_post_short_base_func')) {
                     if ($p_type == $ad_price_type)
                         $p_selected = 'selected="selected"';
 
-                    $sb_price_types_html .= '<option value="' . $p_type . '" ' . $p_selected . '>' . $sb_price_types_strings[ $p_type ] . '</option>';
+                    $sb_price_types_html .= '<option value="' . $p_type . '" ' . $p_selected . '>' . $sb_price_types_strings[$p_type] . '</option>';
                 }
             }
 
@@ -992,10 +991,6 @@ if (!function_exists('ad_post_short_base_func')) {
             }
 
 
-
-
-
-
             if ($is_package_notification && isset($adforest_theme['sb_show_bump_up_notification']) && $adforest_theme['sb_show_bump_up_notification']) {
                 $bump_ad_html = '<div class="row"><div class="col-md-12 col-sm-12 col-xs-12"><div role="alert" class="alert alert-info alert-dismissible">
 				<button aria-label="Close" data-dismiss="alert" class="close" type="button"></button>
@@ -1016,7 +1011,7 @@ if (!function_exists('ad_post_short_base_func')) {
 
             if (isset($adforest_theme['allow_featured_on_ad']) && $adforest_theme['allow_featured_on_ad']) {
 
-                if ($is_feature_ad == 0 && (get_user_meta(get_current_user_id(), '_sb_expire_ads', true) == '-1' || get_user_meta(get_current_user_id(), '_sb_expire_ads', true) >= date('Y-m-d')) && (get_user_meta(get_current_user_id(), '_sb_simple_ads', true) > 0 && (get_user_meta(get_current_user_id(), 'package_ad_expiry_days', true) == '-1' || get_user_meta(get_current_user_id(), 'package_ad_expiry_days', true) > 0)) ) {
+                if ($is_feature_ad == 0 && (get_user_meta(get_current_user_id(), '_sb_expire_ads', true) == '-1' || get_user_meta(get_current_user_id(), '_sb_expire_ads', true) >= date('Y-m-d')) && (get_user_meta(get_current_user_id(), '_sb_simple_ads', true) > 0 && (get_user_meta(get_current_user_id(), 'package_ad_expiry_days', true) == '-1' || get_user_meta(get_current_user_id(), 'package_ad_expiry_days', true) > 0))) {
                     if (get_user_meta(get_current_user_id(), '_sb_featured_ads', true) == '-1' || get_user_meta(get_current_user_id(), '_sb_featured_ads', true) > 0) {
                         $count_featured_ads = __('Featured ads remaining: Unlimited', 'adforest');
 
@@ -1085,14 +1080,12 @@ if (!function_exists('ad_post_short_base_func')) {
                 }
 
 
-
                 if ($is_feature_ad == 1) {
                     $simple_feature_html = '<div role="alert" class="alert alert-info alert-dismissible">
 				<button aria-label="Close" data-dismiss="alert" class="close" type="button"></button>
 				' . __('This ad is already featured.', 'adforest') . '</div>';
                 }
             }
-
 
 
             if (isset($adforest_theme['make_feature_paid']) && $adforest_theme['make_feature_paid']) {
@@ -1209,8 +1202,6 @@ if (!function_exists('ad_post_short_base_func')) {
         }
 
 
-
-
         $sub_cat_required = isset($adforest_theme['is_sub_cat_required']) ? $adforest_theme['is_sub_cat_required'] : false;
 
         $is_req = false;
@@ -1300,7 +1291,7 @@ if (!function_exists('ad_post_short_base_func')) {
                                         </div>';
         }
 
-
+//        $Ads_pachages = '';
         $pay_per_post = isset($adforest_theme['sb_pay_per_post_option']) ? $adforest_theme['sb_pay_per_post_option'] : false;
         if (isset($pay_per_post) && $pay_per_post != 1) {
             /*  Package Details Starts   */
@@ -1331,9 +1322,9 @@ if (!function_exists('ad_post_short_base_func')) {
 
                     foreach ($packageDetails as $detailName => $detailValue) {
                         // Check if the current key is one of the desired keys
-                        if (in_array($detailName, [ 'free_ads', 'featured_ads', 'pkg_expiry_days', 'ad_expiry_days', 'featured_expiry_days' ])) {
+                        if (in_array($detailName, ['free_ads', 'featured_ads', 'pkg_expiry_days', 'ad_expiry_days', 'featured_expiry_days'])) {
 
-                            $custom_titles = [ 
+                            $custom_titles = [
                                 'free_ads' => 'Free Ads',
                                 'featured_ads' => 'Featured Ads',
                                 'pkg_expiry_days' => 'Package Expiry Days',
@@ -1342,7 +1333,7 @@ if (!function_exists('ad_post_short_base_func')) {
                             ];
 
                             // Get the custom title for the current key, or use the original key if not found
-                            $title = isset($custom_titles[ $detailName ]) ? $custom_titles[ $detailName ] : $detailName;
+                            $title = isset($custom_titles[$detailName]) ? $custom_titles[$detailName] : $detailName;
 
                             // Add the custom title and value to the HTML output
                             $Ads_pachages .= '<li>' . $title . ': ' . $detailValue . '</li>';
@@ -1357,8 +1348,8 @@ if (!function_exists('ad_post_short_base_func')) {
                 if ($sb_simple_ads > 0 && ($package_ad_expiry_days == '-1' || $package_ad_expiry_days > 0) && ($sb_expire_ads == '-1' || $sb_expire_ads > date('Y-m-d'))) {
                     $Ads_pachages = '';
                 }
-            ?>
-            <?php
+                ?>
+                <?php
             }
         }
         /*  Package Details Ends  */
