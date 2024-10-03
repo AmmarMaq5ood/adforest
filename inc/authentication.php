@@ -1153,7 +1153,7 @@ if (!function_exists('adforest_register_user')) {
                 update_user_meta($uid, '_sb_pkg_type', 'free');
                 // Email for new user
                 if (function_exists('adforest_email_on_new_user')) {
-                    adforest_email_on_new_user($user->ID, '');
+                    adforest_email_on_new_user($uid, '');
                 }
                 // check phone verification is on or not
                 // check phone verification is on or not
@@ -2496,13 +2496,7 @@ if (!function_exists('adforest_ad_posting')) {
             update_user_meta(get_current_user_id(), '_sb_simple_ads', $deducted_simple_ads);
         }
 
-        if (isset($adforest_theme['make_feature_paid']) && $adforest_theme['make_feature_paid'] && get_post_meta($pid, '_adforest_is_feature', true) != "1") {
-            $url = get_the_permalink($adforest_theme['sb_feature_template_page']);
-            $redirect_url = $url . "?pid=" . $pid;
-        } elseif (isset($adforest_theme['make_bump_up_paid']) && $adforest_theme['make_bump_up_paid'] && get_post_meta($pid, '_sb_bump_ads', true) != "1" && $_POST['is_update'] != "") {
-            $url = get_the_permalink($adforest_theme['sb_bump_up_template_page']);
-            $redirect_url = $url . "?pid=" . $pid;;
-        } elseif (isset($adforest_theme['sb_pay_per_post_option']) && $adforest_theme['sb_pay_per_post_option'] == 1 && !empty($product_ids)) {
+        if (isset($adforest_theme['sb_pay_per_post_option']) && $adforest_theme['sb_pay_per_post_option'] == 1 && !empty($product_ids)) {
             $selecte_cate = $params['ad_cat'];
             $args = array(
                 'tax_query' => array(
@@ -2546,6 +2540,12 @@ if (!function_exists('adforest_ad_posting')) {
                     $redirect_url = wc_get_cart_url();
                 }
             }
+        } elseif (isset($adforest_theme['make_feature_paid']) && $adforest_theme['make_feature_paid'] && get_post_meta($pid, '_adforest_is_feature', true) != "1") {
+            $url = get_the_permalink($adforest_theme['sb_feature_template_page']);
+            $redirect_url = $url . "?pid=" . $pid;
+        } elseif (isset($adforest_theme['make_bump_up_paid']) && $adforest_theme['make_bump_up_paid'] && get_post_meta($pid, '_sb_bump_ads', true) != "1" && $_POST['is_update'] != "") {
+            $url = get_the_permalink($adforest_theme['sb_bump_up_template_page']);
+            $redirect_url = $url . "?pid=" . $pid;;
         } else {
             $redirect_url = get_the_permalink($ad_post_id);
         }
@@ -2940,11 +2940,11 @@ if (!function_exists('adforest_get_sub_cats')) {
                     foreach ($values as $attribute => $value) {
                         if (in_array($attribute, ['free_ads', 'featured_ads', 'pkg_expiry_days', 'ad_expiry_days', 'featured_expiry_days'])) {
                             $custom_titles = [
-                                'free_ads' => 'Free Ads',
-                                'featured_ads' => 'Featured Ads',
-                                'pkg_expiry_days' => 'Package Expiry',
-                                'ad_expiry_days' => 'Simple Expiry Days',
-                                'featured_expiry_days' => 'Featured Expiry Days',
+                                'free_ads' => __('Free Ads', 'adforest'),
+                                'featured_ads' => __('Featured Ads', 'adforest'),
+                                'pkg_expiry_days' => __('Package Expiry Days', 'adforest'),
+                                'ad_expiry_days' => __('Simple Expiry Days', 'adforest'),
+                                'featured_expiry_days' => __('Featured Expiry Days', 'adforest'),
                             ];
 
                             $title = isset($custom_titles[$attribute]) ? $custom_titles[$attribute] : $attribute;
@@ -2954,6 +2954,7 @@ if (!function_exists('adforest_get_sub_cats')) {
                     }
                     $Ads_pachages .= '</ul>';
                 }
+
                 $sb_simple_ads = get_user_meta(get_current_user_id(), '_sb_simple_ads', true);
                 $package_ad_expiry_days = get_user_meta(get_current_user_id(), 'package_ad_expiry_days', true);
                 $sb_expire_ads = get_user_meta(get_current_user_id(), '_sb_expire_ads', true);
@@ -2975,9 +2976,20 @@ if (!function_exists('adforest_get_sub_cats')) {
                 'cats_html' => ''
             );
             $response_data['cats_html'] = $cats_html;
+            wp_send_json_success($response_data);
+            return;
         }
-        wp_send_json_success($response_data);
-        die();
+
+        $response = array();
+        if($Ads_pachages != "") {
+            $response = array(
+                'selected_packages' => $Ads_pachages,
+            );
+            wp_send_json_success($response);
+            return;
+        }
+        return;
+
     }
 }
 
@@ -2986,7 +2998,7 @@ function checkCategoryAndSavePackages($selected_categories, $cat_id)
 {
     $packages = array();
     foreach ($selected_categories as $key => $value) {
-        if (isset($value['allow_cate']) && in_array($cat_id, explode(',', $value['allow_cate']))) {
+        if ((isset($value['allow_cate']) && in_array($cat_id, explode(',', $value['allow_cate'])) || $value['allow_cate'] == 'all')) {
             $packages[$key] = $value;
         }
     }

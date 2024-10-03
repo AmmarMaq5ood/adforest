@@ -4,7 +4,7 @@
     var confirm_text = $('#confirm_text').val();
     var confirm_profile = $('#confirm_profile').val();
     var adforest_ajax_url = $('#adforest_ajax_url').val();
-
+    var sb_options = get_strings;
 
     setTimeout(function () {
         $('body').addClass('loaded');
@@ -396,7 +396,7 @@
         var ad_packages = await fetchAdPackages(adforest_ajax_url, adID, formId);
         $('#sb_loading').hide();
         $.dialog({
-            title: 'Select a Package.',
+            title: sb_options.select_pkg,
             content: ad_packages,
             theme: 'Material',
             closeIcon: true,

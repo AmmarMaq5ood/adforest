@@ -2454,7 +2454,7 @@
     sub_cat_req = true;
   }
 
-  $("#ad_cat").on("change", function () {
+  $("#ad_cat").on("change", function () {    
     if ($("#ad_cat").val()) {
         $("#sb_loading").show();
         let term_label = $(this).find(":selected").data("name");
@@ -2480,7 +2480,6 @@
             action: "sb_get_sub_cat",
             cat_id: $("#ad_cat").val(),
         }).done(function (response) {
-          console.log("THIS IS THE RESPONSE: ", response);
           
             $("#sb_loading").hide();
 
@@ -2494,6 +2493,10 @@
             } else {
                 var selected_packages = response?.data?.selected_packages || "";
                 var cats_html = response?.data?.cats_html || "";
+                if(selected_packages !== "") {
+                  // $("#purchase-package").html("");
+                  $("#purchase-package").html(selected_packages);
+                }
 
                 $("#purchase-package").html(selected_packages);
 
@@ -2586,7 +2589,6 @@
         cat_id: $("#ad_cat_sub").val(),
       }).done(function (response) {
         var cats_html = response?.data?.cats_html || "";
-        console.log("CATS HTML: ", cats_html);
         $("#sb_loading").hide();
         if ($.trim(response) == "cat_error") {
           $("#ad_cat_sub").val("");
@@ -2599,7 +2601,6 @@
             positionClass: "toast-top-right",
           });
         } else {
-          var cats_html = response?.data?.cats_html;
           $("#ad_cat_sub_sub").val("");
           $("#ad_cat_sub_sub_sub").val("");
           if (cats_html !== "") {
@@ -2671,9 +2672,7 @@
         action: "sb_get_sub_cat",
         cat_id: $("#ad_cat_sub_sub").val(),
       }).done(function (response) {
-        console.log('Respone3', response);
-        var cats_html = response?.data?.cats_html;
-        console.log("CATS HTML: ", cats_html);
+        var cats_html = response?.data?.cats_html || "";
         $("#sb_loading").hide();
         if ($.trim(response) == "cat_error") {
           $("#ad_cat_sub_sub").val("");
@@ -2729,9 +2728,7 @@
         action: "sb_get_sub_cat",
         cat_id: $("#ad_cat_sub_sub_sub").val(),
       }).done(function (response) {
-        console.log("RESPONSE3: ", response)
-        var cats_html = response?.data?.cats_html;
-        console.log("CATS HTML: ", cats_html);
+        var cats_html = response?.data?.cats_html || "";
         $("#sb_loading").hide();
         if ($.trim(response) == "cat_error") {
           $("#ad_cat_sub_sub_sub").val("");
@@ -4351,7 +4348,6 @@
         package_id: package,
         bump_up_id: pid,
       }).done(function (response) {
-        console.log(response);
 
         if (true === response.success) {
           $("#sb_loading").show();

@@ -10,6 +10,12 @@ function adforest_static_strings()
         'get_strings',
         $string_array
     );
+
+    wp_localize_script(
+        'adforest-dashboard-custom', // name of js file
+        'get_strings',
+        $string_array
+    );
 }
 
 /* make descsription link in theme options */
@@ -3919,6 +3925,7 @@ if (!function_exists('adforest_get_static_string_fun')) {
             'google_recaptcha_site_key' => isset($adforest_theme['google_api_key']) ? $adforest_theme['google_api_key'] : "",
             'sub_cat_option_select' => isset($adforest_theme['is_sub_cat_required']) ? $adforest_theme['is_sub_cat_required'] : "",
             'confirm' => __('Are you sure?', 'adforest'),
+            'select_pkg' => __('Select a Package.', 'adforest'),
         );
     }
 

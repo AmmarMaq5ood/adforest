@@ -21,7 +21,7 @@
     $sb_search_page = isset($sb_search_page) && $sb_search_page != '' ? get_the_permalink($sb_search_page) : 'javascript:void(0)';
     $sb_search_page = apply_filters('adforest_category_widget_form_action',$sb_search_page);
     ?>
-    <form method="get" action="<?php echo adforest_returnEcho($sb_search_page);?>" >
+    <form method="get" action="<?php echo esc_url(adforest_returnEcho($sb_search_page)); ?>" >
         <div id="collapseThree" class="panel-collapse collapse <?php echo esc_attr($expand); ?>" role="tabpanel" aria-labelledby="headingThree">
             <div class="panel-body">
                 <div class="skin-minimal">

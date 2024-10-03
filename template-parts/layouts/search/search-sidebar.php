@@ -141,6 +141,7 @@ $loading_ads_mode = isset($adforest_theme['loading_ads_mode']) ? $adforest_theme
                                             $find = '&raquo;';
                                             $replace = '';
                                             $result = preg_replace("/$find/", $replace, $title, 1);
+                                            echo $result;
                                             echo adforest_returnEcho($result);
                                             ?> </a>
                                     </h3>
@@ -297,7 +298,7 @@ $loading_ads_mode = isset($adforest_theme['loading_ads_mode']) ? $adforest_theme
                     } ?>
                 </div>
                 <div class="m-2" id="no_more_ads_p"></div>
-                <div id="sb_loading" style="display:none;">Loading...</div>
+                <div id="sb_loading" style="display:none;"><?php echo esc_html("Loading...", 'adforest'); ?></div>
 
 
 

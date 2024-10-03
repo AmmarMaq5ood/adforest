@@ -25,8 +25,7 @@ if (is_archive() || is_category() || is_tax() || is_author() || is_404() || is_h
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <ul class="detail-page-item">
-                        <li> <h1><a href="javascript:void(0);" class="active"><?php echo adforest_bread_crumb_heading(); ?></a></h1>  </li>                 
-                       
+                        <li> <h1><a href="javascript:void(0);" class="active"><?php echo adforest_bread_crumb_heading(); ?></a></h1>  </li>
                     </ul>
                 </div>
             </div>

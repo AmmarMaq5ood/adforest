@@ -59,6 +59,7 @@ a, b, div, li, ul {
 a {
     outline: 0;
     cursor: pointer;
+    color: white;
 }
 
 ul {
@@ -539,4 +540,3 @@ a img.aligncenter {
 .bypostauthor{
     
 }
-

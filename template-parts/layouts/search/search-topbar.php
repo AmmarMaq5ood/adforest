@@ -10,12 +10,10 @@ $sb_search_page = apply_filters('adforest_language_page_id', $adforest_theme['sb
   
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
       <div class="main-search-bar">
-        
           <div class="row">
                 <?php dynamic_sidebar('adforest_search_sidebar'); ?>
                 <?php if ($GLOBALS['widget_counter'] >= $adforest_theme['search_widget_limit']) { echo '</div>'; } ?>
           </div>
-          
       </div>
     </div>
    

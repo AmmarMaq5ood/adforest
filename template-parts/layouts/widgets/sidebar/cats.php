@@ -19,7 +19,7 @@
     $sb_search_page = apply_filters('adforest_category_widget_form_action', $sb_search_page, 'cat_page');
 
     ?>
-    <form method="get" id="search_cats_w" action="<?php echo adforest_returnEcho($sb_search_page); ?>">
+    <form method="get" id="search_cats_w" action="<?php echo esc_url(adforest_returnEcho($sb_search_page)); ?>">
         <div id="collapseOne" class="panel-collapse collapse <?php echo esc_attr($expand); ?>" role="tabpanel"
             aria-labelledby="headingOne">
             <?php

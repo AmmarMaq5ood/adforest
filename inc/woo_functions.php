@@ -140,6 +140,12 @@ if (!function_exists('adforest_after_payment')) {
                                         $update_package[$new_key]['paid_biddings'] = intval($package_data[$key]['paid_biddings']) + intval($naw_pkg_details[$key]['paid_biddings']);
                                     }
 
+                                    if($naw_pkg_details[$key]['allow_cate'] == 'all') {
+                                        $update_package[$new_key]['allow_cate'] =  'all';
+                                    } else {
+                                        $update_package[$new_key]['allow_cate'] =  $naw_pkg_details[$key]['allow_cate'];
+                                    }
+
                                     unset($package_data[$key]);
                                     $package_data = $package_data + $update_package;
                                     update_user_meta($uid, 'adforest_ads_package_details', $package_data);

@@ -4,7 +4,8 @@
 /* ------------------------------------------------ */
 if (!function_exists('ad_post_fancy_short')) {
 
-    function ad_post_fancy_short() {
+    function ad_post_fancy_short()
+    {
         vc_map(array(
             "name" => __("Ad Post - Fancy", 'adforest'),
             "base" => "ad_post_fancy_short_base",
@@ -38,7 +39,7 @@ if (!function_exists('ad_post_fancy_short')) {
                 )),
                 adforest_generate_type(__('Extra Fields Section Title', 'adforest'), 'textfield', 'extra_section_title', '', '', '', '', 'vc_col-sm-12 vc_column'),
                 array
-                    (
+                (
                     'group' => __('Extra Fields', 'adforest'),
                     'type' => 'param_group',
                     'heading' => __('Add field', 'adforest'),
@@ -49,7 +50,7 @@ if (!function_exists('ad_post_fancy_short')) {
                         'value' => 'no',
                     ),
                     'params' => array
-                        (
+                    (
                         adforest_generate_type(__('Title', 'adforest'), 'textfield', 'title'),
                         adforest_generate_type(__('Slug', 'adforest'), 'textfield', 'slug', __('This should be unique and if you change it the pervious data of this field will be lost', 'adforest')),
                         adforest_generate_type(__('Type', 'adforest'), 'dropdown', 'type', '', "", array("Please select" => "", "Textfield" => "text", "Select/List" => "select")),
@@ -65,7 +66,8 @@ if (!function_exists('ad_post_fancy_short')) {
 add_action('vc_before_init', 'ad_post_fancy_short');
 if (!function_exists('ad_post_fancy_short_base_func')) {
 
-    function ad_post_fancy_short_base_func($atts, $content = '') {
+    function ad_post_fancy_short_base_func($atts, $content = '')
+    {
         extract(shortcode_atts(array(
             'extra_section_title' => '',
             'tips_description' => '',
@@ -74,11 +76,11 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
             'terms_link' => '',
             'terms_title' => '',
             'terms_switch' => 'hide',
-                        ), $atts));
+        ), $atts));
 
         extract($atts);
 
-       
+
         global $adforest_theme;
         do_action('adforest_validate_phone_verification');
         $size_arr = explode('-', $adforest_theme['sb_upload_size']);
@@ -124,18 +126,18 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
         $country_states = '';
         $country_cities = '';
         $country_towns = '';
-         $user_address_html  = "";  
+        $user_address_html = "";
 
         $ad_bidding_date = '';
 
-         
-         $current_user = get_current_user_id();
-         $user_packages_images = get_user_meta($current_user, '_sb_num_of_images', true);
-            if (isset($user_packages_images) && $user_packages_images == '-1') {
-                $user_upload_max_images = 'null';
-            } else if (isset($user_packages_images) && $user_packages_images > 0) {
-                $user_upload_max_images = $user_packages_images;
-            }
+
+        $current_user = get_current_user_id();
+        $user_packages_images = get_user_meta($current_user, '_sb_num_of_images', true);
+        if (isset($user_packages_images) && $user_packages_images == '-1') {
+            $user_upload_max_images = 'null';
+        } else if (isset($user_packages_images) && $user_packages_images > 0) {
+            $user_upload_max_images = $user_packages_images;
+        }
 
 
 
@@ -176,7 +178,7 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
                 $is_update = $id;
                 $cats = adforest_get_ad_cats($id);
 
-    
+
                 $level = count($cats);
                 /* Make cats selected on update ad */
                 $ad_cats = adforest_get_cats('ad_cats', 0, 0, 'post_ad');
@@ -276,17 +278,35 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
                 }
             }
         } else {
-            if (!$adforest_theme['admin_allow_unlimited_ads']) {
-                adforest_check_validity();
-            }
-            if (!is_super_admin(get_current_user_id())) {
-                adforest_check_validity();
+            $pay_per_post_check = isset($adforest_theme['sb_pay_per_post_option']) ? $adforest_theme['sb_pay_per_post_option'] : "";
+            if ($pay_per_post_check == false) {
+                $packageDetails = get_user_meta(get_current_user_id(), 'adforest_ads_package_details', true);
+                $packages = is_array($packageDetails) ? count($packageDetails) : 0;
+                $free_ads = 0;
+                $pkg_expiry_days = "";
+                if ($packages != 0) {
+                    foreach ($packageDetails as $key => $subArray) {
+                        if (isset($subArray['free_ads'])) {
+                            if (isset($subArray['free_ads']) && is_numeric($subArray['free_ads'])) {
+                                $free_ads += (int) $subArray['free_ads'];  // Accumulate only numeric values
+                            }
+                            $pkg_expiry_days = $subArray['pkg_expiry_days'];
+                        }
+                    }
+                }
+
+                if (!$adforest_theme['admin_allow_unlimited_ads']) {
+                    adforest_check_validity($free_ads, $pkg_expiry_days);
+                }
+                if (!is_super_admin(get_current_user_id())) {
+                    adforest_check_validity($free_ads, $pkg_expiry_days);
+                }
             }
 
-                  $user_info =  get_userdata(get_current_user_id());
-                  
-                
-              $poster_name = $user_info->display_name;
+            $user_info = get_userdata(get_current_user_id());
+
+
+            $poster_name = $user_info->display_name;
             $poster_ph = get_user_meta($user_info->ID, '_sb_contact', true);
             //$ad_location	=	get_user_meta($profile->user_info->ID, '_sb_address', true );
 
@@ -373,7 +393,7 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
             } else {
                 $rows = vc_param_group_parse_atts($atts['fields']);
             }
-            if ( isset($rows) ) {
+            if (isset($rows)) {
                 $total_fileds = 1;
                 $extra_fields_html .= '<div class="adf-st-information-box">
                                         <div class="row">
@@ -420,13 +440,13 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
         }
 
         /* Only need on this page so inluded here don't want to increase page size for optimizaion by adding extra scripts in all the web */
-      
+
         wp_enqueue_style('jquery-tagsinput', trailingslashit(get_template_directory_uri()) . 'assests/css/jquery.tagsinput.min.css');
         wp_enqueue_style('jquery-te', trailingslashit(get_template_directory_uri()) . 'assests/css/jquery-te.css');
         wp_enqueue_style('dropzone', trailingslashit(get_template_directory_uri()) . 'assests/css/dropzone.css');
         wp_enqueue_style('adforest-dt', trailingslashit(get_template_directory_uri()) . 'assests/css/datepicker.min.css');
 
-    
+
         adforest_load_search_countries(1);
         wp_enqueue_script('google-map-callback');
         wp_enqueue_script('adforest-dt');
@@ -445,7 +465,7 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
 
         $isCustom = $ad_post_form_type;
 
-        $imageStaticHTML = $priceStaticHTML =  $videoStaticHTML = $priceTypeHTML = $ad_curreny_html = $someStaticHTML = $customDynamicFields = $customDynamicAdType = '';
+        $imageStaticHTML = $priceStaticHTML = $videoStaticHTML = $priceTypeHTML = $ad_curreny_html = $someStaticHTML = $customDynamicFields = $customDynamicAdType = '';
         if ($isCustom == 'no') {
 
             $price_fixed = '';
@@ -485,7 +505,7 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
                     if ($p_type == $ad_price_type)
                         $p_selected = 'selected="selected"';
 
-                    $sb_price_types_html .= '<option value="' . $p_type . '" ' . $p_selected . '>' . $sb_price_types_strings[$p_type] . '</option>';
+                    $sb_price_types_html .= '<option value="' . $p_type . '" ' . $p_selected . '>' . $sb_price_types_strings[ $p_type ] . '</option>';
                 }
             }
             if (isset($adforest_theme['sb_price_types_more']) && $adforest_theme['sb_price_types_more'] != "") {
@@ -568,10 +588,10 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
             if ($sb_default_img_required && $isCustom == 'no') {
                 $req_images_html = '<span class="required">*</span>';
             }
-            
-              $req_video_html   =  "";
-              $max_upload_vid_limit_opt = isset($adforest_theme['sb_upload_video_limit'])  ?    $adforest_theme['sb_upload_video_limit'] : "";
-              $max_upload_vid_size =        isset($adforest_theme['sb_upload_video_mb_limit'])  ?  $adforest_theme['sb_upload_video_mb_limit'] : 2;
+
+            $req_video_html = "";
+            $max_upload_vid_limit_opt = isset($adforest_theme['sb_upload_video_limit']) ? $adforest_theme['sb_upload_video_limit'] : "";
+            $max_upload_vid_size = isset($adforest_theme['sb_upload_video_mb_limit']) ? $adforest_theme['sb_upload_video_mb_limit'] : 2;
 
 
             $imageStaticHTML = '<div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
@@ -582,16 +602,16 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
 		                    </div>
                                   </div>
                                 </div>';
-              if(isset($adforest_theme['sb_allow_upload_video']) &&  $adforest_theme['sb_allow_upload_video']){
-            
-               $videoStaticHTML = '<div class="form-group"><div class="row">
+            if (isset($adforest_theme['sb_allow_upload_video']) && $adforest_theme['sb_allow_upload_video']) {
+
+                $videoStaticHTML = '<div class="form-group"><div class="row">
 		  <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
 			 <label class="control-label">' . __('Click the box below to ad Videos', 'adforest') . ' ' . $req_video_html . ' <small>' . __('upload only videos (mp4, ogg, webm) files with a max file size of', 'adforest') . " " . $max_upload_vid_size . '</small></label>
 			 <div id="dropzone_video" class="dropzone"></div>
 		  </div>
 		</div></div>';
-               
-              }
+
+            }
 
             $imageStaticHTML = apply_filters('adforest_directory_brand_fields', $imageStaticHTML);
 
@@ -610,33 +630,33 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
                                 ' . $video_html . '';
 
             $currenies = adforest_get_cats('ad_currency', 0);
-            $ad_currency_option =  $adforest_theme['sb_currency_option_ad_post'];
-            if($ad_currency_option != ""){
-            if (count($currenies) > 0) {
-                $ad_curreny_html = '
+            $ad_currency_option = $adforest_theme['sb_currency_option_ad_post'];
+            if ($ad_currency_option != "") {
+                if (count($currenies) > 0) {
+                    $ad_curreny_html = '
 			<div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
                         <div class="adf-information-box">
 			     <div class="form-group">
 			<label class="control-label">' . __('Select Currency', 'adforest') . '</label><select class="category form-control" id="ad_currency" name="ad_currency" data-parsley-required="true" data-parsley-error-message="' . __('This field is required.', 'adforest') . '">
 					<option value="">' . __('Select Option', 'adforest') . '</option>';
 
-                foreach ($currenies as $currency) {
-                    $selected = '';
-                    if ($ad_currency == $currency->name) {
-                        $selected = ' selected="selected"';
-                    }
-
-                    if ($ad_currency == "" && isset($adforest_theme['sb_multi_currency_default']) && $adforest_theme['sb_multi_currency_default'] != "") {
-                        if ($adforest_theme['sb_multi_currency_default'] == $currency->term_id) {
+                    foreach ($currenies as $currency) {
+                        $selected = '';
+                        if ($ad_currency == $currency->name) {
                             $selected = ' selected="selected"';
                         }
-                    }
 
-                    $ad_curreny_html .= '<option value="' . $currency->term_id . '|' . $currency->name . '"' . $selected . '>' . $currency->name . '</option>';
+                        if ($ad_currency == "" && isset($adforest_theme['sb_multi_currency_default']) && $adforest_theme['sb_multi_currency_default'] != "") {
+                            if ($adforest_theme['sb_multi_currency_default'] == $currency->term_id) {
+                                $selected = ' selected="selected"';
+                            }
+                        }
+
+                        $ad_curreny_html .= '<option value="' . $currency->term_id . '|' . $currency->name . '"' . $selected . '>' . $currency->name . '</option>';
+                    }
+                    $ad_curreny_html .= '</select></div></div></div>';
                 }
-                $ad_curreny_html .= '</select></div></div></div>';
             }
-        }
         } else {
 
             $customDynamicAdType = '';
@@ -918,7 +938,7 @@ var mymap = L.map(\'dvMap\').setView([' . $pin_lat . ', ' . $pin_long . '], 13);
         $simple_feature_html = '';
         if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
 
-            if (isset($adforest_theme['allow_featured_on_ad']) && $adforest_theme['allow_featured_on_ad'] && $is_feature_ad == 0 && ( get_user_meta(get_current_user_id(), '_sb_expire_ads', true) == '-1' || get_user_meta(get_current_user_id(), '_sb_expire_ads', true) >= date('Y-m-d') )) {
+            if (isset($adforest_theme['allow_featured_on_ad']) && $adforest_theme['allow_featured_on_ad'] && $is_feature_ad == 0 && (get_user_meta(get_current_user_id(), '_sb_expire_ads', true) == '-1' || get_user_meta(get_current_user_id(), '_sb_expire_ads', true) >= date('Y-m-d'))) {
 
                 if (get_user_meta(get_current_user_id(), '_sb_featured_ads', true) == '-1' || get_user_meta(get_current_user_id(), '_sb_featured_ads', true) > 0) {
 
@@ -1010,7 +1030,7 @@ var mymap = L.map(\'dvMap\').setView([' . $pin_lat . ', ' . $pin_long . '], 13);
 
         $ad_post_title_limit = isset($adforest_theme['ad_post_title_limit']) ? $adforest_theme['ad_post_title_limit'] : 50;
         $tems_cond_field = '';
-//        if (isset($terms_link) && $terms_link != "") {
+        //        if (isset($terms_link) && $terms_link != "") {
 //            $res = adforest_extarct_link($terms_link);
 //            $terms_text = esc_html__('Terms & conditions', 'adforest');
 //            if (isset($terms_title) && !empty($terms_title)) {
@@ -1032,7 +1052,7 @@ var mymap = L.map(\'dvMap\').setView([' . $pin_lat . ', ' . $pin_long . '], 13);
             if (isset($terms_title) && !empty($terms_title)) {
                 $terms_text = $terms_title;
             }
-            
+
             if (isset($adforest_elementor) && $adforest_elementor) {
                 $btn_args = array(
                     'btn_key' => $terms_link,
@@ -1104,7 +1124,7 @@ var mymap = L.map(\'dvMap\').setView([' . $pin_lat . ', ' . $pin_long . '], 13);
         </script>";
         } else {
 
-            
+
         }
 
         $ad_post_cat_html_custom = '<div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
@@ -1150,7 +1170,7 @@ var mymap = L.map(\'dvMap\').setView([' . $pin_lat . ', ' . $pin_long . '], 13);
                             <div class="row">
                             <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
                                 <div class="adf-information-text">
-                                    <h4>'.esc_html__('Categories','adforest').'</h4>
+                                    <h4>' . esc_html__('Categories', 'adforest') . '</h4>
                                 </div>
                             </div>
                              ' . $ad_post_cat_html_custom . '   
@@ -1173,26 +1193,25 @@ var mymap = L.map(\'dvMap\').setView([' . $pin_lat . ', ' . $pin_long . '], 13);
         $bid_ad_id = isset($_GET['id']) && !empty($_GET['id']) ? $_GET['id'] : $ad_id;
 
 
-       $address_req   =  isset($adforest_theme['sb_default_ad_addres_required'])  ?  $adforest_theme['sb_default_ad_addres_required']  :  true;
+        $address_req = isset($adforest_theme['sb_default_ad_addres_required']) ? $adforest_theme['sb_default_ad_addres_required'] : true;
 
-          $is_allowed_addres = isset($adforest_theme['sb_allow_address']) ? $adforest_theme['sb_allow_address'] : true;
-       
-       
-       $user_address_html  =  "";
-       if($is_allowed_addres ){
-  
-        if($address_req){
-        $user_address_html   =      ' <label class="control-label">' . __('Address', 'adforest') . ' <span class="required">*</span></label>
+        $is_allowed_addres = isset($adforest_theme['sb_allow_address']) ? $adforest_theme['sb_allow_address'] : true;
+
+
+        $user_address_html = "";
+        if ($is_allowed_addres) {
+
+            if ($address_req) {
+                $user_address_html = ' <label class="control-label">' . __('Address', 'adforest') . ' <span class="required">*</span></label>
                          <input class="form-control" value="' . $ad_location . '" type="text" name="sb_user_address" id="sb_user_address" data-parsley-required="true" data-parsley-error-message="' . __('This field is required.', 'adforest') . '" placeholder="' . __('Enter a location', 'adforest') . '" onkeydown="return (event.keyCode!=13);">';
-        }
-        else {
-            
-             $user_address_html   =      ' <label class="control-label">' . __('Address', 'adforest') . ' </label>
+            } else {
+
+                $user_address_html = ' <label class="control-label">' . __('Address', 'adforest') . ' </label>
                          <input class="form-control" value="' . $ad_location . '" type="text" name="sb_user_address" id="sb_user_address" data-parsley-required="false" data-parsley-error-message="' . __('This field is required.', 'adforest') . '" placeholder="' . __('Enter a location', 'adforest') . '" onkeydown="return (event.keyCode!=13);">';
+            }
+
         }
-        
-       }
- $video_logo_url = get_template_directory_uri() . '/images/video-logo.jpg';
+        $video_logo_url = get_template_directory_uri() . '/images/video-logo.jpg';
 
         return '<section class="adfancy-post-ad section-padding">
             <div class="container">
@@ -1222,7 +1241,7 @@ var mymap = L.map(\'dvMap\').setView([' . $pin_lat . ', ' . $pin_long . '], 13);
                                     </div>
                                      ' . $cus_cat_html_swipe . '
 				' . $imageStaticHTML . '
-                                    '.$videoStaticHTML.'
+                                    ' . $videoStaticHTML . '
                                    </div>
                                 </div><!-- ad information section end -->
                                 <div class="adf-st-information-box">
@@ -1283,7 +1302,7 @@ var mymap = L.map(\'dvMap\').setView([' . $pin_lat . ', ' . $pin_long . '], 13);
                                         <div class="adf-information-box"> 
                                             <div class="form-group">
 						
-                                           '.$user_address_html.'
+                                           ' . $user_address_html . '
                                     </div>
                                         </div>
                                     </div>    

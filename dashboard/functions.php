@@ -634,12 +634,12 @@ function load_feature_ad_modal()
             foreach ($packageDetails as $detailName => $detailValue) {
                 if (in_array($detailName, [ 'free_ads', 'featured_ads', 'pkg_expiry_days', 'ad_expiry_days', 'featured_expiry_days', 'bump_ads' ])) {
                     $custom_titles = [ 
-                        'free_ads' => 'Free Ads',
-                        'featured_ads' => 'Featured Ads',
-                        'pkg_expiry_days' => 'Package Expiry Days',
-                        'ad_expiry_days' => 'Simple Expiry Days',
-                        'featured_expiry_days' => 'Featured Expiry Days',
-                        'bump_ads' => 'Bump Up Ads'
+                        'free_ads' => __('Free Ads', 'adforest'),
+                        'featured_ads' => __('Featured Ads', 'adforest'),
+                        'pkg_expiry_days' => __('Package Expiry Days', 'adforest'),
+                        'ad_expiry_days' =>  __('Simple Expiry Days', 'adforest'),
+                        'featured_expiry_days' => __('Featured Expiry Days', 'adforest'),
+                        'bump_ads' => __('Bump Up Ads', 'adforest'),
                     ];
 
                     $title = isset($custom_titles[ $detailName ]) ? $custom_titles[ $detailName ] : $detailName;

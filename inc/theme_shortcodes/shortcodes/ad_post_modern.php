@@ -196,7 +196,7 @@ if (!function_exists('ad_post_short_base_func')) {
                 $post = get_post($id);
                 $description = $post->post_content;
                 $description = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $description);
-                $title = esc_html($post->post_title);
+                $ad_title = esc_html($post->post_title);
                 $price = get_post_meta($id, '_adforest_ad_price', true);
                 $poster_name = get_post_meta($id, '_adforest_poster_name', true);
                 $poster_ph = get_post_meta($id, '_adforest_poster_contact', true);
@@ -1325,11 +1325,11 @@ if (!function_exists('ad_post_short_base_func')) {
                         if (in_array($detailName, ['free_ads', 'featured_ads', 'pkg_expiry_days', 'ad_expiry_days', 'featured_expiry_days'])) {
 
                             $custom_titles = [
-                                'free_ads' => 'Free Ads',
-                                'featured_ads' => 'Featured Ads',
-                                'pkg_expiry_days' => 'Package Expiry Days',
-                                'ad_expiry_days' => 'Simple Expiry Days',
-                                'featured_expiry_days' => 'Featured Expiry Days',
+                                'free_ads' => __('Free Ads', 'adforest'),
+                                'featured_ads' => __('Featured Ads', 'adforest'),
+                                'pkg_expiry_days' => __('Package Expiry Days', 'adforest'),
+                                'ad_expiry_days' =>__('Simple Expiry Days', 'adforest'),
+                                'featured_expiry_days' => __('Featured Expiry Days', 'adforest'),
                             ];
 
                             // Get the custom title for the current key, or use the original key if not found
@@ -1427,7 +1427,7 @@ if (!function_exists('ad_post_short_base_func')) {
                                 ' . $someStaticHTML . '
                                 <div class="form-group ad_title_group">
                                     <label class="control-label">' . __('Title', 'adforest') . ' <span class="required">*</span></label>
-                                    <input maxlength="' . $ad_post_title_limit . '" data-parsley-maxlength="' . $ad_post_title_limit . '" class="form-control" placeholder="' . __('Enter title  character limit', 'adforest') . ' (' . $ad_post_title_limit . '). " type="text" name="ad_title" id="ad_title" data-parsley-required="true" data-parsley-error-message="' . __('This field is required.', 'adforest') . '" value="' . $title . '" autocomplete="off">
+                                    <input maxlength="' . $ad_post_title_limit . '" data-parsley-maxlength="' . $ad_post_title_limit . '" class="form-control" placeholder="' . __('Enter title  character limit', 'adforest') . ' (' . $ad_post_title_limit . '). " type="text" name="ad_title" id="ad_title" data-parsley-required="true" data-parsley-error-message="' . __('This field is required.', 'adforest') . '" value="' . $ad_title . '" autocomplete="off">
                                 </div>
                                 ' . $ad_type_html . '
                                 <div class="form-group">

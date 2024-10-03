@@ -18,13 +18,17 @@ $selected_categories = get_user_meta(get_current_user_id(), 'adforest_ads_packag
 $featured_ads_pkg = "";
 $pkg_expiry_days = "";
 
-foreach ($selected_categories as $key => $packageDetails) {
-    if (isset($packageDetails['featured_ads'])) {
-        $featured_ads_pkg = $packageDetails['featured_ads'];
-    }
+if (!empty($selected_categories) && is_array($selected_categories)) {
+    foreach ($selected_categories as $key => $packageDetails) {
+        if (is_array($packageDetails)) {
+            if (isset($packageDetails['featured_ads']) && !empty($packageDetails['featured_ads'])) {
+                $featured_ads_pkg = $packageDetails['featured_ads'];
+            }
 
-    if (isset($packageDetails['pkg_expiry_days'])) {
-        $pkg_expiry_days = $packageDetails['pkg_expiry_days'];
+            if (isset($packageDetails['pkg_expiry_days']) && !empty($packageDetails['pkg_expiry_days'])) {
+                $pkg_expiry_days = $packageDetails['pkg_expiry_days'];
+            }
+        }
     }
 }
 
