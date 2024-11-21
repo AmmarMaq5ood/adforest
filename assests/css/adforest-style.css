@@ -18733,3 +18733,11 @@ div#nav-profile {
   font-size: 14px;
   color: #f24a4a;
 }
+
+.ad-desc-point {
+  overflow-wrap: break-word; /* Ensures long words break correctly */
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow: hidden;          /* Hides overflow content if it still goes out */
+  max-width: 100%;
+}

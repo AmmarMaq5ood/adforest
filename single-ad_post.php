@@ -1,6 +1,7 @@
-<?php get_header(); ?>
-<?php global $adforest_theme; ?>
 <?php
+get_header();
+global $adforest_theme;
+
 /* Only need on this page so inluded here don't want to increase page size for optimizaion by adding extra scripts in all the web */
 wp_enqueue_style('star-rating', trailingslashit(get_template_directory_uri()) . 'assests/css/star-rating.css');
 if (have_posts()) {
@@ -55,6 +56,7 @@ if (have_posts()) {
         } else if (isset($adforest_theme['featured_expiry']) && $adforest_theme['featured_expiry'] != '') {
             $featured_expiry_days = $adforest_theme['featured_expiry'];
         }
+
         if (get_post_meta($aid, '_adforest_is_feature', true) == '1' && $featured_expiry_days != '-1') {
             if (isset($featured_expiry_days) && $featured_expiry_days != '-1') {
                 $now = time(); // or your date as well

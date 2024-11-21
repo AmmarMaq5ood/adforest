@@ -97,11 +97,11 @@
             dictRemoveFileConfirmation: null,
             init: function () {
                 var thisDropzone = this;
-                $.post(ajax_url, { action: 'get_event_images', is_update: $('#is_update').val() }).done(function (data) {
+                $.post(ajax_url, {action: 'get_event_images', is_update: $('#is_update').val()}).done(function (data) {
                     if (data != 0) {
                         $.each(data, function (key, value) {
 
-                            var mockFile = { name: value.dispaly_name, size: value.size };
+                            var mockFile = {name: value.dispaly_name, size: value.size};
 
                             thisDropzone.options.addedfile.call(thisDropzone, mockFile);
 
@@ -131,7 +131,11 @@
                             $('.dz-message').show();
                         this.removeFile(file);
 
-                        toastr.error(res_arr[1], '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                        toastr.error(res_arr[1], '', {
+                            timeOut: 4000,
+                            "closeButton": true,
+                            "positionClass": "toast-top-right"
+                        });
                     }
 
                 });
@@ -142,7 +146,11 @@
                         i--;
                         if (i == 0)
                             $('.dz-message').show();
-                        $.post(ajax_url, { action: 'delete_event_image', img: img_id, is_update: $('#is_update').val(), }).done(function (response) {
+                        $.post(ajax_url, {
+                            action: 'delete_event_image',
+                            img: img_id,
+                            is_update: $('#is_update').val(),
+                        }).done(function (response) {
                             if ($.trim(response) == "1") {
                                 //   $("#listing_msgz").hide();
                                 this.removeFile(file);
@@ -157,6 +165,7 @@
             },
         });
     }
+
     /*--- Registration Form Action ---*/
     if ($('#event_dropzone').length > 0) {
         sb_eventz_zone();
@@ -164,7 +173,11 @@
     $('#show-me').hide();
     $('#event_title').on('blur', function () {
         $('#show-me').show();
-        $.post(ajax_url, { action: 'create_new_event', event_title: $('#event_title').val(), is_update: $('#is_update').val(), }).done(function (response) {
+        $.post(ajax_url, {
+            action: 'create_new_event',
+            event_title: $('#event_title').val(),
+            is_update: $('#is_update').val(),
+        }).done(function (response) {
             $('#show-me').hide();
         });
     });
@@ -209,7 +222,7 @@
             e.preventDefault();
             $('.creat-booking-submit i').show();
             $('.creat-booking-submit').prop("disabled", true);
-            $.post(ajax_url, { action: 'sb_pro_create_booking', data: $('.create-booking-form').serialize() })
+            $.post(ajax_url, {action: 'sb_pro_create_booking', data: $('.create-booking-form').serialize()})
                 .done(function (response) {
                     if (response.success == true) {
                         $('.booking-form-container').hide();
@@ -218,9 +231,17 @@
                         $('.current-selected-date').hide();
 
 
-                        toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                        toastr.success(response.data.message, '', {
+                            timeOut: 4000,
+                            "closeButton": true,
+                            "positionClass": "toast-top-right"
+                        });
                     } else {
-                        toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                        toastr.error(response.data.message, '', {
+                            timeOut: 4000,
+                            "closeButton": true,
+                            "positionClass": "toast-top-right"
+                        });
                         window.location = response.data.url;
                     }
 
@@ -239,7 +260,6 @@
         $('#selectd_booking_time').html('');
         $('.current-selected-date').show();
     });
-
 
 
     /* Business Hours Selection */
@@ -273,6 +293,7 @@
 
     $(document).on('ifChecked', '.frontend_hours input[type="radio"]', function () {
         var valzz = $(this).val();
+        console.log("VALUE IS: ", valzz);
         $('input[name=hours_type]').val(valzz);
         if (valzz == 2) {
             $("#timezone").show();
@@ -300,7 +321,7 @@
 
     $(document).ready(function () {
         if ($('.for_specific_page').is('.timepicker')) {
-            $('.timepicker').timeselect({ 'step': 15, autocompleteSettings: { autoFocus: true } });
+            $('.timepicker').timeselect({'step': 15, autocompleteSettings: {autoFocus: true}});
         }
         /*Directory   listing start code  hours*/
 
@@ -323,7 +344,6 @@
         }
 
     });
-
 
 
     if ($('#calender-booking').length > 0) {
@@ -380,10 +400,12 @@
                         $('.form_booking_month_name').val(date_obj.month_name);
                         $('.form_booking_year').val(date_obj.year);
                         console.log(response);
-                    }
-
-                    else {
-                        toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                    } else {
+                        toastr.error(response.data.message, '', {
+                            timeOut: 4000,
+                            "closeButton": true,
+                            "positionClass": "toast-top-right"
+                        });
                         window.location = response.data.url;
 
                     }
@@ -402,7 +424,10 @@
         })
             .on('form:submit', function () {
                 $('#sb_loading').show();
-                $.post(adforest_ajax_url, { action: 'my_new_event', sb_data: $("#my-events").serialize(), }).done(function (response) {
+                $.post(adforest_ajax_url, {
+                    action: 'my_new_event',
+                    sb_data: $("#my-events").serialize(),
+                }).done(function (response) {
                     if (response.success == true) {
                         $('#sb_loading').hide();
 
@@ -428,14 +453,26 @@
                                 }
                             }
                         });
-                        toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                        toastr.success(response.data.message, '', {
+                            timeOut: 4000,
+                            "closeButton": true,
+                            "positionClass": "toast-top-right"
+                        });
                     } else {
                         $('#sb_loading').hide();
-                        toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                        toastr.error(response.data.message, '', {
+                            timeOut: 4000,
+                            "closeButton": true,
+                            "positionClass": "toast-top-right"
+                        });
                     }
                 }).fail(function () {
                     $('#sb_loading').hide();
-                    toastr.error($('#_nonce_error').val(), '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                    toastr.error($('#_nonce_error').val(), '', {
+                        timeOut: 4000,
+                        "closeButton": true,
+                        "positionClass": "toast-top-right"
+                    });
                 });
                 return false;
             });
@@ -469,7 +506,7 @@
                         if (text[2] == 'yes') {
                             disabled_opts = true;
                         }
-                        options.push({ id: text[0], text: text[1], disabled: disabled_opts });
+                        options.push({id: text[0], text: text[1], disabled: disabled_opts});
                     });
                 }
                 return {
@@ -502,19 +539,34 @@
                 var booked_days = $('#already_booked_day').datepicker().val();
                 $('#booked_days').val(booked_days);
 
-                $.post(adforest_ajax_url, { action: 'sb_allow_booking', sb_data: $("#my-bookings-listing").serialize(), }).done(function (response) {
+                $.post(adforest_ajax_url, {
+                    action: 'sb_allow_booking',
+                    sb_data: $("#my-bookings-listing").serialize(),
+                }).done(function (response) {
                     if (response.success == true) {
                         $('#sb_loading').hide();
-                        toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                        toastr.success(response.data.message, '', {
+                            timeOut: 4000,
+                            "closeButton": true,
+                            "positionClass": "toast-top-right"
+                        });
 
                         //  window.location.reload();
                     } else {
                         $('#sb_loading').hide();
-                        toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                        toastr.error(response.data.message, '', {
+                            timeOut: 4000,
+                            "closeButton": true,
+                            "positionClass": "toast-top-right"
+                        });
                     }
                 }).fail(function () {
                     $('#sb_loading').hide();
-                    toastr.error($('#_nonce_error').val(), '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                    toastr.error($('#_nonce_error').val(), '', {
+                        timeOut: 4000,
+                        "closeButton": true,
+                        "positionClass": "toast-top-right"
+                    });
                 });
                 return false;
             });
@@ -525,17 +577,32 @@
 
         e.preventDefault();
 
-        $.post(adforest_ajax_url, { action: 'sb_allow_booking', sb_data: $("#update-booking-listing").serialize(), }).done(function (response) {
+        $.post(adforest_ajax_url, {
+            action: 'sb_allow_booking',
+            sb_data: $("#update-booking-listing").serialize(),
+        }).done(function (response) {
             if (response.success == true) {
                 $('#sb_loading').hide();
-                toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                toastr.success(response.data.message, '', {
+                    timeOut: 4000,
+                    "closeButton": true,
+                    "positionClass": "toast-top-right"
+                });
             } else {
                 $('#sb_loading').hide();
-                toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                toastr.error(response.data.message, '', {
+                    timeOut: 4000,
+                    "closeButton": true,
+                    "positionClass": "toast-top-right"
+                });
             }
         }).fail(function () {
             $('#sb_loading').hide();
-            toastr.error($('#_nonce_error').val(), '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+            toastr.error($('#_nonce_error').val(), '', {
+                timeOut: 4000,
+                "closeButton": true,
+                "positionClass": "toast-top-right"
+            });
         });
     });
     $('.booking_status').on('change', function () {
@@ -560,12 +627,25 @@
                             return false;
                         } else {
                             $('#sb_loading').show();
-                            $.post(adforest_ajax_url, { action: 'sb_booking_status', val: val, booking_id: bookingID, extra_detail: name }).done(function (response) {
+                            $.post(adforest_ajax_url, {
+                                action: 'sb_booking_status',
+                                val: val,
+                                booking_id: bookingID,
+                                extra_detail: name
+                            }).done(function (response) {
                                 $('#sb_loading').hide();
                                 if (response.success == true) {
-                                    toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                                    toastr.success(response.data.message, '', {
+                                        timeOut: 4000,
+                                        "closeButton": true,
+                                        "positionClass": "toast-top-right"
+                                    });
                                 } else {
-                                    toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                                    toastr.error(response.data.message, '', {
+                                        timeOut: 4000,
+                                        "closeButton": true,
+                                        "positionClass": "toast-top-right"
+                                    });
                                 }
                             });
                         }
@@ -581,12 +661,10 @@
     });
 
 
-
-
     $(document).on('click', '.view_booking_details', function () {
         var bookingID = $(this).data('id');
         $('#sb_loading').show();
-        $.post(adforest_ajax_url, { action: 'sb_get_booking_details', booking_id: bookingID, }).done(function (response) {
+        $.post(adforest_ajax_url, {action: 'sb_get_booking_details', booking_id: bookingID,}).done(function (response) {
             if (response.success) {
                 $('#booking-detail-content').html(response.data.detail)
                 $('#booking-detail-modal').modal('show');
@@ -618,14 +696,25 @@
                     text: confirm_btn,
                     action: function () {
                         $('#sb_loading').show();
-                        $.post(adforest_ajax_url, { action: 'sb_remove_booking', ad_id: adID, }).done(function (response) {
+                        $.post(adforest_ajax_url, {
+                            action: 'sb_remove_booking',
+                            ad_id: adID,
+                        }).done(function (response) {
                             $('#sb_loading').hide();
                             if (response.success == true) {
-                                toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                                toastr.success(response.data.message, '', {
+                                    timeOut: 4000,
+                                    "closeButton": true,
+                                    "positionClass": "toast-top-right"
+                                });
                                 console.log(elem);
                                 elem.parents('.col-lg-6').remove();
                             } else {
-                                toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                                toastr.success(response.data.message, '', {
+                                    timeOut: 4000,
+                                    "closeButton": true,
+                                    "positionClass": "toast-top-right"
+                                });
                             }
                         });
                     },
@@ -643,7 +732,7 @@
     $('.edit_booking_option').on('click', function () {
         adID = $(this).attr('data-aaa-id');
         $('#sb_loading').show();
-        $.post(adforest_ajax_url, { action: 'sb_get_booking_options', ad_id: adID, }).done(function (response) {
+        $.post(adforest_ajax_url, {action: 'sb_get_booking_options', ad_id: adID,}).done(function (response) {
             $('#sb_loading').hide();
             $('#ad-booking-content').html(response);
             if ($('#already_booked_day').length > 0) {
@@ -675,7 +764,7 @@
 
     if ($('.event_desc').length > 0) {
 
-        $('.event_desc').jqte({ color: false });
+        $('.event_desc').jqte({color: false});
     }
 
     is_rtl = false;
@@ -720,13 +809,19 @@
         if (map_type == 'leafletjs_map') {
             /*For leafletjs map*/
             var map = L.map('event_detail_map').setView([lat, lon], 7);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '' }).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: ''}).addTo(map);
             L.marker([lat, lon]).addTo(map);
         } else if (map_type == 'google_map') {
             /*For Google Map*/
             var map = "";
             var latlng = new google.maps.LatLng(lat, lon);
-            var myOptions = { zoom: 13, center: latlng, scrollwheel: false, mapTypeId: google.maps.MapTypeId.ROADMAP, size: new google.maps.Size(480, 240) }
+            var myOptions = {
+                zoom: 13,
+                center: latlng,
+                scrollwheel: false,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                size: new google.maps.Size(480, 240)
+            }
             map = new google.maps.Map(document.getElementById("event_detail_map"), myOptions);
             var marker = new google.maps.Marker({
                 map: map,
@@ -736,24 +831,39 @@
     }
 
 
-
     /* event  rating Logic */
     if ($('#event_rating_form').length > 0) {
         $('#event_rating_form').parsley().on('field:validated', function () {
         }).on('form:submit', function () {
             $('#sb_loading').show();
-            $.post(ajax_url, { action: 'sb_event_rating', security: $('#sb-review-token').val(), sb_data: $("form#event_rating_form").serialize(), }).done(function (response) {
+            $.post(ajax_url, {
+                action: 'sb_event_rating',
+                security: $('#sb-review-token').val(),
+                sb_data: $("form#event_rating_form").serialize(),
+            }).done(function (response) {
                 $('#sb_loading').hide();
                 var get_r = response.split('|');
                 if ($.trim(get_r[0]) == '1') {
-                    toastr.success(get_r[1], '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                    toastr.success(get_r[1], '', {
+                        timeOut: 4000,
+                        "closeButton": true,
+                        "positionClass": "toast-top-right"
+                    });
                     location.reload();
                 } else {
-                    toastr.error(get_r[1], '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                    toastr.error(get_r[1], '', {
+                        timeOut: 4000,
+                        "closeButton": true,
+                        "positionClass": "toast-top-right"
+                    });
                 }
             }).fail(function () {
                 $('#sb_loading').hide();
-                toastr.error($('#_nonce_error').val(), '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                toastr.error($('#_nonce_error').val(), '', {
+                    timeOut: 4000,
+                    "closeButton": true,
+                    "positionClass": "toast-top-right"
+                });
             });
             return false;
         });
@@ -768,19 +878,35 @@
         $('#event_rating_reply_form').parsley().on('field:validated', function () {
         }).on('form:submit', function () {
             $('#sb_loading').show();
-            $.post(ajax_url, { action: 'sb_event_rating_reply', security: $('#sb-review-reply-token').val(), sb_data: $("form#event_rating_reply_form").serialize(), }).done(function (response) {
+            $.post(ajax_url, {
+                action: 'sb_event_rating_reply',
+                security: $('#sb-review-reply-token').val(),
+                sb_data: $("form#event_rating_reply_form").serialize(),
+            }).done(function (response) {
                 $('#sb_loading').hide();
                 var get_r = response.split('|');
                 if ($.trim(get_r[0]) == '1') {
-                    toastr.success(get_r[1], '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                    toastr.success(get_r[1], '', {
+                        timeOut: 4000,
+                        "closeButton": true,
+                        "positionClass": "toast-top-right"
+                    });
                     location.reload();
                 } else {
-                    toastr.error(get_r[1], '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                    toastr.error(get_r[1], '', {
+                        timeOut: 4000,
+                        "closeButton": true,
+                        "positionClass": "toast-top-right"
+                    });
                 }
             }).fail(function () {
 
                 $('#sb_loading').hide();
-                toastr.error($('#_nonce_error').val(), '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                toastr.error($('#_nonce_error').val(), '', {
+                    timeOut: 4000,
+                    "closeButton": true,
+                    "positionClass": "toast-top-right"
+                });
             });
             return false;
         });
@@ -790,14 +916,22 @@
         var $this = $(this);
         var id = $(this).attr('data-id');
         $('#sb_loading').show();
-        $.post(ajax_url, { action: 'sb_fav_event', event_id: id, }).done(function (response) {
+        $.post(ajax_url, {action: 'sb_fav_event', event_id: id,}).done(function (response) {
             $('#sb_loading').hide();
 
             if (response.success == true) {
                 $this.toggleClass("ad-favourited");
-                toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                toastr.success(response.data.message, '', {
+                    timeOut: 4000,
+                    "closeButton": true,
+                    "positionClass": "toast-top-right"
+                });
             } else {
-                toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+                toastr.error(response.data.message, '', {
+                    timeOut: 4000,
+                    "closeButton": true,
+                    "positionClass": "toast-top-right"
+                });
             }
         });
     });
@@ -824,7 +958,7 @@
     });
     /*event schedules*/
     if ($('.event_day_schedule').length > 0) {
-        $('.event_day_schedule').jqte({ color: false });
+        $('.event_day_schedule').jqte({color: false});
     }
     var addDay = 0;
     $('#add_event_schedule').on('click', function () {
@@ -845,16 +979,13 @@
         divtest.innerHTML = inst_html;
         objTo.appendChild(divtest);
 
-        $('.' + randClass).jqte({ color: false });
+        $('.' + randClass).jqte({color: false});
     });
-
-
 
 
     $(document).on('click', '.btnRemoveDay', function () {
         $(this).closest('.remove-schedule').remove();
     });
-
 
 
     /* event search page queryy **/
@@ -868,7 +999,7 @@
         sb_search_events_content('');
     });
 
-    $('#event_cat').on('change', function() {
+    $('#event_cat').on('change', function () {
         sb_search_events_content('');
 
         var cat_parent = $(this).val();
@@ -883,17 +1014,18 @@
                 $('.additional-fields-search').css("display", "flex");
                 $('.additional-fields-search-container').html(response.data.fields);
 
-                if ($(".custom-range-slider").length > 0) { $(".custom-range-slider").ionRangeSlider({ skin: "round" }); }
-            }
-            else {
+                if ($(".custom-range-slider").length > 0) {
+                    $(".custom-range-slider").ionRangeSlider({skin: "round"});
+                }
+            } else {
                 $('#sb_loading').hide();
                 $('.additional-fields-search').css("display", "none");
             }
         });
     })
 
-    $('#toggle-additional-fields').click(function() {
-        $('#additional-fields-container').slideToggle(function() {
+    $('#toggle-additional-fields').click(function () {
+        $('#additional-fields-container').slideToggle(function () {
             $('.toggle-icon').html($('#additional-fields-container').is(':visible') ? '&#9650;' : '&#9660;');
         });
         $("#additional_fields_filters").slideToggle();
@@ -914,9 +1046,10 @@
                 $('.additional-fields').css("display", "flex");
                 $('.additional-fields-container').html(response.data.fields);
 
-                if ($(".custom-range-slider").length > 0) { $(".custom-range-slider").ionRangeSlider({ skin: "round" }); }
-            }
-            else {
+                if ($(".custom-range-slider").length > 0) {
+                    $(".custom-range-slider").ionRangeSlider({skin: "round"});
+                }
+            } else {
                 $('#sb_loading').hide();
                 $('.additional-fields').css("display", "none");
             }
@@ -924,10 +1057,10 @@
     })
 
 
-
     function add_event_skeletons(append_class, view) {
         append_class.addClass('content-loading-skeleton-grid');
     }
+
     function remoove_event_skeletons(append_class, view) {
         append_class.removeClass('content-loading-skeleton-grid');
     }
@@ -947,22 +1080,21 @@
                 grid_type: $('#layout_type').val(),
                 sort_by: $('.event_orer_by').val(),
             }).done(function (response) {
-                remoove_event_skeletons($('.event-search-content'), 'grid');
-                adforest_timerCounter_function();
-                $('.event-content').html(response.data.data);
-                if (response.data.pagination) {
-                    $('.event-pagination').html(response.data.pagination);
-                    $('.event-pagination li').removeClass('active');
+            remoove_event_skeletons($('.event-search-content'), 'grid');
+            adforest_timerCounter_function();
+            $('.event-content').html(response.data.data);
+            if (response.data.pagination) {
+                $('.event-pagination').html(response.data.pagination);
+                $('.event-pagination li').removeClass('active');
 
-                }
-                $('#event-count').html(response.data.total);
-            });
+            }
+            $('#event-count').html(response.data.total);
+        });
     }
 
     $(document).on('click', '.event-pagination a', function (e) {
         e.preventDefault();
-        document.getElementById('event-content').scrollIntoView({
-        });
+        document.getElementById('event-content').scrollIntoView({});
         sb_search_events_content($(this).text());
 
     });
@@ -971,6 +1103,7 @@
     if ($('#distance-slider').length > 0) {
         /*getting current current lat long */
         getCurLocation();
+
         function getCurLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(setCurrentLatLong, errorMsg);
@@ -978,6 +1111,7 @@
                 x.innerHTML = "Geolocation is not supported by this browser.";
             }
         }
+
         function setCurrentLatLong(position) {
 
             console.log(position);
@@ -985,9 +1119,11 @@
             $('#event-lat').val(position.coords.latitude);
             $('#event-long').val(position.coords.longitude);
         }
+
         function errorMsg(error) {
             alert('Enable Location to work with distance search');
         }
+
         /*  slider  */
         $('#distance-slider').noUiSlider({
             start: 0,
@@ -997,7 +1133,7 @@
                 'max': 100
             }
         });
-        $('#distance-slider').Link('lower').to($('#min_dis'), null, wNumb({ decimals: 0 }));
+        $('#distance-slider').Link('lower').to($('#min_dis'), null, wNumb({decimals: 0}));
         $('.submit-distance').on('click', function () {
             sb_search_events_content();
         })
@@ -1063,21 +1199,21 @@
                 data_date: date_val,
                 grid_col: $('#grid_col').val(),
             }).done(function (response) {
-                remoove_event_skeletons($container, 'grid');
-                adforest_timerCounter_function();
-                $container.html(response.data.data);
-                console.log(response.data.no_result);
-                $('#event-count').html(response.data.total);
-                if (response.data.no_result == true) {
-                    $this.parents('.ads-grid-selector').find('.posts-masonry').height('auto');
-                    $('.ads-grid-selector .btn-theme').hide();
+            remoove_event_skeletons($container, 'grid');
+            adforest_timerCounter_function();
+            $container.html(response.data.data);
+            console.log(response.data.no_result);
+            $('#event-count').html(response.data.total);
+            if (response.data.no_result == true) {
+                $this.parents('.ads-grid-selector').find('.posts-masonry').height('auto');
+                $('.ads-grid-selector .btn-theme').hide();
 
-                } else {
-                    regenerate_masnory();
-                    $('.ads-grid-selector .btn-theme').show();
-                }
+            } else {
+                regenerate_masnory();
+                $('.ads-grid-selector .btn-theme').show();
+            }
 
-            });
+        });
     });
 
     if ($('#tags').length !== 'undefined' && $('#tags').length > 0) {
@@ -1113,15 +1249,23 @@
                 event_id: eventID,
                 staus: staus,
             }).done(function (response) {
-                if (response.success == true) {
-                    toastr.success(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
-                    window.location.reload();
-                } else {
-                    toastr.error(response.data.message, '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
-                    window.location.reload();
-                }
-                $('#sb_loading').hide();
-            });
+            if (response.success == true) {
+                toastr.success(response.data.message, '', {
+                    timeOut: 4000,
+                    "closeButton": true,
+                    "positionClass": "toast-top-right"
+                });
+                window.location.reload();
+            } else {
+                toastr.error(response.data.message, '', {
+                    timeOut: 4000,
+                    "closeButton": true,
+                    "positionClass": "toast-top-right"
+                });
+                window.location.reload();
+            }
+            $('#sb_loading').hide();
+        });
 
     });
 
@@ -1143,7 +1287,10 @@
         }
         $('#event_country').on('change', function () {
             $('#sb_loading').show();
-            $.post(adforest_ajax_url, { action: 'event_get_sub_states', country_id: $("#event_country").val(), }).done(function (response) {
+            $.post(adforest_ajax_url, {
+                action: 'event_get_sub_states',
+                country_id: $("#event_country").val(),
+            }).done(function (response) {
                 $('#sb_loading').hide();
                 $("#event_country_states").val('');
                 $("#event_country_cities").val('');
@@ -1166,7 +1313,10 @@
         /* Level 2 */
         $('#event_country_states').on('change', function () {
             $('#sb_loading').show();
-            $.post(adforest_ajax_url, { action: 'event_get_sub_states', country_id: $("#event_country_states").val(), }).done(function (response) {
+            $.post(adforest_ajax_url, {
+                action: 'event_get_sub_states',
+                country_id: $("#event_country_states").val(),
+            }).done(function (response) {
                 $('#sb_loading').hide();
                 $("#event_country_cities").val('');
                 $("#event_country_towns").val('');
@@ -1184,7 +1334,10 @@
         /* Level 3 */
         $('#event_country_cities').on('change', function () {
             $('#sb_loading').show();
-            $.post(adforest_ajax_url, { action: 'event_get_sub_states', country_id: $("#event_country_cities").val(), }).done(function (response) {
+            $.post(adforest_ajax_url, {
+                action: 'event_get_sub_states',
+                country_id: $("#event_country_cities").val(),
+            }).done(function (response) {
                 $('#sb_loading').hide();
                 $("#event_country_towns").val('');
                 if ($.trim(response) != "") {
@@ -1201,8 +1354,16 @@
 
     $('#sb_sort_event_images').on('click', function () {
         $('#sb_loading').show();
-        $.post(adforest_ajax_url, { action: 'sb_sort_event_images', ids: $('#post_img_ids').val(), ad_id: $('#current_pid').val(), }).done(function (response) {
-            toastr.success($('#re-arrange-msg').val(), '', { timeOut: 4000, "closeButton": true, "positionClass": "toast-top-right" });
+        $.post(adforest_ajax_url, {
+            action: 'sb_sort_event_images',
+            ids: $('#post_img_ids').val(),
+            ad_id: $('#current_pid').val(),
+        }).done(function (response) {
+            toastr.success($('#re-arrange-msg').val(), '', {
+                timeOut: 4000,
+                "closeButton": true,
+                "positionClass": "toast-top-right"
+            });
             location.reload();
             $('#sb_loading').hide();
         });

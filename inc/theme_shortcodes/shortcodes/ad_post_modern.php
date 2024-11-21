@@ -91,7 +91,7 @@ if (!function_exists('ad_post_short_base_func')) {
         $actual_size = $size_arr[0];
         adforest_user_not_logged_in();
         $description = '';
-        $title = '';
+        $ad_title = '';
         $price = '';
         $poster_name = '';
         $poster_ph = '';
@@ -1539,10 +1539,10 @@ if (!function_exists('ad_post_short_base_func')) {
     <input type="hidden" id="ad_posted" value="' . __('Ad Posted successfully.', 'adforest') . '" />
     <input type="hidden" id="ad_updated" value="' . __('Ad updated successfully.', 'adforest') . '" />
     <input type="hidden" id="ad_limit_msg" value="' . __('Your package has been used or expired, please purchase now.', 'adforest') . '" />
-         <input type="hidden" id="select_cat_first"  value="' . esc_html__('Please Select Category first', 'adforest') . '" />
+    <input type="hidden" id="select_cat_first"  value="' . esc_html__('Please Select Category first', 'adforest') . '" />
     <input type="hidden" id="sb_packages_page" value="' . get_the_permalink($sb_packages_page) . '" />
-        <input type="hidden" id="sb_upload_video_limit" value="' . $max_upload_vid_limit_opt . '" />
-            <input type="hidden" id="video_logo_url" value="' . $video_logo_url . '" />
+    <input type="hidden" id="sb_upload_video_limit" value="' . $max_upload_vid_limit_opt . '" />
+    <input type="hidden" id="video_logo_url" value="' . $video_logo_url . '" />
                 
 
 </section>' . apply_filters("adforest_adpost_categories_modal", "") . '';

@@ -266,7 +266,7 @@
         $('#sb_loading').hide();
 
         $.dialog({
-            title: "Please Select a Package",
+            title: sb_options.select_pkg,
             content: ad_packages,
             theme: 'Material',
             closeIcon: true,

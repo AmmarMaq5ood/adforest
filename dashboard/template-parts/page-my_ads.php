@@ -17,7 +17,6 @@ $is_feature  =  false;
     <div class="content">
         <div class="sb-dash-heading">
        <h2>
-           
         <?php echo esc_html__('My Ads','adforest'); ?>
        </h2>
     </div>

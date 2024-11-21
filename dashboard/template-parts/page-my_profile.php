@@ -362,6 +362,7 @@ if (isset($sb_user_phone_num) && $sb_user_phone_num != '' && !$is_firebase) {
                                         </div>
                                  </form>';
 } else if ($is_firebase) {
+    $nonce = wp_create_nonce('sb_login_otp_nonce');
     $phone_verified_html .= '<form id="sb-ph-verification">
     <div class="modal-body">           
         <div class="form-group sb_ver_ph_code_div ">
@@ -370,6 +371,7 @@ if (isset($sb_user_phone_num) && $sb_user_phone_num != '' && !$is_firebase) {
         </div>
     </div>
     <div class="modal-footer">
+        <input type="hidden" id="sb_login_nonce" name="sb_login_nonce" value="'. esc_attr($nonce).'" />
         <button class="btn btn-danger btn-pill" type="button" id="sb_verify_otp">' . __('Verify now', 'adforest') . '</button>
         <button class="btn btn-primary btn-pill no-display" type="button" id="sb_verification_ph_back">' . __('Processing ...', 'adforest') . '</button>
         <button class="btn btn-primary btn-pill  no-display" type="button" id="sb_verification_ph_code">' . __('Verify now', 'adforest') . '</button>

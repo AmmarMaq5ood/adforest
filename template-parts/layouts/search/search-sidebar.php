@@ -293,7 +293,7 @@ $loading_ads_mode = isset($adforest_theme['loading_ads_mode']) ? $adforest_theme
                     if ($results->have_posts()) {
                         if ($loading_ads_mode == 'show_more' || $loading_ads_mode == 'infinity_scroll') {
                             ?>
-                            <button class="btn btn-theme mt-4" id="load-more-ads-btn">Show More</button>
+                            <button class="btn btn-theme mt-4" id="load-more-ads-btn"><?php echo __("Show More", "adforest"); ?></button>
                     <?php }
                     } ?>
                 </div>

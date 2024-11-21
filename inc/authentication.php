@@ -65,7 +65,7 @@ if (!class_exists('authentication')) {
             $otp_html = "";
 
             if ($sb_register_with_phone && $default_registration_form == "phone") {
-
+                $nonce = wp_create_nonce('sb_login_otp_nonce');
                 $otp_html = '<form id="sb-ph-verification">
                                         <div class="modal-body">           
                                         <div class="form-group sb_ver_ph_code_div ">
@@ -76,10 +76,11 @@ if (!class_exists('authentication')) {
                                        </div>
                                         </div>
                                         <div class="modal-footer">
+                                              <input type="hidden" id="sb_login_nonce" name="sb_login_nonce" value="'. esc_attr($nonce).'" />
                                               <button class="btn btn-theme btn-sm" type="button" id="sb_verify_otp">' . __('Verify now', 'adforest') . '</button>
                                               <button class="btn btn-theme btn-sm no-display" type="button" id="sb_verification_ph_back">' . __('Processing ...', 'adforest') . '</button>
                                               <button class="btn btn-theme btn-sm no-display" type="button" id="sb_verification_ph_code">' . __('Verify now', 'adforest') . '</button>
-                                               <button class="btn btn-theme btn-sm " type="button" id="sb_verification_resend">' . __('Resend', 'adforest') . '</button>
+                                              <button class="btn btn-theme btn-sm " type="button" id="sb_verification_resend">' . __('Resend', 'adforest') . '</button>
                                         </div>
                                  </form>';
                 $modal_html = '<div class="custom-modal">
@@ -203,6 +204,7 @@ if (!class_exists('authentication')) {
             $otp_html = "";
 
             if ($sb_register_with_phone && $default_login_form == "phone") {
+                $nonce = wp_create_nonce('sb_login_otp_nonce');
                 $otp_html = '<form id="sb-ph-verification">
                                         <div class="modal-body">           
                                         <div class="form-group sb_ver_ph_code_div ">
@@ -213,11 +215,11 @@ if (!class_exists('authentication')) {
                                         </div>
                                         </div>
                                         <div class="modal-footer">
+                                              <input type="hidden" id="sb_login_nonce" name="sb_login_nonce" value="'. esc_attr($nonce).'" />
                                               <button class="btn btn-theme btn-sm" type="button" id="sb_verify_otp">' . __('Verify now', 'adforest') . '</button>
                                               <button class="btn btn-theme btn-sm no-display" type="button" id="sb_verification_ph_back">' . __('Processing ...', 'adforest') . '</button>
                                               <button class="btn btn-theme btn-sm no-display" type="button" id="sb_verification_ph_code">' . __('Verify now', 'adforest') . '</button>
-                                             <button class="btn btn-theme btn-sm " type="button" id="sb_verification_resend">' . __('Resend', 'adforest') . '</button>
-
+                                              <button class="btn btn-theme btn-sm " type="button" id="sb_verification_resend">' . __('Resend', 'adforest') . '</button>
                                         </div>
                                  </form>';
                 $modal_html = '<div class="custom-modal">
@@ -845,11 +847,14 @@ if (!function_exists('sb_display_phone_num_callback')) {
                 $contact_num = get_post_meta($pid, '_adforest_poster_contact', true);
                 if (isset($adforest_theme['sb_phone_verification']) && $adforest_theme['sb_phone_verification']) {
                     //$contact_num = get_user_meta($poster_id, '_sb_contact', true);
-                    $contact_num = get_user_meta(get_current_user_id(), '_sb_contact', true);
-                    $contact_num = isset($contact_num) && $contact_num != '' ? $contact_num : '';
-                    if ($contact_num == "") {
-                        $contact_num = get_post_meta($pid, '_adforest_poster_contact', true);
+                    $contact_num = get_post_meta($pid, '_adforest_poster_contact', true);
+                    if (empty($contact_num)) {
+                        $contact_num = get_user_meta(get_current_user_id(), '_sb_contact', true);
                     }
+                    $contact_num = isset($contact_num) && $contact_num != '' ? $contact_num : '';
+                    // if ($contact_num == "") {
+                    //     $contact_num = get_post_meta($pid, '_adforest_poster_contact', true);
+                    // }
                 }
             }
             if ($contact_num != '') {
@@ -2268,6 +2273,7 @@ if (!function_exists('adforest_ad_posting')) {
         update_post_meta($pid, '_adforest_ad_bidding', sanitize_text_field($ad_bidding));
         update_post_meta($pid, '_adforest_ad_price_type', sanitize_text_field($ad_price_type));
         update_post_meta($pid, '_adforest_ad_bidding_date', sanitize_text_field($theme_ad_bidding_date));
+        update_post_meta($pid, '_adforest_ad_post_package', $params['ads_package']);
         if (isset($params['ad_yvideo']) && $params['ad_yvideo'] != "") {
             update_post_meta($pid, '_adforest_ad_yvideo', sanitize_text_field($params['ad_yvideo']));
         } else {
@@ -2310,6 +2316,16 @@ if (!function_exists('adforest_ad_posting')) {
                     if ($package_adFeatured_expiry_days) {
                         update_post_meta($pid, 'package_adFeatured_expiry_days', $package_adFeatured_expiry_days);
                     }
+                }
+            }
+
+            if (isset($params['ads_package'])) {
+                $selectedPackage_Id = $params['ads_package'];
+                $packageDetails = get_user_meta(get_current_user_id(), 'adforest_ads_package_details', true);
+                $selectedPackage = $packageDetails[$selectedPackage_Id];
+                $selectedPackageFeaturedExpiry = $selectedPackage['featured_expiry_days'];
+                if (isset($selectedPackageFeaturedExpiry)) {
+                    update_post_meta($pid, 'package_adFeatured_expiry_days', $selectedPackageFeaturedExpiry);
                 }
             }
         }
@@ -2409,6 +2425,20 @@ if (!function_exists('adforest_ad_posting')) {
                 do_action('adforest_duplicate_posts_lang', $pid);
             }
         }
+
+        if (isset($params['ads_package'])) {
+            $selectedPackage_Id = $params['ads_package'];
+            $packageDetails = get_user_meta(get_current_user_id(), 'adforest_ads_package_details', true);
+            $selectedPackage = $packageDetails[$selectedPackage_Id];
+            $selectedPackageAdExpiry = $selectedPackage['ad_expiry_days'];
+            if (isset($selectedPackageAdExpiry)) {
+                update_post_meta($pid, 'package_ad_expiry_days', $selectedPackageAdExpiry);
+            }
+        } else {
+            $user_meta_simple_ad_days = get_user_meta(get_current_user_id(), 'package_ad_expiry_days', true);
+            update_post_meta($pid, 'package_ad_expiry_days', $user_meta_simple_ad_days);
+        }
+
         /**
          * 0 = N/A
          * 1 = open 24/7
@@ -2981,7 +3011,7 @@ if (!function_exists('adforest_get_sub_cats')) {
         }
 
         $response = array();
-        if($Ads_pachages != "") {
+        if ($Ads_pachages != "") {
             $response = array(
                 'selected_packages' => $Ads_pachages,
             );
@@ -3263,7 +3293,6 @@ if (!function_exists('sb_job_alert_subscription_check')) {
 add_action('wp_ajax_nopriv_job_alert_subscription', 'sb_job_alert_subscription');
 add_action('wp_ajax_job_alert_subscription', 'sb_job_alert_subscription');
 if (!function_exists('sb_job_alert_subscription')) {
-
     function sb_job_alert_subscription()
     {
         global $adforest_theme;
@@ -3271,46 +3300,46 @@ if (!function_exists('sb_job_alert_subscription')) {
 
         $is_demo = adforest_is_demo();
         if ($is_demo) {
-            echo esc_html__("Not allowed in demo mode", 'adforest');
+            echo '0|' . esc_html__("Not allowed in demo mode", 'adforest');
             die();
         }
 
         if ($user_id == "" || $user_id == 0) {
-
             echo '0|' . __("Please login first", 'adforest');
             die();
         }
-        // Getting values From Param
+
+        // Get values from form data
         $params = array();
         parse_str(stripslashes($_POST['submit_alert_data']), $params);
-        $alert_name = $params['alert_name'];
-        $alert_email = $params['alert_email'];
-        $alert_frequency = $params['alert_frequency'];
-        $alert_category = $params['alert_category'];
+
+        // Sanitize inputs to ensure no malicious code is processed
+        $alert_name = $_POST['alert_name'];
+        $alert_email = sanitize_email($_POST['alert_email']);
+        $alert_frequency = sanitize_text_field($_POST['alert_frequency']);
+        $alert_category = sanitize_text_field($_POST['alert_category']);
 
         $random_string = adforest_randomString(5);
 
         $cand_alert = array();
-        if ($params['alert_name'] != "") {
-            $cand_alert[] = $params['alert_name'];
+        if (!empty($alert_name)) {
+            $cand_alert['alert_name'] = __($alert_name);
         }
-        if ($params['alert_email'] != "") {
-            $cand_alert[] = $params['alert_email'];
+        if (!empty($alert_email)) {
+            $cand_alert['alert_email'] = $alert_email;
+        }
+        if (!empty($alert_category)) {
+            $cand_alert['alert_category'] = $alert_category;
         }
 
-        if ($params['alert_category'] != "") {
-            $cand_alert[] = $params['alert_category'];
-        }
-
-
-        $my_alert = json_encode($params);
-        update_user_meta($user_id, '_cand_alerts_' . $user_id . $random_string, ($my_alert));
+        $encoded_alert = json_encode($cand_alert, JSON_UNESCAPED_UNICODE);
+        update_user_meta($user_id, '_cand_alerts_' . $user_id . $random_string, $encoded_alert);
 
         if (get_user_meta($user_id, '_cand_alerts_en', true) == '') {
             update_user_meta($user_id, '_cand_alerts_en', 1);
         }
 
-        echo '1|' . __("Succesfully subscribed", 'adforest');
+        echo '1|' . __("Successfully subscribed", 'adforest');
         die();
     }
 }
@@ -3319,28 +3348,38 @@ add_action('wp_ajax_sb_reset_password', 'adforest_reset_password');
 add_action('wp_ajax_nopriv_sb_reset_password', 'adforest_reset_password');
 // Reset Password
 if (!function_exists('adforest_reset_password')) {
-
     function adforest_reset_password()
     {
         global $adforest_theme;
-        // Getting values
-        $params = array();
+
+        $params = [];
         parse_str($_POST['sb_data'], $params);
 
         check_ajax_referer('sb_reset_pass_secure', 'security');
+
         $token = $params['token'];
         $token_arr = explode('-sb-uid-', $token);
         $key = $token_arr[0];
-        $uid = $token_arr[1];
-        $token_db = get_user_meta($uid, 'sb_password_forget_token', true);
-        if ($token_db != $key) {
-            echo '0|' . __("Invalid security token.", 'adforest');
-        } else {
-            $new_password = $params['sb_new_password'];
-            wp_set_password($new_password, $uid);
-            update_user_meta($uid, 'sb_password_forget_token', '');
-            echo '1|' . __("Password Changed successfully.", 'adforest');
+        $uid = intval($token_arr[1]);
+
+        if (!is_user_logged_in() || get_current_user_id() != $uid) {
+            echo '0|' . __("Unauthorized access.", 'adforest');
+            die();
         }
+
+        $token_db = get_user_meta($uid, 'sb_password_forget_token', true);
+        $expiry = get_user_meta($uid, 'sb_password_forget_token_expiry', true);
+        if (empty($token_db) || !hash_equals($token_db, $key) || time() > $expiry) {
+            echo '0|' . __("Invalid or expired security token.", 'adforest');
+            die();
+        }
+
+        $new_password = $params['sb_new_password'];
+        wp_set_password($new_password, $uid);
+        delete_user_meta($uid, 'sb_password_forget_token');
+        delete_user_meta($uid, 'sb_password_forget_token_expiry');
+
+        echo '1|' . __("Password Changed successfully.", 'adforest');
         die();
     }
 }

@@ -1,61 +1,67 @@
 <?php
 global $adforest_theme;
 $bg_cls = 'no-top-margin';
-$sb_search_page = apply_filters('adforest_language_page_id', $adforest_theme['sb_search_page']);  ?>
+$sb_search_page = apply_filters('adforest_language_page_id', $adforest_theme['sb_search_page']);
+
+$loading_ads_mode = isset($adforest_theme['loading_ads_mode']) ? $adforest_theme['loading_ads_mode'] : 'pagination';
+?>
 
 <div class="black-bakground"></div>
 <section class="search-bar-content">
-  <div class="container">
-    <div class="row">
-  
-    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-      <div class="main-search-bar">
-          <div class="row">
-                <?php dynamic_sidebar('adforest_search_sidebar'); ?>
-                <?php if ($GLOBALS['widget_counter'] >= $adforest_theme['search_widget_limit']) { echo '</div>'; } ?>
-          </div>
-      </div>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="main-search-bar">
+                    <div class="row">
+                        <?php dynamic_sidebar('adforest_search_sidebar'); ?>
+                        <?php if ($GLOBALS['widget_counter'] >= $adforest_theme['search_widget_limit']) {
+                            echo '</div>';
+                        } ?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-   
-  </div>
-</div>
 </section>
 <section class="match-adforest-topbar">
     <div class="container">
-        <div class="row">    
+        <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="found-adforest">
                     <div class="found-adforest-heading">
-                        <h5><?php echo esc_html($results->found_posts); ?><?php echo __('Found Ads', 'adforest'). ":"; ?>  <?php
+                        <h5><?php echo esc_html($results->found_posts); ?><?php echo __('Found Ads', 'adforest') . ":"; ?>  <?php
                             $param = $_SERVER['QUERY_STRING'];
                             if ($param != "") {
                                 ?>
-                                <span><a class="filterAdType-count" href="<?php echo get_the_permalink($sb_search_page); ?>"><?php echo __('Reset Search', 'adforest'); ?></a></span>
+                                <span><a class="filterAdType-count"
+                                         href="<?php echo get_the_permalink($sb_search_page); ?>"><?php echo __('Reset Search', 'adforest'); ?></a></span>
                             <?php } ?></h5>
                     </div>
                     <div class="found-adforest-sorting">
 
                         <ul class="found-sort-item">
-                            <li> 
+                            <li>
                                 <?php
                                 $selectedOldest = $selectedLatest = $selectedTitleAsc = $selectedTitleDesc = $selectedPriceHigh = $selectedPriceLow = '';
                                 if (isset($_GET['sort'])) {
-                                    $selectedOldest = ( $_GET['sort'] == 'id-asc' ) ? 'selected' : '';
-                                    $selectedLatest = ( $_GET['sort'] == 'id-desc' ) ? 'selected' : '';
-                                    $selectedTitleAsc = ( $_GET['sort'] == 'title-asc' ) ? 'selected' : '';
-                                    $selectedTitleDesc = ( $_GET['sort'] == 'title-desc' ) ? 'selected' : '';
-                                    $selectedPriceHigh = ( $_GET['sort'] == 'price-desc' ) ? 'selected' : '';
-                                    $selectedPriceLow = ( $_GET['sort'] == 'price-asc' ) ? 'selected' : '';
+                                    $selectedOldest = ($_GET['sort'] == 'id-asc') ? 'selected' : '';
+                                    $selectedLatest = ($_GET['sort'] == 'id-desc') ? 'selected' : '';
+                                    $selectedTitleAsc = ($_GET['sort'] == 'title-asc') ? 'selected' : '';
+                                    $selectedTitleDesc = ($_GET['sort'] == 'title-desc') ? 'selected' : '';
+                                    $selectedPriceHigh = ($_GET['sort'] == 'price-desc') ? 'selected' : '';
+                                    $selectedPriceLow = ($_GET['sort'] == 'price-asc') ? 'selected' : '';
                                 }
                                 ?>
                                 <form method="get">
-                                    <select name="sort"  class="custom-select order_by">
+                                    <select name="sort" class="custom-select order_by">
                                         <option value="id-desc" <?php echo esc_attr($selectedLatest); ?>><?php echo esc_html__('Newest To Oldest', 'adforest'); ?></option>
                                         <option value="id-asc" <?php echo esc_attr($selectedOldest); ?>><?php echo esc_html__('Oldest To Newest', 'adforest'); ?></option>
                                         <option value="price-desc" <?php echo esc_attr($selectedPriceHigh); ?>><?php echo esc_html__('Price: High to Low', 'adforest'); ?></option>
                                         <option value="price-asc" <?php echo esc_attr($selectedPriceLow); ?>><?php echo esc_html__('Price: Low to High', 'adforest'); ?></option>
                                     </select>
-                                    <?php echo adforest_search_params('sort');?>
+                                    <?php echo adforest_search_params('sort'); ?>
                                 </form>
                             </li>
                             <?php
@@ -63,26 +69,30 @@ $sb_search_page = apply_filters('adforest_language_page_id', $adforest_theme['sb
                             $list_view = adforest_custom_remove_url_query('view-type', 'list');
                             if (isset($adforest_theme['search_layout_types']) && $adforest_theme['search_layout_types'] == true) {
                                 ?>
-                                <li class="btn found-listing-icon <?php echo (is_rtl() ) ? 'pull-left' : 'pull-right'; ?>">
-                                    <a class="filterAdType-count" href="<?php echo esc_url($grid_view); ?>" class="<?php echo (is_rtl() ) ? 'pull-left' : 'pull-right'; ?>"><i class="fa fa-th"></i></a><li>                                       
-                                <li class="btn found-listing-icon-1 <?php echo (is_rtl() ) ? 'pull-left' : 'pull-right'; ?>">
-                                    <a class="filterAdType-count" href="<?php echo esc_url($list_view); ?>" class="pull-right">
+                                <li class="btn found-listing-icon <?php echo (is_rtl()) ? 'pull-left' : 'pull-right'; ?>">
+                                    <a class="filterAdType-count" href="<?php echo esc_url($grid_view); ?>"
+                                       class="<?php echo (is_rtl()) ? 'pull-left' : 'pull-right'; ?>"><i
+                                                class="fa fa-th"></i></a>
+                                <li>
+                                <li class="btn found-listing-icon-1 <?php echo (is_rtl()) ? 'pull-left' : 'pull-right'; ?>">
+                                    <a class="filterAdType-count" href="<?php echo esc_url($list_view); ?>"
+                                       class="pull-right">
                                         <i class="fa fa-bars"></i>
-                                    </a></li>                     
+                                    </a></li>
                             <?php } ?>
                         </ul>
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </section>
-    <section class="search-vendor-page">
-        <div class="container">
-            <div class="row">
+<section class="search-vendor-page">
+    <div class="container">
+        <div class="row">
             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 col-pm">
-                                <?php
+                <?php
                 if (isset($adforest_theme['sb_allow_cats_above_filters']) && $adforest_theme['sb_allow_cats_above_filters']) {
                     if (isset($_GET['cat_id']) && $_GET['cat_id'] != "") {
                         ?><?php
@@ -128,7 +138,8 @@ $sb_search_page = apply_filters('adforest_language_page_id', $adforest_theme['sb
                                 <div class="expand-collapse adforest-new-filter">
 
 
-                                    <h3> <a role="button" data-bs-toggle="collapse" data-parent="#accordion" href="#collapseOnez" aria-expanded="true" aria-controls="collapseOnez">
+                                    <h3><a role="button" data-bs-toggle="collapse" data-parent="#accordion"
+                                           href="#collapseOnez" aria-expanded="true" aria-controls="collapseOnez">
                                             <i class="more-less fa fa-plus"></i>
                                             <?php
                                             //echo __('Categories', 'adforest');
@@ -141,7 +152,8 @@ $sb_search_page = apply_filters('adforest_language_page_id', $adforest_theme['sb
                                     </h3>
 
                                     <form>
-                                        <div id="collapseOnez" class="panel-collapse collapse in show" role="tabpanel" aria-labelledby="headingOnez">
+                                        <div id="collapseOnez" class="panel-collapse collapse in show" role="tabpanel"
+                                             aria-labelledby="headingOnez">
                                             <div class="panel-body">
                                                 <div class="search-modal">
                                                     <div class="search-block"><?php echo adforest_returnEcho($res); ?></div>
@@ -154,52 +166,51 @@ $sb_search_page = apply_filters('adforest_language_page_id', $adforest_theme['sb
 
                             <div class="clearfix"></div>
 
-                           
 
                             <?php
                         }
                     }
                 }
                 ?>
-            <?php
-                    get_template_part('template-parts/layouts/search/search', 'tags');
+                <?php
+                get_template_part('template-parts/layouts/search/search', 'tags');
                 if (isset($adforest_theme['feature_on_search']) && $adforest_theme['feature_on_search']) {
                     $countries_location = '';
                     $countries_location = apply_filters('adforest_site_location_ads', $countries_location, 'search');
                     $args = array(
                         'post_type' => 'ad_post',
-                          'post_status' => 'publish',
-                           'posts_per_page' => $adforest_theme['max_ads_feature'],
-                          'tax_query' => array($category, $countries_location,),
+                        'post_status' => 'publish',
+                        'posts_per_page' => $adforest_theme['max_ads_feature'],
+                        'tax_query' => array($category, $countries_location,),
                         'meta_query' => array(
                             array('key' => '_adforest_is_feature', 'value' => 1, 'compare' => '=',),
                             array('key' => '_adforest_ad_status_', 'value' => 'active', 'compare' => '=',),
                         ),
                         'orderby' => 'rand',
                     );
-                     $ads = new ads();
+                    $ads = new ads();
                     echo adforest_returnEcho($ads->adforest_get_ads_grid_slider($args, $adforest_theme['feature_ads_title'], 4, ''));
                 }
-            if(isset($adforest_theme['sb_ad_alerts']) &&  $adforest_theme['sb_ad_alerts']) {   ?>
-                <div class="row  alert-for-topbar">
-               <div class="col-lg-2"></div>
-                <div class="col-md-12  col-lg-8 col-xl-8  col-sm-12">
-                    <div class = "ad-alert-box">
-                        <div class = "row">
-                            <div class = "col-lg-9 col-md-8 col-sm-8 col-xs-12">
-                                <h4><?php echo esc_html__('Ads Alerts', 'adforest') ?></h4>
-                                <p><?php echo esc_html__('Receive emails for the latest Ads matching your search criteria', 'adforest') ?></p>
-                            </div>
-                            <div class = "col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                                <a href = "javascript:void(0)" class = "btn btn-theme  ad_alerts"><?php  echo esc_html__('Create Alert','adforest') ?></a>
+                if (isset($adforest_theme['sb_ad_alerts']) && $adforest_theme['sb_ad_alerts']) { ?>
+                    <div class="row  alert-for-topbar">
+                        <div class="col-lg-2"></div>
+                        <div class="col-md-12  col-lg-8 col-xl-8  col-sm-12">
+                            <div class="ad-alert-box">
+                                <div class="row">
+                                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
+                                        <h4><?php echo esc_html__('Ads Alerts', 'adforest') ?></h4>
+                                        <p><?php echo esc_html__('Receive emails for the latest Ads matching your search criteria', 'adforest') ?></p>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                                        <a href="javascript:void(0)"
+                                           class="btn btn-theme  ad_alerts"><?php echo esc_html__('Create Alert', 'adforest') ?></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-lg-2"></div>
                     </div>
-                </div>
-                 <div class="col-lg-2"></div>
-             </div>
-  
-               <?php } 
+                <?php }
 
                 if (isset($adforest_theme['search_ad_720_1']) && $adforest_theme['search_ad_720_1'] != "" && $results->have_posts()) {
                     ?>
@@ -212,58 +223,78 @@ $sb_search_page = apply_filters('adforest_language_page_id', $adforest_theme['sb
                     <?php
                 }
                 ?>
-             <div class="search-found-list"> 
-                    <div class="row posts-masonry">
+                <div class="search-found-list">
+                    <div class="row posts-masonry" id="ads-search-container"
+                         data-loading-mode="<?php echo esc_attr($loading_ads_mode); ?>">
                         <?php
                         $layouts = array('list_1', 'list_2', 'list_3');
-                        if ($results->have_posts()) {                           
+                        if ($results->have_posts()) {
                             $col = 3;
-                            $col_lg   =   3;    
-                            
+                            $col_lg = 3;
+
                             $layout_type = isset($adforest_theme['search_ad_layout_for_sidebar']) ?
-                                    $adforest_theme['search_ad_layout_for_sidebar'] : "";
+                                $adforest_theme['search_ad_layout_for_sidebar'] : "";
                             $get_grid_layout = adforest_get_grid_layout();
-                            $search_ad_layout_for_sidebar = ($get_grid_layout != "" ) ? $get_grid_layout : $layout_type;
-                              $layout_type =  ($get_grid_layout != "" ) ? $get_grid_layout : $layout_type;
-                
-                             if (in_array($search_ad_layout_for_sidebar, $layouts)) {
+                            $search_ad_layout_for_sidebar = ($get_grid_layout != "") ? $get_grid_layout : $layout_type;
+                            $layout_type = ($get_grid_layout != "") ? $get_grid_layout : $layout_type;
+
+                            if (in_array($search_ad_layout_for_sidebar, $layouts)) {
                                 require trailingslashit(get_template_directory()) . "template-parts/layouts/ad-style/search-layout-list.php";
 
                                 echo adforest_returnEcho($out);
                             } else {
                                 require trailingslashit(get_template_directory()) . "template-parts/layouts/ad-style/search-layout-grid.php";
                                 echo adforest_returnEcho($out);
+                                ?>
+                                <div class="row posts-masonry" id="ad-list"></div>
+                                <?php
                             }
                             /* Restore original Post Data */
                             wp_reset_postdata();
                         } else {
-                             $no_found =  get_template_directory_uri() . '/images/nothing-found.png';
+                            $no_found = get_template_directory_uri() . '/images/nothing-found.png';
+                            ?>
+                            <div class="col-xl-12 col-12 col-sm-12 col-md-12">
+                                <div class="nothing-found white search-bar">
+                                    <img src="<?php echo esc_url($no_found); ?>" alt="">
+                                    <h3><?php echo esc_html__('No Result Found', 'adforest') ?></h3>
+                                </div>
+                            </div>
+                        <?php }
                         ?>
-                    <div class="col-xl-12 col-12 col-sm-12 col-md-12">
-                        <div class="nothing-found white search-bar">
-                        <img src="<?php echo esc_url($no_found); ?>" alt="">
-                    <h3><?php echo esc_html__('No Result Found','adforest') ?></h3>
-                  </div> 
-                    </div>
-                     <?php   }
-                        ?>
-                    </div>
-                </div>
-                <?php if (isset($adforest_theme['search_ad_720_2']) && $adforest_theme['search_ad_720_2'] != "" && $results->have_posts()) {
-                ?>
-                <div class="col-md-12">
-                    <div class="margin-bottom-30 margin-top-10 text-center">
-                        <?php echo "" . $adforest_theme['search_ad_720_2']; ?>
                     </div>
                 </div>
                 <?php
+                if ($results->have_posts()) {
+                    if ($loading_ads_mode == 'show_more' || $loading_ads_mode == 'infinity_scroll') {
+                        ?>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-theme mt-4"
+                                    id="load-more-ads-btn"><?php echo __("Show More", "adforest"); ?></button>
+                        </div>
+                    <?php }
+                } ?>
+
+                <div class="m-2" id="no_more_ads_p"></div>
+                <div id="sb_loading" style="display:none;"><?php echo esc_html("Loading...", 'adforest'); ?></div>
+
+                <?php if (isset($adforest_theme['search_ad_720_2']) && $adforest_theme['search_ad_720_2'] != "" && $results->have_posts()) {
+                    ?>
+                    <div class="col-md-12">
+                        <div class="margin-bottom-30 margin-top-10 text-center">
+                            <?php echo "" . $adforest_theme['search_ad_720_2']; ?>
+                        </div>
+                    </div>
+                    <?php
                 }
                 ?>
-                <div class="pagination-item">
-                    <?php adforest_pagination_search($results); ?>
-                </div>
-                </div>
+                <?php if ($loading_ads_mode == 'pagination') { ?>
+                    <div class="pagination-item">
+                        <?php adforest_pagination_search($results); ?>
+                    </div>
+                <?php } ?>
             </div>
-           
         </div>
-    </section>
+
+    </div>
+</section>

@@ -2400,7 +2400,7 @@ Redux::setSection($opt_name, array(
          array(
             'id' => 'sb_ad_alerts',
             'type' => 'switch',
-            'title' => __('Category base ad alert ', 'adforest'),
+            'title' => __(' ', 'adforest'),
             'desc' => __('Allow user to subscribe ad alerts for specific category','adforest'),
             'default' => false,
         ),        

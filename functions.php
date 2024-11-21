@@ -14,7 +14,7 @@ if (!function_exists('adforest_setup')) :
     {
         global $adforest_theme;
         global $template;
-        $page_template = $template != ""  ?  basename($template) : "";
+        $page_template = $template != "" ? basename($template) : "";
         define('ADFOREST_IMAGE_PATH', get_template_directory_uri() . "/images");
         $is_active_woocomerce = in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) ? true : false;
         define('IS_WOOCOMMERCE_ACTIVE', $is_active_woocomerce);
@@ -94,10 +94,9 @@ function adforest_scripts()
     /* JS files */
 
 
-
     global $adforest_theme, $template;
 
-    $page_template = $template != "" ?  basename($template) : "";
+    $page_template = $template != "" ? basename($template) : "";
     $is_active_woocomerce = in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) ? true : false;
 
     /* gloabal file for dashboard and other front end */
@@ -109,8 +108,7 @@ function adforest_scripts()
     wp_enqueue_style('adforest-select2', trailingslashit(get_template_directory_uri()) . 'assests/css/select2.min.css');
 
 
-
-    if (isset($adforest_theme['sb_android_app'])  && $adforest_theme['sb_android_app']) {
+    if (isset($adforest_theme['sb_android_app']) && $adforest_theme['sb_android_app']) {
         wp_enqueue_style('animate', trailingslashit(get_template_directory_uri()) . 'assests/css/animate.min.css');
     }
 
@@ -182,11 +180,12 @@ function adforest_scripts()
         wp_enqueue_style('dashboard-style', ADFOREST_DASHBOARD_URL_CSS . 'dashboard.css', false, false);
         wp_enqueue_script('bootstrap', ADFOREST_DASHBOARD_URL_JS . 'bootstrap.js', array(), false, true);
 
-        if (isset($_GET['page_type']) && $_GET['page_type'] != "") {
-            wp_enqueue_style('jquery-confirm', ADFOREST_DASHBOARD_URL_CSS . 'jquery-confirm.min.css', false, false);
-            wp_enqueue_script('jquery-confirm', ADFOREST_DASHBOARD_URL_JS . 'jquery-confirm.min.js', array(), false, true);
-        }
-        if ((isset($_GET['page_type']) && $_GET['page_type'] == "msg")  ||  (isset($_GET['page_type']) &&  $_GET['page_type'] == "events") ||  (isset($_GET['page_type']) &&  $_GET['page_type'] == "bookings")) {
+
+        wp_enqueue_style('jquery-confirm', ADFOREST_DASHBOARD_URL_CSS . 'jquery-confirm.min.css', false, false);
+        wp_enqueue_script('jquery-confirm', ADFOREST_DASHBOARD_URL_JS . 'jquery-confirm.min.js', array(), false, true);
+
+        wp_enqueue_script('jquery-confirmjs', ADFOREST_DASHBOARD_URL_JS . 'jquery-confirm.js', array(), false, true);
+        if ((isset($_GET['page_type']) && $_GET['page_type'] == "msg") || (isset($_GET['page_type']) && $_GET['page_type'] == "events") || (isset($_GET['page_type']) && $_GET['page_type'] == "bookings")) {
             wp_enqueue_script('dropzone', trailingslashit(get_template_directory_uri()) . 'assests/js/dropzone.js', false, false, true);
             wp_enqueue_script('parsley', trailingslashit(get_template_directory_uri()) . 'assests/js/parsley.min.js', false, false, true);
             wp_enqueue_script('adforest-fancybox');
@@ -267,7 +266,7 @@ function adforest_scripts()
             wp_enqueue_style('jquery-confirm', ADFOREST_DASHBOARD_URL_CSS . 'jquery-confirm.min.css', false, false);
             wp_enqueue_script('jquery-confirm', ADFOREST_DASHBOARD_URL_JS . 'jquery-confirm.min.js', array(), false, true);
         }
-        if (is_author() || $page_template == 'page-users.php' ||  is_singular('events')) {
+        if (is_author() || $page_template == 'page-users.php' || is_singular('events')) {
             wp_enqueue_script('star-rating');
         }
         if (isset($adforest_theme['search_design']) && $adforest_theme['search_design'] == 'map') {
@@ -504,7 +503,7 @@ function woo_new_product_tab_content($tab)
     $comments = get_comments($args);
 
     if (get_option('woocommerce_review_rating_verification_required') === 'no' || wc_customer_bought_product('', get_current_user_id(), $product->get_id())) :
-?>
+        ?>
         <div id="review_form_wrapper">
             <div id="review_form">
                 <?php
@@ -522,7 +521,7 @@ function woo_new_product_tab_content($tab)
                     'comment_field' => '',
                 );
 
-                $name_email_required = (bool) get_option('require_name_email', 1);
+                $name_email_required = (bool)get_option('require_name_email', 1);
                 $fields = array(
                     'author' => array(
                         'label' => __('Name', 'adforest'),
@@ -587,7 +586,7 @@ if (!function_exists('sb_add_custom_header')) {
     function sb_add_custom_header()
     {
 
-    ?>
+        ?>
         <div class="loading" id="sb_loading"><?php __('Loading', 'adforest'); ?>&#8230;</div>
         <?php
         global $adforest_theme, $wpdb;
@@ -638,7 +637,7 @@ if (!function_exists('adforestAction_app_notifier')) {
             }
         }
 
-        $sb_sign_in_page   =    isset($adforest_theme['sb_sign_in_page']) ? apply_filters('adforest_language_page_id', $adforest_theme['sb_sign_in_page']) : "#";
+        $sb_sign_in_page = isset($adforest_theme['sb_sign_in_page']) ? apply_filters('adforest_language_page_id', $adforest_theme['sb_sign_in_page']) : "#";
 
 
         $slider_item = 4;
@@ -655,7 +654,7 @@ if (!function_exists('adforestAction_app_notifier')) {
         } else if (isset($adforest_theme['search_design']) && $adforest_theme['search_design'] == 'map' && is_page_template('page-search.php')) {
             $slider_item = 3;
 
-            if (isset($_GET['hide-map']) && $_GET['hide-map'] == 'on' && isset($_GET['hide-filters'])  && $_GET['hide-filters']  ==  'on') {
+            if (isset($_GET['hide-map']) && $_GET['hide-map'] == 'on' && isset($_GET['hide-filters']) && $_GET['hide-filters'] == 'on') {
 
                 $slider_item = 4;
             }
@@ -682,9 +681,9 @@ if (!function_exists('adforestAction_app_notifier')) {
             }
         }
 
-        $sub_cat_req  = "";
-        if (isset($adforest_theme['is_sub_cat_required'])  && $adforest_theme['is_sub_cat_required']) {
-            $sub_cat_req =   "req";
+        $sub_cat_req = "";
+        if (isset($adforest_theme['is_sub_cat_required']) && $adforest_theme['is_sub_cat_required']) {
+            $sub_cat_req = "req";
         }
 
         $time_zones_val = isset($adforest_theme['bid_timezone']) && $adforest_theme['bid_timezone'] != '' ? $adforest_theme['bid_timezone'] : 'Etc/UTC';
@@ -697,20 +696,23 @@ if (!function_exists('adforestAction_app_notifier')) {
         <?php $ajax_url = apply_filters('adforest_set_query_param', admin_url('admin-ajax.php')); ?>
 
 
+        <input type="hidden" id="is_sub_cat_required" value="<?php echo adforest_returnEcho($sub_cat_req); ?>"/>
+        <input type="hidden" id="field_required"
+               value="<?php echo esc_attr__('This field is required.', 'adforest') ?>"/>
+        <input type="hidden" id="adforest_ajax_url" value="<?php echo adforest_returnEcho($ajax_url); ?>"/>
+        <input type="hidden" id="_nonce_error"
+               value="<?php echo __('There is something wrong with the security please check the admin panel.', 'adforest'); ?>"/>
+        <input type="hidden" id="invalid_phone"
+               value="<?php echo esc_attr__('Invalid format , Valid format is +16505551234', 'adforest'); ?>"/>
+        <input type="hidden" id="is_rtl" value="<?php echo esc_attr($rtl); ?>"/>
+        <input type="hidden" id="slider_item" value="<?php echo esc_attr($slider_item); ?>"/>
+        <input type="hidden" id="login_page" value="<?php echo get_the_permalink($sb_sign_in_page); ?>"/>
+        <input type="hidden" id="select_place_holder" value="<?php echo __('Select an option', 'adforest'); ?>"/>
+        <input type="hidden" id="adforest_forgot_msg"
+               value="<?php echo __('Password reset link sent to your email.', 'adforest'); ?>"/>
+        <input type="hidden" id="sb_upload_limit" value="<?php echo esc_attr($user_upload_max_images); ?>"/>
 
-        <input type="hidden" id="is_sub_cat_required" value="<?php echo adforest_returnEcho($sub_cat_req); ?>" />
-        <input type="hidden" id="field_required" value="<?php echo esc_attr__('This field is required.', 'adforest') ?>" />
-        <input type="hidden" id="adforest_ajax_url" value="<?php echo adforest_returnEcho($ajax_url); ?>" />
-        <input type="hidden" id="_nonce_error" value="<?php echo __('There is something wrong with the security please check the admin panel.', 'adforest'); ?>" />
-        <input type="hidden" id="invalid_phone" value="<?php echo esc_attr__('Invalid format , Valid format is +16505551234', 'adforest'); ?>" />
-        <input type="hidden" id="is_rtl" value="<?php echo esc_attr($rtl); ?>" />
-        <input type="hidden" id="slider_item" value="<?php echo esc_attr($slider_item); ?>" />
-        <input type="hidden" id="login_page" value="<?php echo get_the_permalink($sb_sign_in_page); ?>" />
-        <input type="hidden" id="select_place_holder" value="<?php echo __('Select an option', 'adforest'); ?>" />
-        <input type="hidden" id="adforest_forgot_msg" value="<?php echo __('Password reset link sent to your email.', 'adforest'); ?>" />
-        <input type="hidden" id="sb_upload_limit" value="<?php echo esc_attr($user_upload_max_images); ?>" />
-
-        <input type="hidden" id="theme_path" value="<?php echo esc_attr(get_template_directory_uri()); ?>" />
+        <input type="hidden" id="theme_path" value="<?php echo esc_attr(get_template_directory_uri()); ?>"/>
 
 
         <?php
@@ -721,8 +723,10 @@ if (!function_exists('adforestAction_app_notifier')) {
         ?>
 
 
-        <input type="hidden" id="google_recaptcha_site_key" value="<?php echo esc_attr($adforest_theme['google_api_key']); ?>" />
-        <input type="hidden" id="adforest_max_upload_reach" value="<?php echo __('Maximum upload limit reached', 'adforest'); ?>" />
+        <input type="hidden" id="google_recaptcha_site_key"
+               value="<?php echo esc_attr($adforest_theme['google_api_key']); ?>"/>
+        <input type="hidden" id="adforest_max_upload_reach"
+               value="<?php echo __('Maximum upload limit reached', 'adforest'); ?>"/>
         <?php
         get_template_part('template-parts/linkedin', 'access');
         get_template_part('template-parts/verification', 'logic');
@@ -731,7 +735,7 @@ if (!function_exists('adforestAction_app_notifier')) {
         get_template_part('template-parts/layouts/scroll', 'up');
 
 
-        if (isset($adforest_theme['sb_ad_alerts']) &&  $adforest_theme['sb_ad_alerts'] && is_page_template('page-search.php')) {
+        if (isset($adforest_theme['sb_ad_alerts']) && $adforest_theme['sb_ad_alerts'] && is_page_template('page-search.php')) {
             get_template_part('template-parts/ad', 'alerts');
         }
 
@@ -743,13 +747,13 @@ if (!function_exists('adforestAction_app_notifier')) {
         }
         $hide_captcha_badge = isset($hide_captcha_badge) ? $hide_captcha_badge : false;
         if (isset($hide_captcha_badge) && $hide_captcha_badge) {
-        ?>
+            ?>
             <style>
                 .grecaptcha-badge {
                     display: none;
                 }
             </style>
-        <?php
+            <?php
         }
     }
 }
@@ -932,7 +936,7 @@ if (!function_exists('adforest_theme_info_page_func')) {
         <h1><?php esc_html_e('Welcome To Theme Info Page.', 'adforest'); ?></h1>
 
         <div class="wr-ap">
-            <br />
+            <br/>
             <div id="welcome-panel" class="welcome-panel">
                 <div class="">
                     <h2><?php esc_html_e("AdForest - Classified WordPress Theme", "adforest"); ?></h2>
@@ -942,23 +946,31 @@ if (!function_exists('adforest_theme_info_page_func')) {
                         <h3><?php esc_html_e("Get Started", "adforest"); ?></h3>
                         <p>
                             <?php esc_html_e("Docementation will helps you to understand the theme flow and will help you to setup the theme accordingly. Click the button below to go to the docementation.", "adforest"); ?></p>
-                        <a class="button button-primary button-hero load-customize hide-if-no-customize" href="https://documentation.scriptsbundle.com/" target="_blank"><?php esc_html_e("Docementation", "adforest"); ?></a>
+                        <a class="button button-primary button-hero load-customize hide-if-no-customize"
+                           href="https://documentation.scriptsbundle.com/"
+                           target="_blank"><?php esc_html_e("Docementation", "adforest"); ?></a>
                     </div>
                     <div class="welcome-panel-column">
                         <h3><?php esc_html_e("Having Issues? Get Support!", "adforest"); ?></h3>
                         <p>
                             <?php esc_html_e("If you are facing any issue regarding setting up the theme. You can contact our support team they will be very happy to assist you.", "adforest"); ?></p>
-                        <a class="button button-primary button-hero load-customize hide-if-no-customize" href="https://scriptsbundle.ticksy.com/" target="_blank"><?php esc_html_e("Get Theme Support", "adforest"); ?></a>
+                        <a class="button button-primary button-hero load-customize hide-if-no-customize"
+                           href="https://scriptsbundle.ticksy.com/"
+                           target="_blank"><?php esc_html_e("Get Theme Support", "adforest"); ?></a>
                     </div>
                     <div class="welcome-panel-column welcome-panel-last">
                         <h3><?php esc_html_e("Looking For Customizations?", "adforest"); ?></h3>
                         <?php esc_html_e("Looking to add more features in the theme no problem. Our development team will customize the theme according to your requirnments. Click the link below to contact us.", "buyent-framework"); ?></p>
-                        <a class="button button-primary button-hero load-customize hide-if-no-customize" href="https://scriptsbundle.com/freelancer/" target="_blank"><?php esc_html_e("Looking For Customization?", "adforest"); ?></a>
+                        <a class="button button-primary button-hero load-customize hide-if-no-customize"
+                           href="https://scriptsbundle.com/freelancer/"
+                           target="_blank"><?php esc_html_e("Looking For Customization?", "adforest"); ?></a>
                     </div>
                 </div>
-                <br />
+                <br/>
                 <p class="hide-if-no-customize" style="color: white;">
-                    <?php esc_html_e("by", "adforest"); ?>, <a href="https://themeforest.net/user/scriptsbundle/portfolio" target="_blank" style="color: white;"><?php esc_html_e("ScriptsBundle", "adforest"); ?></a>
+                    <?php esc_html_e("by", "adforest"); ?>, <a
+                            href="https://themeforest.net/user/scriptsbundle/portfolio" target="_blank"
+                            style="color: white;"><?php esc_html_e("ScriptsBundle", "adforest"); ?></a>
                 </p>
 
             </div>
@@ -973,7 +985,7 @@ if (!function_exists('adforest_theme_info_page_func')) {
                         <span class="updated success code-message theme-tf-message">
                             <p></p>
                         </span>
-                        <p><strong><?php echo esc_html__("Enter Purchase Code", "adforest"); ?></strong><br />
+                        <p><strong><?php echo esc_html__("Enter Purchase Code", "adforest"); ?></strong><br/>
                             <?php
                             $btn_txt = __("Click To Validate", "adforest");
                             $action_a = 'activate';
@@ -986,10 +998,14 @@ if (!function_exists('adforest_theme_info_page_func')) {
                             }
                             $onlick = '';
                             ?>
-                            <input class="p-the-code" type="password" name="p_the_code" size="75" value="<?php echo esc_attr(get_option('_sb_purchase_code')); ?>" />
-                            <span data-toggle="#password-field" class="toggle-password"><?php echo __("Show", "adforest"); ?></span>
-                            <input type="hidden" name="p_the_action" size="75" value="<?php echo esc_attr($action_a); ?>" />
-                            <input type="button" name="submit" value="<?php echo esc_attr($btn_txt); ?>" class="button button-primary bt-start-action" <?php echo $onlick; ?> />
+                            <input class="p-the-code" type="password" name="p_the_code" size="75"
+                                   value="<?php echo esc_attr(get_option('_sb_purchase_code')); ?>"/>
+                            <span data-toggle="#password-field"
+                                  class="toggle-password"><?php echo __("Show", "adforest"); ?></span>
+                            <input type="hidden" name="p_the_action" size="75"
+                                   value="<?php echo esc_attr($action_a); ?>"/>
+                            <input type="button" name="submit" value="<?php echo esc_attr($btn_txt); ?>"
+                                   class="button button-primary bt-start-action" <?php echo $onlick; ?> />
                         </p>
 
 
@@ -1021,7 +1037,7 @@ if (!function_exists('adforest_theme_info_page_func')) {
                         }
                     </style>
                     <script type="text/javascript">
-                        jQuery(".toggle-password").click(function() {
+                        jQuery(".toggle-password").click(function () {
 
                             var input = jQuery(this).closest("form").find("input.p-the-code");
                             if (input.attr("type") === "password") {
@@ -1032,12 +1048,12 @@ if (!function_exists('adforest_theme_info_page_func')) {
                                 jQuery(this).html("<?php echo __("Show", "adforest"); ?>");
                             }
                         });
-                        jQuery('.bt-start-action').on('click', function() {
+                        jQuery('.bt-start-action').on('click', function () {
                             jQuery(this).attr("disabled", "disabled");
                             jQuery.post('<?php echo esc_url(admin_url('admin-ajax.php')); ?>', {
                                 action: 'adforest_validate_theme_purchase_ajax',
                                 data: jQuery('form.inner-code-from').serialize(),
-                            }).done(function(response) {
+                            }).done(function (response) {
 
                                 jQuery(".bt-start-action").removeAttr("disabled");
                                 if (response) {
@@ -1046,24 +1062,24 @@ if (!function_exists('adforest_theme_info_page_func')) {
                                     var obj = jQuery.parseJSON(response);
                                     jQuery('span.code-message p').html(obj.message);
                                     jQuery('span.code-message').show();
-                                    window.setTimeout(function() {
+                                    window.setTimeout(function () {
                                         location.reload();
                                     }, 2000);
                                 } else {
 
-                                    window.setTimeout(function() {
+                                    window.setTimeout(function () {
                                         location.reload();
                                     }, 1000);
 
                                 }
-                            }).fail(function() {
-                                window.setTimeout(function() {
+                            }).fail(function () {
+                                window.setTimeout(function () {
                                     location.reload();
                                 }, 2000);
                             });
                         });
                     </script>
-                    <br />
+                    <br/>
                 </div>
             </div>
         </div>
@@ -1076,7 +1092,9 @@ if (!function_exists('adforest_theme_info_page_func')) {
                         <h3><?php esc_html_e("Having Issue In Theme Activation?", "adforest"); ?></h3>
                         <p>
                             <?php esc_html_e("If you are facing any issue regarding the activation or deactivation please contact our support by clicking below link.", "adforest"); ?></p>
-                        <a class="button button-primary button-hero load-customize hide-if-no-customize" href="https://scriptsbundle.ticksy.com/" target="_blank"><?php esc_html_e("Contact Support Here", "adforest"); ?></a>
+                        <a class="button button-primary button-hero load-customize hide-if-no-customize"
+                           href="https://scriptsbundle.ticksy.com/"
+                           target="_blank"><?php esc_html_e("Contact Support Here", "adforest"); ?></a>
 
                         <p>
                             <?php esc_html_e("Always use valid license purchased from themeforest only. You can buy it from the following link. Haven't buy theme yet.", "adforest"); ?></p>
@@ -1086,7 +1104,7 @@ if (!function_exists('adforest_theme_info_page_func')) {
         </div>
 
 
-<?php
+        <?php
     }
 }
 
@@ -1108,12 +1126,13 @@ function disable_new_posts_for_claim()
         </style>';
     }
 }
+
 add_action('admin_menu', 'disable_new_posts_for_claim');
 if (!function_exists('sb_ads_text')) {
     function sb_ads_text($text)
     {
         global $adforest_theme;
-        $is_directory  =   isset($adforest_theme['is_directory'])  ? $adforest_theme['is_directory']  : "";
+        $is_directory = isset($adforest_theme['is_directory']) ? $adforest_theme['is_directory'] : "";
         if ($is_directory) {
             return esc_html__('Listings', 'adforest');
         } else {
@@ -1156,6 +1175,7 @@ function adforest_set_ad_featured_img($single_template)
     }
     return $single_template;
 }
+
 add_filter('single_template', 'adforest_set_ad_featured_img');
 
 if (in_array('elementor-pro/elementor-pro.php', apply_filters('active_plugins', get_option('active_plugins')))) {

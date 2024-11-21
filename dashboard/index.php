@@ -208,27 +208,26 @@ $sb_post_ad_page = apply_filters('adforest_ad_post_verified_id', $sb_post_ad_pag
                                                                 $user_data = get_userdata($get_arr[1]);
                                                                 $user_image = adforest_get_user_dp($get_arr[1]);
                                                                 echo ' <li>
-                                                        <a href="' . $action . '" class="media media-message media-notification">
-
-                                                            <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 text-white">
-                                                              <img src="' . esc_url($user_image) . '" alt="' . adforest_returnEcho($user_data->display_name) . '" class="notify-user-image">
-                                                            </div>
-
-                                                            <div class="media-body d-flex justify-content-between">
-                                                                <div class="message-contents">
-                                                                    <h4 class="title">' . $user_data->display_name . '</h4>
-                                                                    <p class="last-msg font-size-14">' . get_the_title($ad_id) . '</p>
-
-                                                                  
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </li>';
+                                                                            <a href="' . $action . '" class="media media-message media-notification">
+                    
+                                                                                <div class="d-flex rounded-circle align-items-center justify-content-center mr-3 media-icon iconbox-45 text-white">
+                                                                                  <img src="' . esc_url($user_image) . '" alt="' . adforest_returnEcho($user_data->display_name) . '" class="notify-user-image">
+                                                                                </div>
+                    
+                                                                                <div class="media-body d-flex justify-content-between">
+                                                                                    <div class="message-contents">
+                                                                                        <h4 class="title">' . $user_data->display_name . '</h4>
+                                                                                        <p class="last-msg font-size-14">' . get_the_title($ad_id) . '</p>
+                    
+                                                                                      
+                                                                                    </div>
+                                                                                </div>
+                                                                            </a>
+                                                                        </li>';
                                                             }
                                                         }
                                                     }
                                                     ?>
-
                                                 </ul>
                                             </div>
                                         </div>
@@ -882,7 +881,7 @@ $sb_post_ad_page = apply_filters('adforest_ad_post_verified_id', $sb_post_ad_pag
             ?>
 
             <div class="package-container">
-                <?php
+                    <?php
                 if (is_array($selected_categories) && count($selected_categories) > 0) {
                     foreach ($selected_categories as $package_id => $details) : ?>
                         <div class="package adt_user_packages">
@@ -939,7 +938,6 @@ $sb_post_ad_page = apply_filters('adforest_ad_post_verified_id', $sb_post_ad_pag
                 <div class="copyright bg-white">
                     <p>
                         <?php
-
                         $footer_text = isset($adforest_theme['sb_dashbboard_footer']) ? $adforest_theme['sb_dashbboard_footer'] : "";
                         echo adforest_returnEcho($footer_text);
                         ?>

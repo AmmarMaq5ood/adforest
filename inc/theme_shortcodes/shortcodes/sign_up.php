@@ -5,7 +5,8 @@
 /* ------------------------------------------------ */
 if (!function_exists('register_short')) {
 
-    function register_short() {
+    function register_short()
+    {
         vc_map(array(
             "name" => __("Sign Up", 'adforest'),
             "base" => "register_short_base",
@@ -80,7 +81,8 @@ if (!function_exists('register_short')) {
 add_action('vc_before_init', 'register_short');
 if (!function_exists('register_short_base_func')) {
 
-    function register_short_base_func($atts, $content = '') {
+    function register_short_base_func($atts, $content = '')
+    {
         extract(shortcode_atts(array(
             'section_title' => '',
             'description' => '',
@@ -93,7 +95,7 @@ if (!function_exists('register_short_base_func')) {
             'bg_img' => '',
             'description_2' => '',
             'main_link' => ''
-                        ), $atts));
+        ), $atts));
         extract($atts);
 
         if (!adforest_vc_forntend_edit() && !is_admin()) {
@@ -102,13 +104,11 @@ if (!function_exists('register_short_base_func')) {
 
 
         global $adforest_theme;
-             if (isset($adforest_elementor) && $adforest_elementor) {
-       $sec_img   = isset($atts['bg_img']['url']) ? $atts['bg_img']['url'] : '#';
-          }
-          
-          else{
-              $sec_img   =  isset($atts['bg_img']) ? adforest_returnImgSrc($atts['bg_img']) : '#';
-          }
+        if (isset($adforest_elementor) && $adforest_elementor) {
+            $sec_img = isset($atts['bg_img']['url']) ? $atts['bg_img']['url'] : '#';
+        } else {
+            $sec_img = isset($atts['bg_img']) ? adforest_returnImgSrc($atts['bg_img']) : '#';
+        }
         wp_enqueue_script('recaptcha');
 
         $sb_sign_up_page = apply_filters('adforest_language_page_id', $adforest_theme['sb_sign_up_page']);
@@ -133,7 +133,6 @@ if (!function_exists('register_short_base_func')) {
         }
 
 
-
         $social_login = '';
         $social_linked = (isset($social_linked) && $social_linked != "") ? $social_linked : __("Signin With LinkedIn", "adforest");
         $linkedin_api_key = '';
@@ -143,9 +142,10 @@ if (!function_exists('register_short_base_func')) {
             $redirect_uri = ($adforest_theme['adforest_redirect_uri']);
             $linkedin_url = 'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=' . $linkedin_api_key . '&redirect_uri=' . $redirect_uri . '&state=popup&scope=r_liteprofile r_emailaddress';
             $social_login .= '<li>
-   <a href="' . esc_url($linkedin_url) . '" class="btn-social btn-linkedIn socials-links-items">
-    <img src="' . get_template_directory_uri() . '/images/linkedin.png"  alt="' . esc_html__('facebook logo', 'adforest') . '" />
-    </a></li>';
+                               <a href="' . esc_url($linkedin_url) . '" class="btn-social btn-linkedIn socials-links-items">
+                                <img src="' . get_template_directory_uri() . '/images/linkedin.png"  alt="' . esc_html__('facebook logo', 'adforest') . '" />
+                                </a>
+                                </li>';
         }
 
         if ($adforest_theme['fb_api_key'] != "") {
@@ -245,11 +245,11 @@ if (!function_exists('register_short_base_func')) {
         }
 
 
-        $adforest_elementor   =   isset($adforest_elementor)   ?  $adforest_elementor  : false;
-        
-        
-   return 
-        '<section class="register-section-content">
+        $adforest_elementor = isset($adforest_elementor) ? $adforest_elementor : false;
+
+
+        return
+            '<section class="register-section-content">
     <div class="container">
         <div class="row">
             <div class="col-xxl-12 col-lg-12 col-md-12 col-sm-12">

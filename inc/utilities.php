@@ -508,7 +508,7 @@ if (!function_exists('display_recently_viewed_ad_posts')) {
                 return $output;
             }
         }
-        return '<p>No recently viewed ad posts.</p>';
+        return '<p>'. __("No recently viewed ad posts.", "adforest") .'</p>';
     }
 }
 // Recently Viewed posts//
@@ -3925,7 +3925,7 @@ if (!function_exists('adforest_get_static_string_fun')) {
             'google_recaptcha_site_key' => isset($adforest_theme['google_api_key']) ? $adforest_theme['google_api_key'] : "",
             'sub_cat_option_select' => isset($adforest_theme['is_sub_cat_required']) ? $adforest_theme['is_sub_cat_required'] : "",
             'confirm' => __('Are you sure?', 'adforest'),
-            'select_pkg' => __('Select a Package.', 'adforest'),
+            'select_pkg' => __('Please Select a Package.', 'adforest'),
         );
     }
 

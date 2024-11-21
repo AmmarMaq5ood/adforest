@@ -22,7 +22,7 @@
                 ?>
                 
                 <div class="<?php echo esc_attr($blog_type); ?>">
-                    <div class="row posts-masonry">                  
+                    <div class="posts-masonry">
                             <?php get_template_part('template-parts/layouts/blog', 'loop'); ?>                                         
                         <div class="col-md-12 col-xs-12 col-sm-12">
                             <?php adforest_pagination(); ?>

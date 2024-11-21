@@ -21,7 +21,6 @@ if (!function_exists('adforest_sb_fav_remove_ad')) {
 
 add_action('wp_ajax_sb_change_password', 'adforest_change_password');
 if (!function_exists('adforest_change_password')) {
-
     function adforest_change_password()
     {
         adforest_authenticate_check();
@@ -60,7 +59,6 @@ if (!function_exists('adforest_change_password')) {
 
         die();
     }
-
 }
 add_action('wp_ajax_sb_get_ad_package_info', 'sb_get_ad_package_info_callback');
 
@@ -292,6 +290,10 @@ if (!function_exists('sb_verify_firebase_otp_fun')) {
 
     function sb_verify_firebase_otp_fun()
     {
+        if (!isset($_POST['security']) || !wp_verify_nonce($_POST['security'], 'sb_login_otp_nonce')) {
+            wp_send_json_error(array("message" => esc_html__('Invalid security token', 'adforest')));
+            die();
+        }
 
         $is_demo = adforest_is_demo();
         if ($is_demo) {
@@ -610,7 +612,7 @@ function load_feature_ad_modal()
     $selected_categories = get_user_meta(get_current_user_id(), 'adforest_ads_package_details', true);
     if (is_array($selected_categories)) {
         $Ads_pachages = '<form id="'.$formId.'" class="d-flex flex-column" method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
-        
+
         foreach ($selected_categories as $product_id => $packageDetails) {
             $Pkg_radio = '<input class="form-check-input" type="radio" name="ads_package" id="ads_package_' . $product_id . '" value="' . $product_id . '" required>';
             $product = wc_get_product($product_id);
@@ -633,7 +635,7 @@ function load_feature_ad_modal()
 
             foreach ($packageDetails as $detailName => $detailValue) {
                 if (in_array($detailName, [ 'free_ads', 'featured_ads', 'pkg_expiry_days', 'ad_expiry_days', 'featured_expiry_days', 'bump_ads' ])) {
-                    $custom_titles = [ 
+                    $custom_titles = [
                         'free_ads' => __('Free Ads', 'adforest'),
                         'featured_ads' => __('Featured Ads', 'adforest'),
                         'pkg_expiry_days' => __('Package Expiry Days', 'adforest'),
@@ -648,9 +650,9 @@ function load_feature_ad_modal()
             }
             $Ads_pachages .= '</ul></div>';
         }
-        $Ads_pachages .= '<button type="submit" class="btn btn-primary m-4">Submit</button>';
+        $Ads_pachages .= '<button type="submit" class="btn btn-primary m-4">'. __("Submit", "adforest") .'</button>';
         $Ads_pachages .= '</form>';
-        
+
         echo $Ads_pachages;
     }
     wp_die();
@@ -785,7 +787,7 @@ if (!function_exists('adforest_bump_it_up')) {
                             )
                         );
                         do_action('adforest_wpml_bumpup_ads', $ad_id);
-    
+
                         if (!$adforest_theme['sb_allow_free_bump_up'] && $bump_ads_new != '-1') {
                             $bump_ads_new = $bump_ads_new - 1;
                             $package_single['bump_ads'] = $bump_ads_new;
@@ -802,7 +804,7 @@ if (!function_exists('adforest_bump_it_up')) {
                     die();
                 }
 
-            } 
+            }
         } else {
             wp_send_json_error(array("message" => esc_html__('You must be the Ad owner to make it featured.', 'adforest')));
         }

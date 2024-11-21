@@ -2152,7 +2152,7 @@
         maxFilesize: 50000000,
         addRemoveLinks: true,
         paramName: "my_single_video_upload",
-        maxFiles: sb_max_files, //change limit as per your requirements
+        maxFiles: sb_max_files,
         acceptedFiles: acceptedFileTypes,
         dictMaxFilesExceeded: $("#adforest_max_upload_reach").val(),
         url: video_ajax_callback,
@@ -3943,7 +3943,7 @@
     $('#sb_loading').hide();
 
     $.dialog({
-      title: "Please Select a Package",
+      title: sb_options.select_pkg,
       content: ad_packages,
       theme: 'Material',
       closeIcon: true,
@@ -4057,23 +4057,40 @@
       })
       .on("form:submit", function () {
         $("#sb_loading").show();
-        // Ajax Submitting Resume
-        $.post(adforest_ajax_url, {
-          action: "job_alert_subscription",
-          submit_alert_data: $("form#alert_job_form").serialize(),
-        }).done(function (response) {
-          $("#sb_loading").hide();
-          var res_arr = response.split("|");
+        var formData = new FormData(document.querySelector("#alert_job_form"));
+        formData.append('action', 'job_alert_subscription'); // Add the action to the form data
 
-          if ($.trim(res_arr[0]) != "0") {
-            toastr.success(res_arr[1], "", {
-              timeOut: 4000,
-              closeButton: true,
-              positionClass: "toast-top-right",
-            });
-            $("#ad-alert-subscribtion").modal("hide");
-          } else {
-            toastr.error(res_arr[1], "", {
+        $.ajax({
+          url: adforest_ajax_url,
+          type: "POST",
+          data: formData,
+          processData: false,  // Prevent jQuery from transforming the data into a query string
+          contentType: false,  // Ensure proper encoding of FormData
+          beforeSend: function() {
+            $("#sb_loading").show(); // Show loading indicator
+          },
+          success: function(response) {
+            $("#sb_loading").hide(); // Hide loading indicator
+            var res_arr = response.split("|"); // Split response on pipe character
+
+            if ($.trim(res_arr[0]) != "0") {
+              toastr.success(res_arr[1], "", {
+                timeOut: 4000,
+                closeButton: true,
+                positionClass: "toast-top-right",
+              });
+              $("#ad-alert-subscribtion").modal("hide"); // Close modal on success
+            } else {
+              toastr.error(res_arr[1], "", {
+                timeOut: 4000,
+                closeButton: true,
+                positionClass: "toast-top-right",
+              });
+            }
+          },
+          error: function() {
+            $("#sb_loading").hide(); // Hide loading indicator on error
+            toastr.error("An error occurred. Please try again.", "", {
               timeOut: 4000,
               closeButton: true,
               positionClass: "toast-top-right",

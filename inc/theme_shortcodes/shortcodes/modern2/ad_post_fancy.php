@@ -90,7 +90,7 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
         adforest_user_not_logged_in();
 
         $description = '';
-        $title = '';
+        $ad_title = '';
         $price = '';
         $poster_name = '';
         $poster_ph = '';
@@ -156,7 +156,7 @@ if (!function_exists('ad_post_fancy_short_base_func')) {
             } else {
                 $post = get_post($id);
                 $description = $post->post_content;
-                $title = esc_html($post->post_title);
+                $ad_title = esc_html($post->post_title);
                 $price = get_post_meta($id, '_adforest_ad_price', true);
                 $poster_name = get_post_meta($id, '_adforest_poster_name', true);
                 $poster_ph = get_post_meta($id, '_adforest_poster_contact', true);
@@ -1045,6 +1045,69 @@ var mymap = L.map(\'dvMap\').setView([' . $pin_lat . ', ' . $pin_long . '], 13);
 //        }
 
 
+        //        $Ads_pachages = '';
+        $pay_per_post = isset($adforest_theme['sb_pay_per_post_option']) ? $adforest_theme['sb_pay_per_post_option'] : false;
+        if (isset($pay_per_post) && $pay_per_post != 1) {
+            /*  Package Details Starts   */
+            $selected_categories = get_user_meta(get_current_user_id(), 'adforest_ads_package_details', true);
+            if (is_array($selected_categories)) {
+                $Ads_pachages = '';
+                ?>
+                <?php
+                foreach ($selected_categories as $product_id => $packageDetails) {
+                    $Pkg_radio = '<input class="form-check-input" type="radio" name="ads_package" id="ads_package_' . $product_id . '" value="' . $product_id . '" required="">';
+                    $product = wc_get_product($product_id);
+                    if ($product) {
+                        $product_title = $product->get_title();
+                    }
+                    $Ads_pachages .= '<div class="featured-duration" id="featured-duration">  
+                    <ul class="featured-duration-list" id="cate_package">
+                        <li> 
+                            <label for="ads_package_' . $product_id . '">
+                                <div class="type-box">
+                                    <div class="r-meta">
+                                        ' . $Pkg_radio . '
+                                        <span>' . $product_title . '</span>
+                                    </div>
+                                </div>
+                            </label>
+                        </li>';
+
+
+                    foreach ($packageDetails as $detailName => $detailValue) {
+                        // Check if the current key is one of the desired keys
+                        if (in_array($detailName, ['free_ads', 'featured_ads', 'pkg_expiry_days', 'ad_expiry_days', 'featured_expiry_days'])) {
+
+                            $custom_titles = [
+                                'free_ads' => __('Free Ads', 'adforest'),
+                                'featured_ads' => __('Featured Ads', 'adforest'),
+                                'pkg_expiry_days' => __('Package Expiry Days', 'adforest'),
+                                'ad_expiry_days' =>__('Simple Expiry Days', 'adforest'),
+                                'featured_expiry_days' => __('Featured Expiry Days', 'adforest'),
+                            ];
+
+                            // Get the custom title for the current key, or use the original key if not found
+                            $title = isset($custom_titles[$detailName]) ? $custom_titles[$detailName] : $detailName;
+
+                            // Add the custom title and value to the HTML output
+                            $Ads_pachages .= '<li>' . $title . ': ' . $detailValue . '</li>';
+                        }
+                    }
+                    $Ads_pachages .= '</ul></div>';
+                }
+                $sb_simple_ads = get_user_meta(get_current_user_id(), '_sb_simple_ads', true);
+                $package_ad_expiry_days = get_user_meta(get_current_user_id(), 'package_ad_expiry_days', true);
+                $sb_expire_ads = get_user_meta(get_current_user_id(), '_sb_expire_ads', true);
+                // echo "ITHY";
+                if ($sb_simple_ads > 0 && ($package_ad_expiry_days == '-1' || $package_ad_expiry_days > 0) && ($sb_expire_ads == '-1' || $sb_expire_ads > date('Y-m-d'))) {
+                    $Ads_pachages = '';
+                }
+                ?>
+                <?php
+            }
+        }
+        /*  Package Details Ends  */
+
         $term_link_html = '';
         if (isset($terms_link) && $terms_link != "") {
 
@@ -1230,7 +1293,7 @@ var mymap = L.map(\'dvMap\').setView([' . $pin_lat . ', ' . $pin_long . '], 13);
                                             <div class="adf-search-bar">
                                                 <div class="form-group">
                                                     <label class="control-label">' . __('Title', 'adforest') . ' <span class="required">*</span></label>
-						        <input maxlength="' . $ad_post_title_limit . '" data-parsley-maxlength="' . $ad_post_title_limit . '" class="form-control" placeholder="' . __('Enter title  character limit', 'adforest') . ' (' . $ad_post_title_limit . '). " type="text" name="ad_title" id="ad_title" data-parsley-required="true" data-parsley-error-message="' . __('This field is required.', 'adforest') . '" value="' . $title . '" autocomplete="off">
+						        <input maxlength="' . $ad_post_title_limit . '" data-parsley-maxlength="' . $ad_post_title_limit . '" class="form-control" placeholder="' . __('Enter title  character limit', 'adforest') . ' (' . $ad_post_title_limit . '). " type="text" name="ad_title" id="ad_title" data-parsley-required="true" data-parsley-error-message="' . __('This field is required.', 'adforest') . '" value="' . $ad_title . '" autocomplete="off">
                                                         <input type="hidden" id="is_update" name="is_update" value="' . $is_update . '" />
                                                         <input type="hidden" id="bid_ad_id" name="bid_ad_id" value="' . $bid_ad_id . '" />    
                                                         <input type="hidden" id="is_level" name="is_level" value="' . $level . '" />
@@ -1267,10 +1330,13 @@ var mymap = L.map(\'dvMap\').setView([' . $pin_lat . ', ' . $pin_long . '], 13);
                                 </div>
                                 <!-- Extra Fields code -->
                                 ' . $extra_fields_html . '  
-                                  ' . $directory_ad_post_html . '
-                                        ' . $simple_feature_html . '
-					' . $bump_ad_html . '
-                                        ' . $tems_cond_field . ' 
+                                ' . $directory_ad_post_html . '
+                                ' . $simple_feature_html . '
+                                ' . $bump_ad_html . '
+                                <div class="purchase-package featured-duration" id="purchase-package">
+                                    ' . $Ads_pachages . '
+                                </div>
+                                ' . $tems_cond_field . ' 
                                 
                             </div>
                             <div class="col-lg-4 col-xs-12 col-sm-12 col-md-4">

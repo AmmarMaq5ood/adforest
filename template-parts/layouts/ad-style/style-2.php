@@ -216,7 +216,7 @@ $address = get_post_meta($pid, '_adforest_ad_location', true);
                     <div class="ad-detail-2-short-features">
                         <h2><?php echo esc_html__('Description', 'adforest') ?></h2>
                         
-                        <div class="desc-points">
+                        <div class="desc-points ad-desc-point">
                             <?php
                             $contents = get_the_content();
                             $contents = apply_filters('the_content', $contents);

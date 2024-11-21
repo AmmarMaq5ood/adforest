@@ -3,7 +3,6 @@
 add_action('woocommerce_order_status_completed', 'adforest_after_payment');
 
 if (!function_exists('adforest_after_payment')) {
-
     function adforest_after_payment($order_id)
     {
         global $adforest_theme;
@@ -88,10 +87,16 @@ if (!function_exists('adforest_after_payment')) {
                                         $update_package[$new_key]['free_ads'] = $package_data[$key]['free_ads'] + $naw_pkg_details[$key]['free_ads'];
                                     }
 
+                                    if ($naw_pkg_details[$key]['ad_expiry_days'] == "-1") {
+                                        $update_package[$new_key]['ad_expiry_days'] = $naw_pkg_details[$key]['ad_expiry_days'];
+                                    } else {
+                                        $update_package[$new_key]['ad_expiry_days'] = intval($package_data[$key]['ad_expiry_days']);
+                                    }
+
                                     if ($naw_pkg_details[$key]['featured_ads'] == "-1") {
                                         $update_package[$new_key]['featured_ads'] =  $naw_pkg_details[$key]['featured_ads'];
                                     } else {
-                                        $update_package[$new_key]['featured_ads'] = $package_data[$key]['featured_ads'] + $naw_pkg_details[$key]['featured_ads'];
+                                        $update_package[$new_key]['featured_ads'] = intval($package_data[$key]['featured_ads'] )+ intval($naw_pkg_details[$key]['featured_ads']);
                                     }
 
                                     if ($naw_pkg_details[$key]['bump_ads'] == "-1") {

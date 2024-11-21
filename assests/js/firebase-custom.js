@@ -56,7 +56,9 @@
                     var userobj = response.user;
                     var phoneNum = userobj.phoneNumber;
                     var adforest_ajax_url = jQuery("#adforest_ajax_url").val();
-                    $.post(adforest_ajax_url, {action: 'sb_verify_firebase_otp', phone_number: phoneNum}).done(function (response) {
+                    // Add nonce to the request
+                    var security = jQuery('#sb_login_nonce').val();
+                    $.post(adforest_ajax_url, {action: 'sb_verify_firebase_otp', phone_number: phoneNum, security: security}).done(function (response) {
 
                         $("#sb_verification_ph_back").hide();
                         $('#sb_verify_otp').show();
@@ -220,7 +222,9 @@ if($('#sb-pre-code').length > 0 && $('#sb-pre-code').val() == 1){
                             var phoneNum = userobj.phoneNumber;
                             var adforest_ajax_url = jQuery("#adforest_ajax_url").val();
                             var form_data = $("#sb-sign-multi-form").serialize();
-                            $.post(adforest_ajax_url, {action: 'sb_register_user_with_otp', phone_number: phoneNum, form_data: form_data}).done(function (response) {
+                            // Add nonce to the request
+                            var security = jQuery('#sb_login_nonce').val();
+                            $.post(adforest_ajax_url, {action: 'sb_register_user_with_otp', phone_number: phoneNum, form_data: form_data, security: security}).done(function (response) {
                                 $("#sb_verification_ph_back").hide();
                                 $('#sb_verify_otp').show();
                                 if (response['success'] == true) {
@@ -397,7 +401,9 @@ if($('#sb-pre-code').length > 0 && $('#sb-pre-code').val() == 1){
                             var phoneNum = userobj.phoneNumber;
                             var adforest_ajax_url = jQuery("#adforest_ajax_url").val();
                             var form_data = $("#sb-login-multi-form").serialize();
-                            $.post(adforest_ajax_url, {action: 'sb_login_user_with_otp', phone_number: phoneNum, form_data: form_data ,user_id:userID , token:secureToken}).done(function (response) {
+                            // Add nonce to the request
+                            var security = jQuery('#sb_login_nonce').val();
+                            $.post(adforest_ajax_url, {action: 'sb_login_user_with_otp', phone_number: phoneNum, form_data: form_data ,user_id:userID , token:secureToken, security: security}).done(function (response) {
                                 $("#sb_verification_ph_back").hide();
                                 $('#sb_verify_otp').show();
                                 if (response['success'] == true) {
